@@ -1,0 +1,37 @@
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js"></script>
+<% if protect_against_forgery? %>
+  <script type='text/javascript'>
+      //<![CDATA[
+        window._auth_token_name = "#{request_forgery_protection_token}";
+        window._auth_token = "#{form_authenticity_token}";
+    //]]>
+    </script>
+<% end %>
+<%= javascript_include_tag 'application' %>
+
+<div class="newFeed">
+    <%= link_to 'Create a new feed', new_feed_path(),:class => "get"%>
+</div>
+
+
+<h1>Listing feeds</h1>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>URL</th>
+  </tr>
+
+<% @feeds.each do |feed| %>
+  <tr>
+    <td><%=h feed.title %></td>
+    <td><%=h feed.uri %></td>
+    <td><%= link_to 'Show', feed %></td>
+    <td><%= link_to 'Edit', edit_feed_path(feed) %></td>
+    <td><%= link_to 'Destroy', feed, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+<br />
+
+<%= link_to 'New feed', new_feed_path %>

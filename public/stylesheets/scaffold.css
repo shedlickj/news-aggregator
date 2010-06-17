@@ -1,0 +1,79 @@
+/*
+ * Layout
+ ***************************/
+
+body { background-color: #fff; color: #333; }
+
+body, p, ol, ul, td {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   13px;
+  line-height: 18px;
+}
+
+div#container { position: relative; width: 950px; height: 700px; margin: 0 auto; }
+div#content { position:absolute; left:15px; top:20px; width:735px; }
+div#right_bar { position:absolute; left: 760px; top:80px; width:180px; }
+div#footer { clear: both; text-align: center; font-size: 11px; color: #777; padding-top: 40px; padding-bottom: 40px; }
+div#footer p { margin: 0; padding: 0; }
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+a { color: #000; }
+a:visited { color: #666; }
+a:hover { color: #fff; background-color:#000; }
+
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+
+/*
+ * Forms
+ ***************************/
+div.right_bar_title { font-weight:bold; }
+div.right_bar_img {  align: right; }
+div.right_bar_data { margin-left: 5px; }
+
+
+/*
+ * Table
+ ***************************/
+#table_row_even { background-color: #CCF; }
+#table_row_odd { background-color: #DDF; }
+div#table_description_even { background-color: #CCF; padding-left:50px; padding-bottom: 5px; padding-right: 5px; }
+div#table_description_odd { background-color: #DDF; padding-left:50px; padding-bottom: 5px; padding-right: 5px; }

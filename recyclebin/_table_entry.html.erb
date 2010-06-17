@@ -1,0 +1,13 @@
+  <tr>
+  	<td><%=h rss_entry.source %></td>
+    <td><a target='_blank' href ='<%=h rss_entry.link %>'><%=h rss_entry.title %></a></td>
+    <td><%=h rss_entry.published.strftime("%m/%d/%Y")%> at <%=h rss_entry.published.strftime("%I:%M%p") %></td>
+    <td><%=h rss_entry.description %></td>
+    <!--<td><%=h rss_entry.data %></td>-->
+    <td><% if rss_entry.favorite %><img src="/images/star.jpg" width="25" height="25" alt="Favorite" /><% end %></td>
+    <td><%= link_to 'Show', rss_entry %></td>
+	<td><%= link_to 'Edit', edit_rss_entry_path(rss_entry) %></td>
+	<td><%= link_to_remote 'Favorite', :url => { :action => "favorite", :id => rss_entry.id }, :update => 'table_entry', :method => :favorite %></td>
+    <td><%= link_to_remote 'Hide', :url => { :action => "hide", :id => rss_entry.id }, :update => 'ajaxWrapper' %></td>
+	
+  </tr>

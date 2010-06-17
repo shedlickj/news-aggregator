@@ -1,0 +1,14 @@
+<%= image_tag 'loading.gif', :id=>'spinner',
+      :style=>"display:none; float:right;" %>
+      <div id="container">
+          <div id="content">
+          	  <h1>Listing rss_entries</h1>
+              <!-- START:ajaxWrapper -->
+              <div class='ajaxWrapper'>
+                  <%= render :partial=>'search' %>
+              </div>
+              <!-- END:ajaxWrapper -->
+			  <%= render :partial => 'footer' %>
+          </div>
+		  <%= render :partial => 'right_bar' %>
+      </div>

@@ -1,0 +1,11 @@
+<div id="feed<%= feed.id %>">
+<%=
+    content_tag(:p,
+    feed.title)
+%>
+<!-- We are accessing the update function so we use put as class -->
+<span class="uri"><%= feed.uri %></span><span> - <%= link_to 'Add one point!',comment_path(comment),:class => "put"  %></span>
+<p> - <%= link_to '*Delete this comment',feed_path(feed),:method => :delete,:class => "delete"  %></p>
+<p><%= feed.created_at %></p>
+<hr />
+</div>

@@ -1,0 +1,52 @@
+<% if @rss_entries.empty? %>
+	<p>No entries to display</p>
+<% else %>
+<table cellpadding="2">
+  <tr>
+  	<th>Source</th>
+    <th>Title</th>
+    <th>Published</th>
+    <!--<th>Description</th>-->
+    <!--<th>Data</th>-->
+	<!--<th>Favorite</th>-->
+  </tr>
+<% for rss_entry in @rss_entries %>
+
+  <tr>
+  	<td><%=h rss_entry.source %></td>
+    <td><a target='_blank' href ='<%=h rss_entry.link %>'><%=h rss_entry.title %></a></td>
+    <td><%=h rss_entry.published.strftime("%m/%d/%Y")%> at <%=h rss_entry.published.strftime("%I:%M%p") %></td>
+    <!--<td><%=h rss_entry.data %></td>-->
+	<td>
+	<% if rss_entry.favorite %>
+		<%= form_remote_tag( :url => {:action => "favorite" , :id => rss_entry.id} , :update => "ajaxWrapper", 
+		:before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") %>
+                     <%= image_submit_tag "/images/star.png", 
+:onmouseover => "this.src='/images/star_gray.png'", 
+:onmouseout => "this.src='/images/star.png'",:name => nil%>
+    </form>
+	<% else %>
+		<%= form_remote_tag( :url => {:action => "favorite" , :id => rss_entry.id} , :update => "ajaxWrapper", 
+		:before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") %>
+                     <%= image_submit_tag "/images/star_gray.png", 
+:onmouseover => "this.src='/images/star.png'", 
+:onmouseout => "this.src='/images/star_gray.png'",:name => nil%>
+    </form>
+	<% end %>
+	</td>
+	<% if rss_entry.hidden
+		hide_var = 'Unhide'
+	else
+		hide_var = 'Hide'
+	end %>
+    <td><%= link_to_remote hide_var, :url => { :action => "hide", :id => rss_entry.id }, :update => 'ajaxWrapper',
+		:before => "Element.show('spinner')", :complete  => "Element.hide('spinner')" %></td>
+  </tr>
+  <tr><td></td><td colspan="3"><div class="table_entry"><%=h rss_entry.description %></div></td></tr>
+<% end %>
+</table>
+<% end %>
+<%= link_to 'Previous page',
+{ :page => @rss_entries.previous_page } if @rss_entries.previous_page %>
+<%= link_to 'Next page',
+{ :page => @rss_entries.next_page } if @rss_entries.next_page %>

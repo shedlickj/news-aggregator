@@ -1,0 +1,3 @@
+<% puts "responding js" %>
+$j(".ajaxWrapper").html("<%= escape_javascript(render :partial => 'search') %>");
+ajaxLinks();

@@ -1,0 +1,14 @@
+<% if @rss_entry.favorite
+	img = '<img src="/images/star.png" width="25" height="25" alt="Favorite" />'
+else
+	img = '<img src="/images/star_gray.png" width="25" height="25" alt="Favorite" />'
+end %>
+<%= link_to_remote img, :url => { :action => "favorite", :id => @rss_entry.id }, :update => "favorite_cell#{@rss_entry.id}", 
+		:before => "Element.show('spinner')", :complete  => "Element.hide('spinner')" %>
+		
+<% puts "favorite_cell#{@rss_entry.id}" %>
+
+
+
+#in _search:
+#<td><div id="favorite_cell<%=h @rss_entry.id%> "><%= render :partial => 'favorite_cell' %></div></td>

@@ -1,0 +1,8 @@
+OR_terms:
+ title : true
+ description : false
+ data : false
+
+AND_terms:
+ hidden : false
+ favorite : false

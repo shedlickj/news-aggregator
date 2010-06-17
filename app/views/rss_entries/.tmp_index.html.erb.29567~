@@ -1,0 +1,34 @@
+<h1>Listing rss_entries</h1>
+
+<table>
+  <tr>
+  	<th>Source</th>
+    <th>Title</th>
+    <th>Published</th>
+    <th>Description</th>
+    <!--<th>Data</th>-->
+	<th>Favorite</th>
+  </tr>
+
+<% @rss_entries.sort_by { |item| item.published }.reverse.each do |rss_entry| %>
+  <tr>
+  	<td><%=h rss_entry.source %></td>
+    <td><a target='_blank' href ='<%=h rss_entry.link %>'><%=h rss_entry.title %></a></td>
+    <td><%=h rss_entry.published.strftime("%m/%d/%Y")%> at <%=h rss_entry.published.strftime("%I:%M%p") %></td>
+    <td><%=h rss_entry.description %></td>
+    <!--<td><%=h rss_entry.data %></td>-->
+    <td><% if rss_entry.favorite %><img src="/images/star.jpg" width="25" height="25" alt="Favorite" /><% end %></td>
+    <td><%= link_to 'Show', rss_entry %></td>
+	<td><%= link_to 'Edit', edit_rss_entry_path(rss_entry) %></td>
+    <td><%= link_to 'Hide', rss_entry, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'Hidden Entries', :controller => "rss_entries", :action => "hidden" %>
+<%= link_to 'Favorite Entries', :controller => "rss_entries", :action => "favorite" %>
+<!-- TODO: Remove -->
+<br />
+For testing only: <%= link_to 'New rss_entry', new_rss_entry_path %>

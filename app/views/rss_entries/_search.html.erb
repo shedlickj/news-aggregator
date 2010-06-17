@@ -1,0 +1,67 @@
+<% if @rss_entries.empty? %>
+	<p>No entries to display</p>
+<% else %>
+<table cellpadding="1" id="report">
+  <tr>
+  	<th width="15%">Source</th>
+    <th width="53%">Title</th>
+    <th width="15%">Published</th>
+	<th width="17%">Options</th>
+  </tr>
+</table>
+
+<% row = 1 %>
+<% for rss_entry in @rss_entries %>
+<script type="text/javascript">
+    $j(document).ready(function(){
+        $j('#arrow-toggle<%= rss_entry.id %>').click(function(){
+            $j('.table_entry<%= rss_entry.id %>').slideToggle(400);
+            return false;
+        });
+    });
+</script>
+
+<% if(row%2==0) %><table id="table_row_even">
+<% else %><table id="table_row_odd">
+<% end %>
+  <tr>
+  	<td width="15%"><%=h rss_entry.source %></td>
+    <td width="53%"><a target='_blank' href ='<%=h rss_entry.link %>'><%=h rss_entry.title %></a></td>
+    <td width="15%"><%=h rss_entry.published.strftime("%m/%d/%Y")%> at <%=h rss_entry.published.strftime("%I:%M%p") %></td>
+	<td width="4%">
+		<div align="right">
+		<%= form_remote_tag( :url => {:action => 'update', :id => rss_entry.id, :task => "favorite"}, :method => 'put', 
+		:before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") %>
+		<% if rss_entry.favorite %>
+       		<%= image_submit_tag "/images/star.png", 
+			:onmouseover => "this.src='/images/star_gray.png'", 
+			:onmouseout => "this.src='/images/star.png'",:name => nil%>
+		<% else %>
+        	<%= image_submit_tag "/images/star_gray.png", 
+			:onmouseover => "this.src='/images/star.png'", 
+			:onmouseout => "this.src='/images/star_gray.png'",:name => nil%>
+		<% end %>
+    	</form>
+		</div>
+	</td><td width="8%">
+		<% if rss_entry.hidden
+			hide_var = 'Unhide'
+		else
+			hide_var = 'Hide'
+		end %>
+    	<div align="center"><%= link_to_remote(hide_var, :url => { :action => "update", :id => rss_entry.id, :task => "hide" }, :method => 'put',
+			:before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") %></div></td>
+	<td width="5%"><span id="arrow-toggle<%= rss_entry.id %>" class="ui-state-default ui-corner-all ui-icon ui-icon-triangle-1-s"></span></td>
+  </tr>
+</table>
+<div class="table_entry<%= rss_entry.id %>" style="display:none;">
+	<% if(row%2==0) %><div id="table_description_even">
+	<% else %><div id="table_description_odd">
+	<% end %>
+	<%=h rss_entry.description %>
+	</div>
+</div>
+<% row+=1 %>
+<% end %>
+<% end %>
+<div align = "center"><%= will_paginate @rss_entries, :params => params %></div>

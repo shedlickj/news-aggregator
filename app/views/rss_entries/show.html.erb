@@ -1,0 +1,36 @@
+<p>
+  <b>Title:</b>
+  <%=h @rss_entry.title %>
+</p>
+
+<p>
+  <b>Published:</b>
+  <%=h @rss_entry.published %>
+</p>
+
+<p>
+  <b>Link:</b>
+  <%=h @rss_entry.link %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @rss_entry.description %>
+</p>
+
+<p>
+  <b>Data:</b>
+  <%=h @rss_entry.data %>
+</p>
+
+<p>
+  <b>Favorite:</b>
+  <%=h @rss_entry.favorite %>
+</p>
+
+<p>
+  <b>Hidden:</b>
+  <%=h @rss_entry.hidden %>
+</p>
+
+<%= link_to 'Back', rss_entries_path %>
