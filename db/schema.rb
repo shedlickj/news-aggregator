@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100607145811) do
+ActiveRecord::Schema.define(:version => 20100618155347) do
 
   create_table "feeds", :force => true do |t|
     t.string   "uri"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(:version => 20100607145811) do
     t.string   "title"
     t.datetime "published"
     t.string   "link"
-    t.string   "description"
+    t.text     "description", :limit => 255
     t.string   "data"
     t.boolean  "hidden"
     t.boolean  "favorite"
