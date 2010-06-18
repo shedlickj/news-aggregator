@@ -4,17 +4,34 @@
         <span id="move_icon" class="ui-state-default ui-corner-all ui-icon ui-icon-arrow-4"></span>
     </div>
 </div>
-<div class="right_bar_data">
-    <table>
-        <% for feed in @feeds %>
-        <tr>
-            <td>
-                <%=h feed.title %>
-            </td>
-        </tr>
-        <% end %>
-    </table>
-</div>
+
+<!--<div class="right_bar_data">-->
+    <% for feed in @feeds %>
+    <span id="edit_feeds-tag" class="ui-state-default ui-corner-all ui-icon ui-icon-wrench" style="display:none;"></span>
+    <h4 class="trigger"><a href="#"><%=h feed.title %></a></h4>
+    <div class="toggle_container">
+        <div class="block">
+            <% remote_form_for :feed, feed, :url => {:controller => 'feeds', :action => 'update', :id => feed.id}, :html => { :method => 'put' }, :before => "Element.show('spinner')", :complete  => "Element.hide('spinner')" do |f| %>
+            <%= f.error_messages %>
+            <p>
+                <%= f.label :title %>
+                <br/>
+                <%= f.text_field :title, :size=>"23" %>
+            </p>
+            <p>
+                <%= f.label :url %>
+                <br/>
+                <%= f.text_field :uri, :size=>"23" %>
+            </p>
+            <p>
+                <%= f.submit 'Update' %>
+            </p>
+            <% end %>
+			<%= link_to 'Destroy', feed, :confirm => 'Are you sure?', :method => :delete %>
+        </div>
+    </div>
+    <% end %>
+<!--</div>-->
 <a href="#" id="new_feed-toggle">Add a new feed</a>
 <div id="new_feed_tag" style="display:none; padding:3px; background:#ddd; width=200px">
     <% @feed = Feed.new %>

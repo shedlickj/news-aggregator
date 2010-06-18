@@ -34,8 +34,8 @@ class FeedsController < ApplicationController
   #This is not a "normal" update, I'll use this one to add points to the comment
   def update
     @feed = Feed.find(params[:id])
-    @feed.score = @feed.score + 1
     @feed.save
+    @feeds = Feed.all
  
     respond_to do |format|
       format.html { redirect_to feeds_path }

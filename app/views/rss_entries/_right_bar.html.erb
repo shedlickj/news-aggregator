@@ -38,7 +38,23 @@
             $j('#new_feed_tag').slideToggle(400);
             return false;
         });
+        $j('a#edit_feeds-toggle').click(function(){
+            $j('#edit_feeds_tag').slideToggle(400);
+            return false;
+        });
     });
+</script>
+
+<script>
+$j(document).ready(function(){
+	//Hide (Collapse) the toggle containers on load
+	$j(".toggle_container").hide(); 
+
+	//Switch the "Open" and "Close" state per click then slide up/down (depending on open/close state)
+	$j("h4.trigger").click(function(){
+		$j(this).toggleClass("active").next().slideToggle("slow");
+	});
+});
 </script>
 
 <!-- Sortables -->

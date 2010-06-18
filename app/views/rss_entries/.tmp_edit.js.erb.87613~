@@ -1,2 +1,0 @@
-$j(".ajaxWrapper").html("<%= escape_javascript(render :partial => 'search') %>");
-ajaxLinks();
