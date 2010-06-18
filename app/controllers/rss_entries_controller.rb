@@ -1,7 +1,6 @@
 require 'feed_tools'
 require 'will_paginate'
 require 'chronic'
-require "yaml"
 
 class RssEntriesController < ApplicationController
   # GET /rss_entries
