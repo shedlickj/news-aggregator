@@ -1,0 +1,6 @@
+rails -v 2.3.8
+pg
+chronic
+will_paginate
+feed_tools
+yaml
