@@ -1,6 +1,8 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
+var $j = jQuery.noConflict();
+		
 jQuery.ajaxSetup({ 'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")} })
  
 function _ajax_request(url, data, callback, type, method) {
@@ -29,7 +31,7 @@ jQuery.extend({
 jQuery.fn.submitWithAjax = function() {
   this.unbind('submit', false);
   this.submit(function() {
-    $.post(this.action, $(this).serialize(), null, "script");
+    $.post(this.action, $j(this).serialize(), null, "script");
     return false;
   })
  
@@ -40,7 +42,7 @@ jQuery.fn.submitWithAjax = function() {
 jQuery.fn.getWithAjax = function() {
   this.unbind('click', false);
   this.click(function() {
-    $.get($(this).attr("href"), $(this).serialize(), null, "script");
+    $.get($j(this).attr("href"), $j(this).serialize(), null, "script");
     return false;
   })
   return this;
@@ -50,7 +52,7 @@ jQuery.fn.getWithAjax = function() {
 jQuery.fn.postWithAjax = function() {
   this.unbind('click', false);
   this.click(function() {
-    $.post($(this).attr("href"), $(this).serialize(), null, "script");
+    $.post($j(this).attr("href"), $j(this).serialize(), null, "script");
     return false;
   })
   return this;
@@ -59,7 +61,7 @@ jQuery.fn.postWithAjax = function() {
 jQuery.fn.putWithAjax = function() {
   this.unbind('click', false);
   this.click(function() {
-    $.put($(this).attr("href"), $(this).serialize(), null, "script");
+    $.put($j(this).attr("href"), $j(this).serialize(), null, "script");
     return false;
   })
   return this;
@@ -69,7 +71,7 @@ jQuery.fn.deleteWithAjax = function() {
   this.removeAttr('onclick');
   this.unbind('click', false);
   this.click(function() {
-    $.delete_($(this).attr("href"), $(this).serialize(), null, "script");
+    $.delete_($j(this).attr("href"), $j(this).serialize(), null, "script");
     return false;
   })
   return this;
@@ -77,18 +79,18 @@ jQuery.fn.deleteWithAjax = function() {
  
 //This will "ajaxify" the links
 function ajaxLinks(){
-    $('.ajaxForm').submitWithAjax();
-    $('a.get').getWithAjax();
-    $('a.post').postWithAjax();
-    $('a.put').putWithAjax();
-    $('a.delete').deleteWithAjax();
+    $j('.ajaxForm').submitWithAjax();
+    $j('a.get').getWithAjax();
+    $j('a.post').postWithAjax();
+    $j('a.put').putWithAjax();
+    $j('a.delete').deleteWithAjax();
 }
  
-$(document).ready(function() {
+$j(document).ready(function() {
  
 // All non-GET requests will add the authenticity token
   // if not already present in the data packet
- $(document).ajaxSend(function(event, request, settings) {
+ $j(document).ajaxSend(function(event, request, settings) {
        if (typeof(window.AUTH_TOKEN) == "undefined") return;
        // <acronym title="Internet Explorer 6">IE6</acronym> fix for http://dev.jquery.com/ticket/3155
        if (settings.type == 'GET' || settings.type == 'get') return;
