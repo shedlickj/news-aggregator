@@ -1,4 +1,10 @@
-<% form_remote_tag(:url => {:action => 'index'}, :method => 'get', :before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") do %>
+<script type="text/javascript">
+    $j(function(){
+        $j("a", "#button_style").button();
+    });
+</script>
+
+<form id="search_form" >
 <div class="right_bar_title">
     Search
     <div style="display:block;float:right;">
@@ -8,7 +14,7 @@
 <%= text_field_tag :q, h(params[:q]), :size=>"23" %>
 <br/>
 <a href="#" id="advanced_search-toggle">Advanced</a>
-<div id="advanced_search_tag" style="display:none; padding:3px; background:#ddd;">
+<div id="advanced_search_tag" style="display:none; padding:3px; background:#ddd; margin: 0 0 5px; border: 1px solid #999;">
     <label for="features[]">
         Search Fields:
     </label>
@@ -49,6 +55,10 @@
     <br/>
     <input id="end_on" name="end_on" size="19" type="text" value="" class="datepicker" />
     <br/>
-    <hr/><%= submit_tag 'Search' %>
+    <hr/><!--<%= submit_tag 'Search', :class => "search_submit" %>-->
+	<div id = "button_style">
+	<%= link_to 'Submit', rss_entries_path(), :class => "search_submit" %>
+	</div>
+	<!--<input class="feed_submit" name="commit" type="submit"  />-->
 </div>
-<% end %>
+</form> 

@@ -5,18 +5,13 @@
     </div>
 </div>
 <div class="right_bar_data">
-    <%= link_to_remote("All Articles", :url => { :action => "index", :view => "all" }, :method => 'get',
-    :before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") %>
+	<%= link_to 'Normal View', rss_entries_path(), :view => "normal", :class => "view_entries" %><br />
+	<%= link_to 'All Articles', rss_entries_path(), :view => "all", :class => "view_entries" %><br />
+    <%= link_to 'Favorite Articles', rss_entries_path(), :view => "favorite", :class => "view_entries" %><br />
+	<%= link_to 'Hidden Articles', rss_entries_path(), :view => "hidden", :class => "view_entries" %><br />
+
     <br/>
-    <%= link_to_remote("Favorite Articles", :url => { :action => "index", :view => "favorite" }, :method => 'get',
-    :before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") %>
-    <br/>
-    <%= link_to_remote("Hidden Articles", :url => { :action => "index", :view => "hidden" }, :method => 'get',
-    :before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") %>
-    <br/>
-    <br/>
-    <%= link_to_remote('Update Articles', :url => { :action => "update_articles", :view => "all" },
-    :before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") %>
+	<%= link_to 'Update Articles', "#{rss_entries_path()}/update_articles", :view => "normal", :class => "get" %><br />
 </div>
 <br/>
 <a href="#" id="more_views-toggle">More</a>

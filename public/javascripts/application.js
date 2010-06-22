@@ -87,10 +87,19 @@ function ajaxLinks(){
 }
  
 $j(document).ready(function() {
+	
+	$j('#spinner')
+    .hide()  // hide it initially
+    .ajaxStart(function() {
+        $j(this).show();
+    })
+    .ajaxStop(function() {
+        $j(this).hide();
+    });
  
 // All non-GET requests will add the authenticity token
   // if not already present in the data packet
- $j(document).ajaxSend(function(event, request, settings) {
+ 	$j(document).ajaxSend(function(event, request, settings) {
        if (typeof(window.AUTH_TOKEN) == "undefined") return;
        // <acronym title="Internet Explorer 6">IE6</acronym> fix for http://dev.jquery.com/ticket/3155
        if (settings.type == 'GET' || settings.type == 'get') return;
@@ -98,6 +107,46 @@ $j(document).ready(function() {
        settings.data = settings.data || "";
        settings.data += (settings.data ? "&" : "") + "authenticity_token=" + encodeURIComponent(window.AUTH_TOKEN);
      });
+
+	 $j('.error').hide();  
+	 	 
+	 $j(".link_to_nowhere").click(function() {
+	 	event.preventDefault();
+	 });
+	 
+     $j(".view_entries").click(function(){
+         event.preventDefault();
+         $j.get($j(this).attr("href"), {view: $j(this).attr("view")}, function(data){
+			 return false;
+         });
+     });
+	 
+	 $j(".feed_submit").click(function() {
+	 	$j('.error').hide();
+		//var title = $j("input#feed_title").val();
+		//var uri = $j("input#feed_uri").val();
+		//var dataString = 'title='+title+'&uri='+uri;
+	 	$j.post("/feeds/create", $j("#feed_form").serialize(), function(data) {
+			//$("#right_bar_3").html(data);
+			ajaxLinks();
+			return false;
+		});
+	 });
+	 
+	 $j(".search_submit").click(function() {
+	 	event.preventDefault();
+	 	$j.get($j(this).attr("href"), $j("#search_form").serialize(), function(data) {
+			return false;
+		});
+	 });
+	 
+	 $j(".new_feed_submit").click(function() {
+	 	event.preventDefault();
+	 	$j.post($j(this).attr("href"), $j("#feed_form").serialize(), function(data) {
+			//$j("#right_bar_3").html(data);
+			return false;
+		});
+	 });
  
   ajaxLinks();
 });

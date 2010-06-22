@@ -65,7 +65,7 @@ a:hover { color: #fff; background-color:#000; }
 /*
  * Forms
  ***************************/
-div.right_bar_title { font-weight:bold; }
+div.right_bar_title { font-weight:bold; margin-bottom:2px; }
 div.right_bar_img {  align: right; }
 div.right_bar_data { margin-left: 5px; }
 
@@ -78,39 +78,70 @@ div.right_bar_data { margin-left: 5px; }
 div#table_description_even { background-color: #CCF; padding-left:50px; padding-bottom: 5px; padding-right: 5px; }
 div#table_description_odd { background-color: #DDF; padding-left:50px; padding-bottom: 5px; padding-right: 5px; }
 
+#report { border-collapse:collapse;}
+#report h4 { margin:0px; padding:0px;}
+#report img { float:right;}
+#report ul { margin:10px 0 10px 40px; padding:0px;}
+#report th { background:#7CB8E2 url(../images/header_bkg.png) repeat-x scroll center left; color:#fff; padding:7px 15px; text-align:left;}
+#testerxxx td { background:#7CB8E2 none repeat-x scroll center left; color:#000; padding:7px 15px; }
+#report td { background:#C7DDEE none repeat-x scroll center left; color:#000; padding:7px 15px; }
+#report div.arrow { background:transparent url(../images/arrows.png) no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}
+#report div.up { background-position:0px 0px;}
+
+.star_link {
+	background: url(../images/star.png) no-repeat;
+	height: 25px;
+	width: 25px;
+	text-decoration: none;
+}
+
+.star_link:hover {
+	background: url(../images/star_gray.png) no-repeat;
+}
+
+.star_link_gray {
+	background: url(../images/star_gray.png) no-repeat;
+	height: 25px;
+	width: 25px;
+	text-decoration: none;
+}
+
+.star_link_gray:hover {
+	background: url(../images/star.png) no-repeat;
+}
 
 /*
  * Feed Pane
  ***************************/
-h2.trigger {
-	padding: 0 0 0 50px;
+h4.trigger {
+	padding: 0 0 0 28px;
 	margin: 0 0 5px 0;
-	background: url(h2_trigger_a.gif) no-repeat;
-	height: 46px;
-	line-height: 46px;
-	width: 450px;
-	font-size: 2em;
+	background: url(../images/h2_trigger_a_small.gif) no-repeat;
+	height: 25px;
+	line-height: 25px;
+	width: 170px;
+	font-size: 1em;
 	font-weight: normal;
 	float: left;
 }
-h2.trigger a {
-	color: #fff;
+h4.trigger a {
+	color: #eee;
 	text-decoration: none;
 	display: block;
 }
-h2.trigger a:hover { color: #ccc; }
-h2.active {background-position: left bottom;} /*--When toggle is triggered, it will shift the image to the bottom to show its "opened" state--*/
+h4.trigger a:hover { color: #ccc; background:none; }
+
+h4.active {background-position: left bottom;} /*--When toggle is triggered, it will shift the image to the bottom to show its "opened" state--*/
 .toggle_container {
 	margin: 0 0 5px;
-	padding: 0;
-	border-top: 1px solid #d6d6d6;
-	background: #ddd url(toggle_block_stretch.gif) repeat-y left top;
+	padding: 2px;
+	border: 1px solid #999;
+	background: #ddd;
 	overflow: hidden;
 	font-size: 1.2em;
-	width: 180px;
+	width: 176px;
 	clear: both;
 }
-.toggle_container .block {
+.toggle_container #block {
 	padding: 3px; /*--Padding of Container--*/
-	background: url(toggle_block_btm.gif) no-repeat left bottom; /*--Bottom rounded corners--*/
 }

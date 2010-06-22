@@ -7,6 +7,10 @@ class RssEntriesController < ApplicationController
   # GET /rss_entries.xml
   def index
     @feeds = Feed.all
+    #if(params[:commit] == "Search")
+    #  params[:view] = "normal" unless params[:features].include?("hidden")
+    #else
+    params[:view] ||= "normal" unless params[:q] != nil
     find_and_show_entries
   end
   
@@ -19,6 +23,8 @@ class RssEntriesController < ApplicationController
   # PUT /rss_entries/1
   # PUT /rss_entries/1.xml
   def update
+    puts "YEFEKINFDSHF"
+    puts params[:id]
     @rss_entry = RssEntry.find(params[:id])
     if(params[:task] == 'favorite')
       @rss_entry.favorite = !@rss_entry.favorite
@@ -132,6 +138,8 @@ class RssEntriesController < ApplicationController
   def find_and_show_entries
     if(params[:view] == 'all')
       conditions = ""
+    elsif(params[:view] == 'normal')
+      conditions = "(rss_entries.hidden = 'f')"
     elsif(params[:view] == 'favorite')
       conditions = "(rss_entries.favorite = 't')"
     elsif(params[:view] == 'hidden')

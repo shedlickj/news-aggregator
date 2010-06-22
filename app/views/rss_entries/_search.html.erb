@@ -1,6 +1,16 @@
 <% if @rss_entries.empty? %>
 	<p>No entries to display</p>
 <% else %>
+<script type="text/javascript">
+$j(document).ready(function(){
+	 $j(".update_entry").click(function(){
+         event.preventDefault();
+         $j.put($j(this).attr("href"), {id: $j(this).attr("id"), task: $j(this).attr("task")}, function(data){
+			 return false;
+         });
+     });
+});
+</script>
 <table cellpadding="1" id="report">
   <tr>
   	<th width="15%">Source</th>
@@ -33,14 +43,11 @@
 		<%= form_remote_tag( :url => {:action => 'update', :id => rss_entry.id, :task => "favorite"}, :method => 'put', 
 		:before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") %>
 		<% if rss_entry.favorite %>
-       		<%= image_submit_tag "/images/star.png", 
-			:onmouseover => "this.src='/images/star_gray.png'", 
-			:onmouseout => "this.src='/images/star.png'",:name => nil%>
+			<% star_img="<div class=star_link></div>" %>
 		<% else %>
-        	<%= image_submit_tag "/images/star_gray.png", 
-			:onmouseover => "this.src='/images/star.png'", 
-			:onmouseout => "this.src='/images/star_gray.png'",:name => nil%>
+			<% star_img="<div class=star_link_gray></div>" %>
 		<% end %>
+		<%= link_to (star_img, "/rss_entries/update/#{rss_entry.id}", :task => "favorite", :class => "update_entry") %>
     	</form>
 		</div>
 	</td><td width="8%">
@@ -49,8 +56,9 @@
 		else
 			hide_var = 'Hide'
 		end %>
-    	<div align="center"><%= link_to_remote(hide_var, :url => { :action => "update", :id => rss_entry.id, :task => "hide" }, :method => 'put',
-			:before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") %></div></td>
+    	<div align="center">
+    		<%= link_to (hide_var, "/rss_entries/update/#{rss_entry.id}", :task => "hide", :class => "update_entry") %>
+		</div></td>
 	<td width="5%"><span id="arrow-toggle<%= rss_entry.id %>" class="ui-state-default ui-corner-all ui-icon ui-icon-triangle-1-s"></span></td>
   </tr>
 </table>
