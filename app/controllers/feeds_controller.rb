@@ -22,6 +22,10 @@ class FeedsController < ApplicationController
   def create
     @feed = Feed.create(params[:feed])
     @feeds = Feed.all
+    puts @feed.errors
+    if(@feed.errors.empty?)
+      puts "no errors"
+    end
     respond_to do |format|
       format.html { redirect_to feeds_path() }
       format.js {render :layout => false}
@@ -53,6 +57,7 @@ class FeedsController < ApplicationController
   def destroy
     @feed = Feed.find(params[:id])
     @feed.destroy
+    @feeds = Feed.all
  
     respond_to do |format|
       format.html { redirect_to feeds_path }

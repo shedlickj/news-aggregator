@@ -3,62 +3,61 @@
         $("a", "#button_style").button();
     });
 </script>
-
-<form id="search_form" >
-<div class="right_bar_title">
-    Search
-    <div style="display:block;float:right;">
-        <span id="move_icon" class="ui-state-default ui-corner-all ui-icon ui-icon-arrow-4"></span>
+<form id="search_form">
+    <div class="right_bar_title">
+        Search
+        <div style="display:block;float:right;">
+            <span id="move_icon" class="ui-state-default ui-corner-all ui-icon ui-icon-arrow-4"></span>
+        </div>
     </div>
-</div>
-<%= text_field_tag :q, h(params[:q]), :size=>"23" %>
-<br/>
-<a href="#" id="advanced_search-toggle">Advanced</a>
-<div id="advanced_search_tag" style="display:none; padding:3px; background:#ddd; margin: 0 0 5px; border: 1px solid #999;">
-    <label for="features[]">
-        Search Fields:
-    </label>
-    <% (APP_CONFIG['OR_terms']).each do |feature| %>
-    <br>
-    <%= check_box_tag 'features[]', feature[0],
-    (params[:features] || {}).include?(feature[0]) || (feature[1] if params[:features] == nil) %>
-    <%= feature[0].humanize %>
-    <% end %>
-    <hr/>
-    <label for="features[]">
-        Restrict by Fields:
-    </label>
-    <% (APP_CONFIG['AND_terms'].keys).each do |feature| %>
-    <br>
-    <%= check_box_tag 'features[]', feature,
-    (params[:features] || {}).include?(feature) %>
-    <%= feature.humanize %>
-    <% end %>
-    <hr/><a href="#" id="feed_search-toggle">Restrict by Sources:</a>
-    <div id="feed_search_tag" style="display:none">
-        <% (@feeds).each do |feed| %>
-        <%= check_box_tag 'sources[]', feed.title, true %>
-        <%=h feed.title %>
-        <br/>
+    <%= text_field_tag :q, h(params[:q]), :size=>"23" %>
+    <br/>
+    <a href="#" id="advanced_search-toggle">Advanced</a>
+    <div id="advanced_search_tag" style="display:none; padding:3px; background:#ddd; margin: 0 0 5px; border: 1px solid #999;">
+        <label for="features[]">
+            Search Fields:
+        </label>
+        <% (APP_CONFIG['OR_terms']).each do |feature| %>
+        <br>
+        <%= check_box_tag 'features[]', feature[0],
+        (params[:features] || {}).include?(feature[0]) || (feature[1] if params[:features] == nil) %>
+        <%= feature[0].humanize %>
         <% end %>
+        <hr/>
+        <label for="features[]">
+            Restrict by Fields:
+        </label>
+        <% (APP_CONFIG['AND_terms'].keys).each do |feature| %>
+        <br>
+        <%= check_box_tag 'features[]', feature,
+        (params[:features] || {}).include?(feature) %>
+        <%= feature.humanize %>
+        <% end %>
+        <hr/><a href="#" id="feed_search-toggle">Restrict by Sources:</a>
+        <div id="feed_search_tag" style="display:none">
+            <% (@feeds).each do |feed| %>
+            <%= check_box_tag 'sources[]', feed.title, true %>
+            <%=h feed.title %>
+            <br/>
+            <% end %>
+        </div>
+        <hr/>
+        <label>
+            Date Range:
+        </label>
+        <br/>
+        <%= label_tag :from %>
+        <br/>
+        <input id="start_on" name="start_on" size="19" type="text" value="" class="datepicker" />
+        <br/>
+        <%= label_tag :to %>
+        <br/>
+        <input id="end_on" name="end_on" size="19" type="text" value="" class="datepicker" />
+        <br/>
+        <hr/><!--<%= submit_tag 'Search', :class => "search_submit" %>-->
+        <div id = "button_style">
+            <%= link_to 'Submit', rss_entries_path(), :class => "search_submit" %>
+        </div>
+        <!--<input class="feed_submit" name="commit" type="submit"  />-->
     </div>
-    <hr/>
-    <label>
-        Date Range:
-    </label>
-    <br/>
-    <%= label_tag :from %>
-    <br/>
-    <input id="start_on" name="start_on" size="19" type="text" value="" class="datepicker" />
-    <br/>
-    <%= label_tag :to %>
-    <br/>
-    <input id="end_on" name="end_on" size="19" type="text" value="" class="datepicker" />
-    <br/>
-    <hr/><!--<%= submit_tag 'Search', :class => "search_submit" %>-->
-	<div id = "button_style">
-	<%= link_to 'Submit', rss_entries_path(), :class => "search_submit" %>
-	</div>
-	<!--<input class="feed_submit" name="commit" type="submit"  />-->
-</div>
-</form> 
+</form>

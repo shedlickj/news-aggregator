@@ -1,9 +1,11 @@
+<%= javascript_include_tag 'application' %>
+
 <!-- Datepicker -->
 <script type="text/javascript">
     $(function(){
         $(".datepicker").datepicker({
             showOn: 'button',
-            buttonImage: 'images/calendar.png',
+            buttonImage: '/images/calendar.png',
             buttonImageOnly: true,
             showAnim: 'blind'
         });
@@ -74,12 +76,12 @@ $(function() {
 <!-- Right bar partials -->
 <div id="right_bar">
     <div id="right_bar_1" style="width:180px; margin:5px; padding:10px; background:#cccccc;">
-        <%= render :partial => 'right_bar_1' %>
+        <%= render :partial => '/rss_entries/right_bar_1' %>
     </div>
     <div id="right_bar_2" style="width:180px; margin:5px; padding:10px; background:#cccccc;">
-        <%= render :partial => 'right_bar_2' %>
+        <%= render :partial => '/rss_entries/right_bar_2' %>
     </div>
     <div id="right_bar_3" style="width:180px; margin:5px; padding:10px; background:#cccccc;">
-        <%= render :partial => 'right_bar_3' %>
+        <%= render :partial => '/rss_entries/right_bar_3' %>
     </div>
 </div>

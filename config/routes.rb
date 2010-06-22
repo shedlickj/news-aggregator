@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   
-  map.resources :rss_entries
+  map.resources :rss_entries, :collection => { :update_articles => :get }
 
   map.resources :feeds
   

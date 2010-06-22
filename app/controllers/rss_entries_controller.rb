@@ -23,8 +23,6 @@ class RssEntriesController < ApplicationController
   # PUT /rss_entries/1
   # PUT /rss_entries/1.xml
   def update
-    puts "YEFEKINFDSHF"
-    puts params[:id]
     @rss_entry = RssEntry.find(params[:id])
     if(params[:task] == 'favorite')
       @rss_entry.favorite = !@rss_entry.favorite
@@ -116,7 +114,7 @@ class RssEntriesController < ApplicationController
         entry.title = item.title
         entry.published = item.published
         entry.link = item.link
-        entry.description = item.description.gsub(/<[^>]+>/,"").squeeze(" ").strip
+        entry.description = (item.description || "No description").gsub(/<[^>]+>/,"").squeeze(" ").strip
         entry.data = item.media_text
         entry.hidden ||= false
         entry.favorite ||= false

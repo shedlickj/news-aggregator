@@ -68,7 +68,7 @@ jQuery.fn.putWithAjax = function() {
 };
  
 jQuery.fn.deleteWithAjax = function() {
-  this.removeAttr('onclick');
+  //this.removeAttr('onclick');
   this.unbind('click', false);
   this.click(function() {
     $.delete_($(this).attr("href"), $(this).serialize(), null, "script");
@@ -143,6 +143,23 @@ $(document).ready(function() {
 	 $(".new_feed_submit").click(function(event) {
 	 	event.preventDefault();
 	 	$.post($(this).attr("href"), $("#feed_form").serialize(), function(data) {
+			//$("#right_bar_3").html(data);
+			return false;
+		});
+	 });
+	 
+	 $(".feed_update_submit").click(function(event) {
+	 	event.preventDefault();
+		alert("input#feed_title" + $(this).attr("id"));
+	 	$.put($(this).attr("href"), {id: $(this).attr("id"), title: $("input#feed_title" + $(this).attr("id")).val(), uri: $("input#feed_uri" + $(this).attr("id")).val()}, function(data) {
+			//$("#right_bar_3").html(data);
+			return false;
+		});
+	 });
+	 
+	 $(".feed_delete").click(function(event) {
+	 	event.preventDefault();
+	 	$.delete_($(this).attr("href"), $("#feed_form").serialize(), function(data) {
 			//$("#right_bar_3").html(data);
 			return false;
 		});
