@@ -1,7 +1,7 @@
 <!-- Datepicker -->
 <script type="text/javascript">
-    $j(function(){
-        $j(".datepicker").datepicker({
+    $(function(){
+        $(".datepicker").datepicker({
             showOn: 'button',
             buttonImage: 'images/calendar.png',
             buttonImageOnly: true,
@@ -12,48 +12,48 @@
 
 <!-- Widget cornering -->
 <script type="text/javascript">
-    $j(function(){
-        $j("#right_bar_1").corner()
-        $j("#right_bar_2").corner()
-        $j("#right_bar_3").corner()
-		$j(".toggle_container").corner("bottom")
+    $(function(){
+        $("#right_bar_1").corner()
+        $("#right_bar_2").corner()
+        $("#right_bar_3").corner()
+		$(".toggle_container").corner("bottom")
     });
 </script>
 
 <!-- Toggling -->
 <script type="text/javascript">
-    $j(document).ready(function(){
-        $j('a#advanced_search-toggle').click(function(){
-            $j('#advanced_search_tag').slideToggle(400);
+    $(document).ready(function(){
+        $('a#advanced_search-toggle').click(function(){
+            $('#advanced_search_tag').slideToggle(400);
             return false;
         });
-        $j('a#feed_search-toggle').click(function(){
-            $j('#feed_search_tag').slideToggle(400);
+        $('a#feed_search-toggle').click(function(){
+            $('#feed_search_tag').slideToggle(400);
             return false;
         });
-        $j('a#more_views-toggle').click(function(){
-            $j('#more_views_tag').slideToggle(400);
+        $('a#more_views-toggle').click(function(){
+            $('#more_views_tag').slideToggle(400);
             return false;
         });
-        $j('a#new_feed-toggle').click(function(){
-            $j('#new_feed_tag').slideToggle(400);
+        $('a#new_feed-toggle').click(function(){
+            $('#new_feed_tag').slideToggle(400);
             return false;
         });
-        $j('a#edit_feeds-toggle').click(function(){
-            $j('#edit_feeds_tag').slideToggle(400);
+        $('a#edit_feeds-toggle').click(function(){
+            $('#edit_feeds_tag').slideToggle(400);
             return false;
         });
     });
 </script>
 
 <script>
-$j(document).ready(function(){
+$(document).ready(function(){
 	//Hide (Collapse) the toggle containers on load
-	$j(".toggle_container").hide(); 
+	$(".toggle_container").hide(); 
 
 	//Switch the "Open" and "Close" state per click then slide up/down (depending on open/close state)
-	$j("h4.trigger").click(function(){
-		$j(this).toggleClass("active").next().slideToggle("slow");
+	$("h4.trigger").click(function(){
+		$(this).toggleClass("active").next().slideToggle("slow");
 	});
 });
 </script>
@@ -65,9 +65,9 @@ $j(document).ready(function(){
 #sortable div { }
 </style>
 <script type="text/javascript">
-$j(function() {
-	$j("#right_bar").sortable({ axis: 'y', forcePlaceholderSize: true, opacity: 0.8, handle: 'span#move_icon' });
-	$j("#right_bar").disableSelection();
+$(function() {
+	$("#right_bar").sortable({ axis: 'y', forcePlaceholderSize: true, opacity: 0.8, handle: 'span#move_icon' });
+	$("#right_bar").disableSelection();
 });
 </script>
 	

@@ -4,13 +4,15 @@
         <span id="move_icon" class="ui-state-default ui-corner-all ui-icon ui-icon-arrow-4"></span>
     </div>
 </div>
-            <script type="text/javascript">
-                $j(function(){                    
-		$j("a", ".toggle_container").button();
-		
-		$j("a", ".toggle_container").click(function() { return false; });
-                });
-            </script>
+<script type="text/javascript">
+    $(function(){
+        $("a", ".toggle_container").button();
+        
+        $("a", ".toggle_container").click(function(){
+            return false;
+        });
+    });
+</script>
 <!--<div class="right_bar_data">-->
     <% for feed in @feeds %>
     <!--<span id="edit_feeds-tag" class="ui-state-default ui-corner-all ui-icon ui-icon-wrench" style="display:none;"></span>-->

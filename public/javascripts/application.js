@@ -1,7 +1,7 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
-var $j = jQuery.noConflict();
+//var $j = jQuery.noConflict();
 		
 jQuery.ajaxSetup({ 'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")} })
  
@@ -31,7 +31,7 @@ jQuery.extend({
 jQuery.fn.submitWithAjax = function() {
   this.unbind('submit', false);
   this.submit(function() {
-    $.post(this.action, $j(this).serialize(), null, "script");
+    $.post(this.action, $(this).serialize(), null, "script");
     return false;
   })
  
@@ -42,7 +42,7 @@ jQuery.fn.submitWithAjax = function() {
 jQuery.fn.getWithAjax = function() {
   this.unbind('click', false);
   this.click(function() {
-    $.get($j(this).attr("href"), $j(this).serialize(), null, "script");
+    $.get($(this).attr("href"), $(this).serialize(), null, "script");
     return false;
   })
   return this;
@@ -52,7 +52,7 @@ jQuery.fn.getWithAjax = function() {
 jQuery.fn.postWithAjax = function() {
   this.unbind('click', false);
   this.click(function() {
-    $.post($j(this).attr("href"), $j(this).serialize(), null, "script");
+    $.post($(this).attr("href"), $(this).serialize(), null, "script");
     return false;
   })
   return this;
@@ -61,7 +61,7 @@ jQuery.fn.postWithAjax = function() {
 jQuery.fn.putWithAjax = function() {
   this.unbind('click', false);
   this.click(function() {
-    $.put($j(this).attr("href"), $j(this).serialize(), null, "script");
+    $.put($(this).attr("href"), $(this).serialize(), null, "script");
     return false;
   })
   return this;
@@ -71,7 +71,7 @@ jQuery.fn.deleteWithAjax = function() {
   this.removeAttr('onclick');
   this.unbind('click', false);
   this.click(function() {
-    $.delete_($j(this).attr("href"), $j(this).serialize(), null, "script");
+    $.delete_($(this).attr("href"), $(this).serialize(), null, "script");
     return false;
   })
   return this;
@@ -79,27 +79,27 @@ jQuery.fn.deleteWithAjax = function() {
  
 //This will "ajaxify" the links
 function ajaxLinks(){
-    $j('.ajaxForm').submitWithAjax();
-    $j('a.get').getWithAjax();
-    $j('a.post').postWithAjax();
-    $j('a.put').putWithAjax();
-    $j('a.delete').deleteWithAjax();
+    $('.ajaxForm').submitWithAjax();
+    $('a.get').getWithAjax();
+    $('a.post').postWithAjax();
+    $('a.put').putWithAjax();
+    $('a.delete').deleteWithAjax();
 }
  
-$j(document).ready(function() {
+$(document).ready(function() {
 	
-	$j('#spinner')
+	$('#spinner')
     .hide()  // hide it initially
     .ajaxStart(function() {
-        $j(this).show();
+        $(this).show();
     })
     .ajaxStop(function() {
-        $j(this).hide();
+        $(this).hide();
     });
  
 // All non-GET requests will add the authenticity token
   // if not already present in the data packet
- 	$j(document).ajaxSend(function(event, request, settings) {
+ 	$(document).ajaxSend(function(event, request, settings) {
        if (typeof(window.AUTH_TOKEN) == "undefined") return;
        // <acronym title="Internet Explorer 6">IE6</acronym> fix for http://dev.jquery.com/ticket/3155
        if (settings.type == 'GET' || settings.type == 'get') return;
@@ -108,42 +108,42 @@ $j(document).ready(function() {
        settings.data += (settings.data ? "&" : "") + "authenticity_token=" + encodeURIComponent(window.AUTH_TOKEN);
      });
 
-	 $j('.error').hide();  
+	 $('.error').hide();  
 	 	 
-	 $j(".link_to_nowhere").click(function() {
+	 $(".link_to_nowhere").click(function(event) {
 	 	event.preventDefault();
 	 });
 	 
-     $j(".view_entries").click(function(){
+     $("a.view_entries").click(function(event){
          event.preventDefault();
-         $j.get($j(this).attr("href"), {view: $j(this).attr("view")}, function(data){
+         $.get($(this).attr("href"), {view: $(this).attr("view")}, function(data){
 			 return false;
          });
      });
 	 
-	 $j(".feed_submit").click(function() {
-	 	$j('.error').hide();
-		//var title = $j("input#feed_title").val();
-		//var uri = $j("input#feed_uri").val();
+	 $(".feed_submit").click(function(event) {
+	 	$('.error').hide();
+		//var title = $("input#feed_title").val();
+		//var uri = $("input#feed_uri").val();
 		//var dataString = 'title='+title+'&uri='+uri;
-	 	$j.post("/feeds/create", $j("#feed_form").serialize(), function(data) {
+	 	$.post("/feeds/create", $("#feed_form").serialize(), function(data) {
 			//$("#right_bar_3").html(data);
 			ajaxLinks();
 			return false;
 		});
 	 });
 	 
-	 $j(".search_submit").click(function() {
+	 $(".search_submit").click(function(event) {
 	 	event.preventDefault();
-	 	$j.get($j(this).attr("href"), $j("#search_form").serialize(), function(data) {
+	 	$.get($(this).attr("href"), $("#search_form").serialize(), function(data) {
 			return false;
 		});
 	 });
 	 
-	 $j(".new_feed_submit").click(function() {
+	 $(".new_feed_submit").click(function(event) {
 	 	event.preventDefault();
-	 	$j.post($j(this).attr("href"), $j("#feed_form").serialize(), function(data) {
-			//$j("#right_bar_3").html(data);
+	 	$.post($(this).attr("href"), $("#feed_form").serialize(), function(data) {
+			//$("#right_bar_3").html(data);
 			return false;
 		});
 	 });
