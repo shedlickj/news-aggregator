@@ -96,6 +96,8 @@ $(document).ready(function() {
     .ajaxStop(function() {
         $(this).hide();
     });
+	
+	$('#feed_create_spinner').hide();
  
 // All non-GET requests will add the authenticity token
   // if not already present in the data packet
@@ -108,7 +110,8 @@ $(document).ready(function() {
        settings.data += (settings.data ? "&" : "") + "authenticity_token=" + encodeURIComponent(window.AUTH_TOKEN);
      });
 
-	 $('.error').hide();  
+	 $('.feed_create_title_error').hide(); 
+	 $('.feed_create_uri_error').hide(); 
 	 	 
 	 $(".link_to_nowhere").click(function(event) {
 	 	event.preventDefault();
@@ -122,7 +125,6 @@ $(document).ready(function() {
      });
 	 
 	 $(".feed_submit").click(function(event) {
-	 	$('.error').hide();
 		//var title = $("input#feed_title").val();
 		//var uri = $("input#feed_uri").val();
 		//var dataString = 'title='+title+'&uri='+uri;
@@ -141,6 +143,7 @@ $(document).ready(function() {
 	 });
 	 
 	 $(".new_feed_submit").click(function(event) {
+	 	$('#feed_create_spinner').show();
 	 	event.preventDefault();
 	 	$.post($(this).attr("href"), $("#feed_form").serialize(), function(data) {
 			//$("#right_bar_3").html(data);
@@ -150,7 +153,7 @@ $(document).ready(function() {
 	 
 	 $(".feed_update_submit").click(function(event) {
 	 	event.preventDefault();
-		alert("input#feed_title" + $(this).attr("id"));
+
 	 	$.put($(this).attr("href"), {id: $(this).attr("id"), title: $("input#feed_title" + $(this).attr("id")).val(), uri: $("input#feed_uri" + $(this).attr("id")).val()}, function(data) {
 			//$("#right_bar_3").html(data);
 			return false;

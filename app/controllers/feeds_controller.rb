@@ -22,7 +22,11 @@ class FeedsController < ApplicationController
   def create
     @feed = Feed.create(params[:feed])
     @feeds = Feed.all
-    puts @feed.errors
+    puts "here it is:"
+    puts @feed.errors.on("uri")
+    if(@feed.errors.on("title") != nil)
+    puts @feed.errors.on("title")
+    end
     if(@feed.errors.empty?)
       puts "no errors"
     end
@@ -31,6 +35,18 @@ class FeedsController < ApplicationController
       format.js {render :layout => false}
     end
   end
+  
+    # GET /rss_entries/1
+  # GET /rss_entries/1.xml
+  def show
+    @feed = Feed.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @rss_entry }
+    end
+  end
+
  
    # GET /feeds/1/edit
   def edit

@@ -139,7 +139,7 @@ h4.active {background-position: left bottom;} /*--When toggle is triggered, it w
 	background: #ddd;
 	overflow: hidden;
 	font-size: 1.2em;
-	width: 176px;
+	width: 172px;
 	clear: both;
 }
 .toggle_container #block {
