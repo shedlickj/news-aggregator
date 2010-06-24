@@ -98,6 +98,7 @@ $(document).ready(function() {
     });
 	
 	$('#feed_create_spinner').hide();
+	$('.feed_update_spinner').hide();
  
 // All non-GET requests will add the authenticity token
   // if not already present in the data packet
@@ -124,17 +125,6 @@ $(document).ready(function() {
          });
      });
 	 
-	 $(".feed_submit").click(function(event) {
-		//var title = $("input#feed_title").val();
-		//var uri = $("input#feed_uri").val();
-		//var dataString = 'title='+title+'&uri='+uri;
-	 	$.post("/feeds/create", $("#feed_form").serialize(), function(data) {
-			//$("#right_bar_3").html(data);
-			ajaxLinks();
-			return false;
-		});
-	 });
-	 
 	 $(".search_submit").click(function(event) {
 	 	event.preventDefault();
 	 	$.get($(this).attr("href"), $("#search_form").serialize(), function(data) {
@@ -152,9 +142,9 @@ $(document).ready(function() {
 	 });
 	 
 	 $(".feed_update_submit").click(function(event) {
+	 	$('#feed_update_spinner' + $(this).attr("id")).show();
 	 	event.preventDefault();
-
-	 	$.put($(this).attr("href"), {id: $(this).attr("id"), title: $("input#feed_title" + $(this).attr("id")).val(), uri: $("input#feed_uri" + $(this).attr("id")).val()}, function(data) {
+	 	$.put($(this).attr("href"), $("#feed_update_form" + $(this).attr("id")).serialize(), function(data) {
 			//$("#right_bar_3").html(data);
 			return false;
 		});

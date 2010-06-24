@@ -1,0 +1,353 @@
+<?xml-stylesheet type="text/xsl" href="docs.xsl"?><javascript fileName="readability.js">
+    <function name="dbg" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Function">
+    </function>
+    <object_literal name="readability" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+        <property name="version" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+        </property>
+        <property name="emailSrc" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+        </property>
+        <property name="kindleSrc" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+        </property>
+        <property name="iframeLoads" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Number">
+        </property>
+        <property name="frameHack" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Boolean">
+        </property>
+        <property name="bodyCache" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="null">
+            <description>The frame hack is to workaround a firefox bug where if you pull content out of a frame and stick it into the parent element, the scrollbar won&apos;t appear. So we fake a scrollbar in the wrapping div.</description>
+        </property>
+        <object_literal name="regexps" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Object">
+            <description>All of the regular expressions in use within readability. Defined up here so we don&apos;t instantiate them repeatedly in loops.</description>
+            <property name="regexps" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Regex">
+                <description>All of the regular expressions in use within readability. Defined up here so we don&apos;t instantiate them repeatedly in loops.</description>
+            </property>
+            <property name="regexps" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Regex">
+                <description>All of the regular expressions in use within readability. Defined up here so we don&apos;t instantiate them repeatedly in loops.</description>
+            </property>
+            <property name="positiveRe" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Regex">
+            </property>
+            <property name="negativeRe" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Regex">
+            </property>
+            <property name="divToPElementsRe" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Regex">
+            </property>
+            <property name="replaceBrsRe" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Regex">
+            </property>
+            <property name="replaceFontsRe" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Regex">
+            </property>
+            <property name="trimRe" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Regex">
+            </property>
+            <property name="normalizeRe" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Regex">
+            </property>
+            <property name="killBreaksRe" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Regex">
+            </property>
+            <property name="videoRe" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Regex">
+            </property>
+        </object_literal>
+        <function name="init" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Runs readability. Workflow: 1. Prep the document by removing script tags, css, etc. 2. Build readability&apos;s DOM tree. 3. Grab the article content from the current dom tree. 4. Replace the current DOM tree with the new one. 5. Read peacefully.</description>
+            <property name="overlay" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="id" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                </property>
+                <property name="className" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                </property>
+            </property>
+            <property name="innerDiv" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="id" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                </property>
+                <property name="className" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                </property>
+            </property>
+            <property name="articleTools" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="articleTitle" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="articleContent" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                </property>
+            </property>
+            <property name="articleFooter" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="document" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="body" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                    <property name="className" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                    </property>
+                    <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                    </property>
+                </property>
+            </property>
+            <property name="readability" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="bodyCache" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                </property>
+            </property>
+            <property name="readOverlay" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="style" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                    <property name="height" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                    </property>
+                    <property name="overflow" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                    </property>
+                </property>
+            </property>
+        </function>
+        <function name="getArticleTools" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Get the article tools Element that has buttons like reload, print, email.</description>
+            <property name="getArticleTools" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Object">
+                <description>Get the article tools Element that has buttons like reload, print, email.</description>
+                <property name="id" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                </property>
+                <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                </property>
+            </property>
+        </function>
+        <function name="getArticleTitle" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Get the article title as an H1. Currently just uses document.title, we might want to be smarter in the future.</description>
+            <property name="getArticleTitle" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Object">
+                <description>Get the article title as an H1. Currently just uses document.title, we might want to be smarter in the future.</description>
+                <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                </property>
+            </property>
+        </function>
+        <function name="getArticleFooter" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Get the footer with the readability mark etc.</description>
+            <property name="getArticleFooter" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Object">
+                <description>Get the footer with the readability mark etc.</description>
+                <property name="id" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                </property>
+                <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                </property>
+            </property>
+        </function>
+        <function name="prepDocument" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Prepare the HTML document for readability to scrape it. This includes things like stripping javascript, CSS, and handling terrible markup.</description>
+            <property name="frames" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="scripts" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="styleTags" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="document" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="body" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                    <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                    </property>
+                </property>
+            </property>
+            <property name="body" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="bestFrame" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="null">
+            </property>
+            <property name="bestFrameSize" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Number">
+            </property>
+            <property name="newBody" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                </property>
+                <property name="style" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                    <property name="overflow" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                    </property>
+                </property>
+            </property>
+            <property name="frameset" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="readability" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="frameHack" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Boolean">
+                </property>
+            </property>
+            <property name="typeKitScript" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="type" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                </property>
+                <property name="src" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                </property>
+            </property>
+            <property name="typeKitLoader" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Object">
+                <description>Done as a script elem so that it&apos;s ensured it will activate after typekit is loaded from the previous script src.</description>
+                <property name="type" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                </property>
+            </property>
+            <property name="typeKitLoaderContent" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+        </function>
+        <function name="prepArticle" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Prepare the article node for display. Clean out any inline styles, iframes, forms, strip extraneous &lt;p&gt; tags, etc.</description>
+            <parameters>
+                <parameter name="Element" type="Object">
+                </parameter>
+            </parameters>
+            <property name="articleParagraphs" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="articleContent" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                </property>
+            </property>
+        </function>
+        <function name="initializeNode" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Initialize a node with the readability object. Also checks the className/id for special names to add to its score.</description>
+            <parameters>
+                <parameter name="Element" type="Object">
+                </parameter>
+            </parameters>
+            <property name="node" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <object_literal name="readability" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                    <property name="contentScore" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Number">
+                    </property>
+                </object_literal>
+            </property>
+        </function>
+        <function name="grabArticle" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>* grabArticle - Using a variety of metrics (content score, classname, element types), find the content that is most likely to be the stuff a user wants to read. Then return it wrapped up in a div.</description>
+            <property name="allParagraphs" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Object">
+                <description>Loop through all paragraphs, and assign a score to them based on how content-y they look. Then add their score to their parent node. A score is determined by things like number of commas, class names, etc. Maybe eventually link density.</description>
+            </property>
+            <property name="candidates" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Array">
+            </property>
+            <property name="topCandidate" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="null">
+                <description>After we&apos;ve calculated scores, loop through all of the possible candidate nodes we found and find the one with the highest score.</description>
+                <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                </property>
+            </property>
+            <property name="articleContent" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Object">
+                <description>Now that we have the top candidate, look through its siblings for content that might also be related. Things like preambles, content split by ads that we removed, etc.</description>
+                <property name="id" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                </property>
+            </property>
+            <property name="siblingScoreThreshold" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="siblingNodes" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="document" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="body" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                    <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                    </property>
+                </property>
+            </property>
+        </function>
+        <function name="getInnerText" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Get the inner text of a node - cross browser compatibly. This also strips out any excess whitespace to be found.</description>
+            <parameters>
+                <parameter name="Element" type="Object">
+                </parameter>
+            </parameters>
+            <property name="textContent" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+            </property>
+        </function>
+        <function name="getCharCount" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Get the number of times a string s appears in the node e.</description>
+            <parameters>
+                <parameter name="Element" type="Object">
+                </parameter>
+                <parameter name="string" type="Object">
+                    <description>- what to split on. Default is &quot;,&quot;</description>
+                </parameter>
+            </parameters>
+        </function>
+        <function name="cleanStyles" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Remove the style attribute on every e and under. TODO: Test if getElementsByTagName(*) is faster.</description>
+            <parameters>
+                <parameter name="Element" type="Object">
+                </parameter>
+            </parameters>
+            <property name="cur" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+        </function>
+        <function name="getLinkDensity" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Get the density of links as a percentage of the content This is the amount of text that is inside a link divided by the total text in the node.</description>
+            <parameters>
+                <parameter name="Element" type="Object">
+                </parameter>
+            </parameters>
+            <property name="getLinkDensity" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Object">
+                <description>Get the density of links as a percentage of the content This is the amount of text that is inside a link divided by the total text in the node.</description>
+                <parameters>
+                    <parameter name="Element" type="Object">
+                    </parameter>
+                </parameters>
+            </property>
+            <property name="textLength" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="linkLength" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Number">
+            </property>
+        </function>
+        <function name="getClassWeight" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Get an elements class/id weight. Uses regular expressions to tell if this element looks good or bad.</description>
+            <parameters>
+                <parameter name="Element" type="Object">
+                </parameter>
+            </parameters>
+            <property name="getClassWeight" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Number">
+                <description>Get an elements class/id weight. Uses regular expressions to tell if this element looks good or bad.</description>
+                <parameters>
+                    <parameter name="Element" type="Object">
+                    </parameter>
+                </parameters>
+            </property>
+        </function>
+        <function name="killBreaks" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Remove extraneous break tags from a node.</description>
+            <parameters>
+                <parameter name="Element" type="Object">
+                </parameter>
+            </parameters>
+            <property name="e" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                </property>
+            </property>
+        </function>
+        <function name="clean" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Clean a node of all elements of type &quot;tag&quot;. (Unless it&apos;s a youtube/vimeo video. People love movies.)</description>
+            <parameters>
+                <parameter name="Element" type="Object">
+                </parameter>
+                <parameter name="string" type="Object">
+                    <description>tag to clean</description>
+                </parameter>
+            </parameters>
+            <property name="targetList" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="isEmbed" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+        </function>
+        <function name="cleanConditionally" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Clean an element of all tags of type &quot;tag&quot; if they look fishy. &quot;Fishy&quot; is an algorithm based on content length, classnames, link density, number of images &amp; embeds, etc.</description>
+            <property name="tagsList" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="curTagsLength" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+        </function>
+        <function name="cleanHeaders" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Clean out spurious headers from an Element. Checks things like classnames and link density.</description>
+            <parameters>
+                <parameter name="Element" type="Object">
+                </parameter>
+            </parameters>
+        </function>
+        <function name="emailBox" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Show the email popup.</description>
+            <property name="emailBox" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Object">
+                <description>Show the email popup.</description>
+                <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                </property>
+            </property>
+        </function>
+        <function name="kindleBox" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Show the email popup.</description>
+            <property name="kindleBox" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Object">
+                <description>Show the email popup.</description>
+                <property name="innerHTML" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="String">
+                </property>
+            </property>
+            <property name="formHtml" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+        </function>
+        <function name="removeFrame" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="false" internal="false" type="Function">
+            <description>Close the email popup. This is a hacktackular way to check if we&apos;re in a &quot;close loop&quot;. Since we don&apos;t have crossdomain access to the frame, we can only know when it has loaded again. If it&apos;s loaded over 3 times, we know to close the frame.</description>
+            <property name="emailContainer" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="kindleContainer" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+            <property name="readability" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+                <property name="iframeLoads" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Number">
+                </property>
+            </property>
+        </function>
+        <function name="htmlspecialchars" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Function">
+            <property name="s" scope="static" constructor="false" deprecated="false" private="false" protected="false" ignored="true" internal="false" type="Object">
+            </property>
+        </function>
+    </object_literal>
+</javascript>

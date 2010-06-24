@@ -18,29 +18,31 @@
 <!--<span id="edit_feeds-tag" class="ui-state-default ui-corner-all ui-icon ui-icon-wrench" style="display:none;"></span>-->
 <h4 class="trigger"><a class ="link_to_nowhere" href="#"><%=h feed.title %></a></h4>
 <div class="toggle_container" id="block">
-    <% form_for :feed, feed, :url => {:controller => 'feeds', :action => 'update', :class => "feed_update_form"}, :html => { :method => 'put' } do |f| %>
-    <form id="feed_update_form">
-        <%= f.error_messages %>
+	<%= image_tag 'loading.gif', :size=>"20x20", :id=>"feed_update_spinner#{feed.id}", :style=>"float:right; display:none;" %> 
+    <form id="feed_update_form<%= feed.id %>">
         <p>
-            <label for="feed_title#{feed.id}">
+            <label for="feed_title<%= feed.id %>">
                 Title:
             </label>
             <br/>
-            <input id="feed_title#{feed.id}" name="feed[title]" size="22" type="text" value="<%= feed.title %>" />
-        </p>
+            <table cellpadding='0' cellspacing='0'><tr><td><input id="feed_title<%= feed.id %>" name="feed[title]" size="19" type="text" value="<%= feed.title %>" /></td>
+			<td><div id="feed_update_title<%= feed.id %>"></div></td></tr></table>
+        	<div class="ui-state-error feed_update_title_error<%= feed.id %>" style="display:none;"></div>
+		</p>
         <p>
-            <label for="feed_uri#{feed.id}">
+            <label for="feed_uri<%= feed.id %>">
                 URL:
             </label>
             <br/>
-            <input id="feed_uri#{feed.id}" name="feed[uri]" size="22" type="text" value="<%= feed.uri %>" />
-        </p>
+            <table cellpadding='0' cellspacing='0'><tr><td><input id="feed_uri<%= feed.id %>" name="feed[uri]" size="19" type="text" value="<%= feed.uri %>" /></td>
+			<td><div id="feed_update_uri<%= feed.id %>"></div></td></tr></table>
+        	<div class="ui-state-error feed_update_uri_error<%= feed.id %>" style="display:none;"></div>
+		</p>
         <p>
-            <%= link_to 'Update', feed_path(feed.id), :id => feed.id, :class => "feed_update_submit" %>
+            <%= link_to 'Update', feed_path(feed), :id => feed.id, :class => "feed_update_submit" %>
             <%= link_to 'Delete', feed_path(feed), :confirm => 'Are you sure?', :class => "delete" %>
         </p>
     </form>
-    <% end %>
 </div>
 <% end %>
 <!--</div>-->

@@ -22,14 +22,6 @@ class FeedsController < ApplicationController
   def create
     @feed = Feed.create(params[:feed])
     @feeds = Feed.all
-    puts "here it is:"
-    puts @feed.errors.on("uri")
-    if(@feed.errors.on("title") != nil)
-    puts @feed.errors.on("title")
-    end
-    if(@feed.errors.empty?)
-      puts "no errors"
-    end
     respond_to do |format|
       format.html { redirect_to feeds_path() }
       format.js {render :layout => false}

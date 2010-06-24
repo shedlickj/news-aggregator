@@ -1,11 +1,10 @@
-$('.feed_create_title_error').hide(); 
-$('.feed_create_uri_error').hide(); 
 <% if !@feed.errors.empty? %>
 	<% if(@feed.errors.on("title") != nil) %>
 		$('.feed_create_title_error').show();
 		$('.feed_create_title_error').html("Title <%= @feed.errors.on("title") %>");
-		$('#feed_create_title').html('<span class="ui-state-error ui-corner-all ui-icon ui-icon-closethick" style="float:right;"></span>'); 
+		$('#feed_create_title').html('<span class="ui-state-error ui-corner-all ui-icon ui-icon-closethick" style="float:right;"></span>');
 	<% else %>
+		$('.feed_create_title_error').hide();
 		$('#feed_create_title').html('<span class="ui-state-accept ui-corner-all ui-icon ui-icon-check" style="float:right;"></span>');
 	<% end %>
 	<% if(@feed.errors.on("uri") != nil) %>
@@ -17,7 +16,8 @@ $('.feed_create_uri_error').hide();
 		$('.feed_create_uri_error').html("Error: <%= @feed.errors.on("base").humanize %>");
 		$('#feed_create_uri').html('<span class="ui-state-error ui-corner-all ui-icon ui-icon-closethick" style="float:right;"></span>'); 
 	<% else %>
-		$('#feed_create_uri').html('<span class="ui-state-accept ui-corner-all ui-icon ui-icon-check" style="float:right;"></span>'); 
+		$('#feed_create_uri').html('<span class="ui-state-accept ui-corner-all ui-icon ui-icon-check" style="float:right;"></span>');
+		$('.feed_create_uri_error').hide(); 
 	<% end %>
 <% else %>
 	$("#right_sidebar").html("<%= escape_javascript(render :partial => "/rss_entries/right_bar") %>");
