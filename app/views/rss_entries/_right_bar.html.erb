@@ -1,5 +1,12 @@
 <%= javascript_include_tag 'application' %>
 
+<!-- Buttons -->
+<script type="text/javascript">
+    $(function(){
+        $("a", ".button_style").button();
+    });
+</script>
+
 <!-- Datepicker -->
 <script type="text/javascript">
     $(function(){
@@ -15,10 +22,10 @@
 <!-- Widget cornering -->
 <script type="text/javascript">
     $(function(){
-        $("#right_bar_1").corner()
-        $("#right_bar_2").corner()
-        $("#right_bar_3").corner()
-		$(".toggle_container").corner("bottom")
+        $("#right_bar_1").corner();
+        $("#right_bar_2").corner();
+        $("#right_bar_3").corner();
+		$(".toggle_container").corner("bottom");
     });
 </script>
 

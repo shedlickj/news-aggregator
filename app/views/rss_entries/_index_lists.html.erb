@@ -1,0 +1,19 @@
+<%= javascript_include_tag 'feeds_editor' %>
+
+<script type="text/javascript">
+    $(function(){
+        $("#list_pane").corner();
+		$("#middle_pane").corner();
+        $("#feed_pane").corner();
+    });
+</script>
+
+<div class='pane_container' id='list_pane'>
+    <%= render :partial=>'/rss_entries/lists_pane' %>
+</div>
+<div class='pane_container' id='middle_pane'>
+    <%= render :partial=>'/rss_entries/middle_pane' %>
+</div>
+<div class='pane_container' id='feed_pane'>
+    <%= render :partial=>'/rss_entries/feeds_pane' %>
+</div>

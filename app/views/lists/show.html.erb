@@ -1,0 +1,18 @@
+<p>
+  <b>Name:</b>
+  <%=h @list.name %>
+</p>
+
+<p>
+  <b>Feeds by:</b>
+  <%=h @list.feeds_by_id %>
+</p>
+
+<p>
+  <b>Default:</b>
+  <%=h @list.default_list %>
+</p>
+
+
+<%= link_to 'Edit', edit_list_path(@list) %> |
+<%= link_to 'Back', lists_path %>

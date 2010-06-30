@@ -88,15 +88,6 @@ function ajaxLinks(){
  
 $(document).ready(function() {
 	
-	$('#spinner')
-    .hide()  // hide it initially
-    .ajaxStart(function() {
-        $(this).show();
-    })
-    .ajaxStop(function() {
-        $(this).hide();
-    });
-	
 	$('#feed_create_spinner').hide();
 	$('.feed_update_spinner').hide();
  
@@ -117,6 +108,13 @@ $(document).ready(function() {
 	 $(".link_to_nowhere").click(function(event) {
 	 	event.preventDefault();
 	 });
+	 
+	 $("a.set_list").click(function(event){
+         event.preventDefault();
+         $.get($(this).attr("href"), $("#list_selector").serialize(), function(data){
+			 return false;
+         });
+     });
 	 
      $("a.view_entries").click(function(event){
          event.preventDefault();
@@ -157,6 +155,20 @@ $(document).ready(function() {
 			return false;
 		});
 	 });
+	 
+	 $(".read_link").click(function(event){
+         event.preventDefault();
+         $.get($(this).attr("href"), {view: $(this).attr("view")}, function(data){
+			 return false;
+         });
+     });
+	 
+	 $(".view_lists_pane").click(function(event){
+         event.preventDefault();
+         $.get($(this).attr("href"), function(data){
+			 return false;
+         });
+     });
  
   ajaxLinks();
 });

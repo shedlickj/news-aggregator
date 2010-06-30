@@ -1,16 +1,41 @@
+<script>
+$(document).ready(function() {
+	
+	$('#spinner')
+    .hide()  // hide it initially
+    .ajaxStart(function() {
+        $(this).show();
+    })
+    .ajaxStop(function() {
+        $(this).hide();
+    });
+                
+    $(document).ajaxSend(function(event, request, settings) {
+        
+    	$(".view_lists_pane").click(function(event){
+    	event.preventDefault();
+    	$.get($(this).attr("href"), function(data){
+    		return false;
+    		});
+    	});
+    });
+});
+</script>
+
 <%= image_tag 'loading.gif', :id=>'spinner',
-      :style=>"float:right;" %>
-      <div id="container">
-          <div id="content">
-          	  <h1>Listing rss_entries</h1>
-              <!-- START:ajaxWrapper -->
-              <div class='ajaxWrapper'>
-                  <%= render :partial=>'search' %>
-              </div>
-              <!-- END:ajaxWrapper -->
-			  <%= render :partial => 'footer' %>
-          </div>
-		  <div id="right_sidebar">
-		  	<%= render :partial => 'right_bar' %>
-		  </div>
-      </div>
+:style=>"float:right;" %>
+<div id="container">
+	<div id="header">
+		<h1>Listing rss_entries</h1>
+		<table><tr>
+			<td><%= link_to 'Newsfeed', rss_entries_path(), :class => "view_rss_entries_pane" %></td>
+			<td><%= link_to 'Lists & Feeds', lists_path(), :class => "view_lists_pane" %></td>
+		</tr></table>
+	</div>
+    <div id="content">
+		<%= render :partial => 'index_rss_entries' %>
+	</div>
+	<!--<div id="footer">
+		<%#= render :partial => 'footer' %>
+	</div>-->
+</div>

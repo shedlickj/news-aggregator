@@ -486,7 +486,7 @@ var readability = {
 		 * After we've calculated scores, loop through all of the possible candidate nodes we found
 		 * and find the one with the highest score.
 		**/
-		var topCandidate = null;
+		var topCandidate = null;h
 		for(var i=0, il=candidates.length; i < il; i++)
 		{
 			/**

@@ -1,0 +1,24 @@
+<h1>Editing list</h1>
+
+<% form_for(@list) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :feeds_by_id %><br />
+    <%= f.text_field :feeds_by_id %>
+  </p>
+  <p>
+    <%= f.label :default_list %><br />
+    <%= f.check_box :default_list %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @list %> |
+<%= link_to 'Back', lists_path %>

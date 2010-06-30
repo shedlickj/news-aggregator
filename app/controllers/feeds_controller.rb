@@ -21,6 +21,7 @@ class FeedsController < ApplicationController
  
   def create
     @feed = Feed.create(params[:feed])
+    flash[:notice] = "Feed successfully created"
     @feeds = Feed.all
     respond_to do |format|
       format.html { redirect_to feeds_path() }
@@ -43,19 +44,23 @@ class FeedsController < ApplicationController
    # GET /feeds/1/edit
   def edit
     @feed = Feed.find(params[:id])
+    respond_to do |format|
+      format.html { redirect_to feeds_path }
+      format.js {render :layout => false}
+    end
   end
   
   # PUT /feeds/1
   # PUT /feeds/1.xml
   def update
     @feed = Feed.find(params[:id])
-    if @feed.update_attributes(params[:feed])
-      #show success
-    else
-      #show failure
-    end
     @feeds = Feed.all
- 
+    if @feed.update_attributes(params[:feed])
+      flash[:notice] = "Feed successfully updated"
+    else
+      flash[:error] = "Feed update failed"
+    end
+      
     respond_to do |format|
       format.html { redirect_to feeds_path }
       format.js {render :layout => false}
@@ -66,6 +71,7 @@ class FeedsController < ApplicationController
     @feed = Feed.find(params[:id])
     @feed.destroy
     @feeds = Feed.all
+    flash[:notice] = "Feed successfully deleted"
  
     respond_to do |format|
       format.html { redirect_to feeds_path }

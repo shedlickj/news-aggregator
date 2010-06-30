@@ -1,8 +1,3 @@
-<script type="text/javascript">
-    $(function(){
-        $("a", "#button_style").button();
-    });
-</script>
 <form id="search_form">
     <div class="right_bar_title">
         Search
@@ -53,11 +48,10 @@
         <%= label_tag :to %>
         <br/>
         <input id="end_on" name="end_on" size="19" type="text" value="" class="datepicker" />
-        <br/>
-        <hr/><!--<%= submit_tag 'Search', :class => "search_submit" %>-->
-        <div id = "button_style">
-            <%= link_to 'Submit', rss_entries_path(), :class => "search_submit" %>
-        </div>
+		<!--<%= submit_tag 'Search', :class => "search_submit" %>-->
         <!--<input class="feed_submit" name="commit" type="submit"  />-->
+    </div>
+	<div class="button_style" align="right">
+    	<%= link_to 'Submit', rss_entries_path(), :class => "search_submit" %>
     </div>
 </form>

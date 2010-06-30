@@ -20,7 +20,8 @@
 		$('.feed_create_uri_error').hide(); 
 	<% end %>
 <% else %>
-	$("#right_sidebar").html("<%= escape_javascript(render :partial => "/rss_entries/right_bar") %>");
+	$("#feed_pane").html("<%= escape_javascript(render :partial => "/rss_entries/feeds_pane") %>");
+	$("#middle_pane").html("<%= escape_javascript(flash[:notice]) %>");
 <% end %>
 $('#feed_create_spinner').hide();
 ajaxLinks();

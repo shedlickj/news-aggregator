@@ -5,6 +5,16 @@
     </div>
 </div>
 <div class="right_bar_data">
+	<form id="list_selector">
+    	<select name="list_id">
+    	    <option value="0">All Feeds</option>
+     	    <% for list in @lists %>
+      		<option value="<%= list.id %>" <% if cookies[:list] == "#{list.id}" %>selected="selected"<% end %>><%= list.name %></option>
+    	    <% end %>
+    	</select>
+		<div class="button_style"><%= link_to 'Change', rss_entries_path(), :class => "set_list" %></div>
+	</form>
+	<br />
 	<%= link_to 'Normal View', rss_entries_path(), :view => "normal", :class => "view_entries" %><br />
 	<%= link_to 'All Articles', rss_entries_path(), :view => "all", :class => "view_entries" %><br />
     <%= link_to 'Favorite Articles', rss_entries_path(), :view => "favorite", :class => "view_entries" %><br />
@@ -12,6 +22,7 @@
 
     <br/>
 	<%= link_to 'Update Articles', "#{rss_entries_path()}/update_articles", :view => "normal", :class => "get" %><br />
+	<%= link_to 'Readability', rss_entries_path(), :view => "normal", :class => "read_link" %><br />
 </div>
 <br/>
 <a href="#" id="more_views-toggle">More</a>

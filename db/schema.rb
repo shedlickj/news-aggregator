@@ -9,13 +9,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100618155347) do
+ActiveRecord::Schema.define(:version => 20100625183724) do
 
   create_table "feeds", :force => true do |t|
     t.string   "uri"
     t.string   "title"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "lists_by_id"
+  end
+
+  create_table "lists", :force => true do |t|
+    t.string   "feeds_by_id"
+    t.boolean  "default_list", :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
   end
 
   create_table "rss_entries", :force => true do |t|

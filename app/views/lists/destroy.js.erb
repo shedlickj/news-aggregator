@@ -1,0 +1,3 @@
+$("#list_pane").html("<%= escape_javascript(render :partial => '/rss_entries/lists_pane') %>");
+$("#middle_pane").html("<%= escape_javascript(flash[:notice]) %>");
+ajaxLinks();

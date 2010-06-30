@@ -11,10 +11,29 @@ body, p, ol, ul, td {
 }
 
 div#container { position: relative; width: 950px; height: 700px; margin: 0 auto; }
-div#content { position:absolute; left:15px; top:20px; width:735px; }
-div#right_bar { position:absolute; left: 760px; top:80px; width:180px; }
+div#header { position:absolute; left:0px; top:0px; width:950px; height:100px; padding: 10px; }
+div#content { position:absolute; left:15px; top:120px; width:950px; }
+
+div#rss_entries_content { position:absolute; left:15px; width:735px; }
+div#right_sidebar { position:absolute; left: 760px; width:180px; }
+
+div#list_pane { position:absolute; left:15px; width:180px; }
+div#middle_pane { position:absolute; left:210px; width:535px; }
+div#feed_pane { position:absolute; left:760px; width:180px; }
+
 div#footer { clear: both; text-align: center; font-size: 11px; color: #777; padding-top: 40px; padding-bottom: 40px; }
 div#footer p { margin: 0; padding: 0; }
+
+div.pane_container {
+	margin: 0 0 0 0;
+	padding: 5px;
+	border: 1px solid #999;
+	background: #ddd;
+	overflow: hidden;
+	font-size: 1.0em;
+	width: 150px;
+	clear: both;
+}
 
 pre {
   background-color: #eee;
@@ -144,4 +163,63 @@ h4.active {background-position: left bottom;} /*--When toggle is triggered, it w
 }
 .toggle_container #block {
 	padding: 3px; /*--Padding of Container--*/
+}
+
+
+/*
+ * List Pane
+ ***************************/
+.list_container {
+	margin: 4px;
+	padding: 2px;
+	border: 1px solid #999;
+	background: #ddd;
+	overflow: hidden;
+	font-size: 1.2em;
+	width: 168px;
+	clear: both;
+}
+
+.move_container {
+	cursor: move;
+}
+
+.open_container {
+	cursor: hand;
+}
+
+.list_edit_container {
+	text-align: center; 
+	margin: 10px;
+	padding: 0px;
+	border: 1px solid #999;
+	background: #ddd;
+	overflow: hidden;
+	font-size: 1.2em;
+	width: 515px;
+	clear: both;
+}
+
+.feed_edit_container {
+	text-align: center; 
+	margin: 10px;
+	padding: 0px;
+	border: 1px solid #999;
+	background: #ddd;
+	overflow: hidden;
+	font-size: 1.2em;
+	width: 515px;
+	clear: both;
+}
+
+.feed_new_container {
+	text-align: center; 
+	margin: 10px;
+	padding: 0px;
+	border: 1px solid #999;
+	background: #ddd;
+	overflow: hidden;
+	font-size: 1.2em;
+	width: 515px;
+	clear: both;
 }

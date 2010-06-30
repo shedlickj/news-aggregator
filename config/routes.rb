@@ -4,6 +4,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :feeds
   
+  map.resources :lists
+  
   map.resources :updates
 
   # The priority is based upon order of creation: first created -> highest priority.

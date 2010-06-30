@@ -1,0 +1,40 @@
+
+<script type="text/javascript">
+    $(function(){
+        $("a", ".feed_new_container").button();
+		
+		$(".feed_create_submit").click(function(event) {
+            $('#feed_create_spinner').show();
+            event.preventDefault();
+            $.post($(this).attr("href"), $("#feed_form").serialize(), function(data){
+                return false;
+            });
+	 	});
+    });
+</script>
+
+<div class="feed_new_container" id="block">
+	<form id="feed_form" >
+    	<!--<div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="4hWoOR1Hdqi4vEqzt0uM+wEn+JG70oqLLsY4iZzso9w=" /></div>-->
+    	<p> 
+			<table align="center" cellpadding='5' cellspacing='0'><tr>
+				<td><label for="feed_title<%= @feed.id %>">Title:</label>
+				<td><input id="feed_title" name="feed[title]" size="40" type="text" /></td>
+				<td><div id="feed_create_title"></div></td>
+			</tr></table>
+			<div class="ui-state-error feed_create_title_error" style="display:none; width:400px; margin-left:55px"></div>
+    	</p> 
+    	<p> 
+			<table align="center" cellpadding='5' cellspacing='0'><tr>
+				<td><label for="feed_uri<%= @feed.id %>">URL:</label></td>
+				<td><input id="feed_uri" name="feed[uri]" size="40" type="text" /></td>
+				<td><div id="feed_create_uri"></div></td>
+			</tr></table>
+			<div class="ui-state-error feed_create_uri_error" style="display:none; width:400px; margin-left:55px"></div>
+    	</p> 
+    	<p> 
+			<%= link_to 'Create', feeds_path(), :class => "feed_create_submit" %>
+			<%= image_tag 'loading.gif', :size=>"20x20", :id=>'feed_create_spinner', :style=>"float:right; display:none;" %> 
+    	</p> 
+    </form> 
+</div>
