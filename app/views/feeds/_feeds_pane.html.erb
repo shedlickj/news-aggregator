@@ -1,0 +1,22 @@
+
+<%= javascript_include_tag 'feeds_editor' %>
+<div class="right_bar_title">
+    Feeds
+</div>
+<% for feed in Feed.all %>
+<script type="text/javascript">
+    $(function(){
+		$("#draggable_feed_<%= feed.id %>").draggable({ revert: true, opacity: 0.75, appendTo: 'body', helper: 'clone', distance: 5});
+
+        $("a", ".toggle_container").button();
+        
+        $("a", ".toggle_container").click(function(){
+            return false;
+        });
+    });
+</script>
+<div class="list_container move_container" id="draggable_feed_<%= feed.id %>"><%=h feed.title %></div>
+<%= link_to 'Edit', edit_feed_path(feed), :id => feed.id, :class => "feed_edit_submit" %>
+<% end %>
+<br />
+<%= link_to 'Add a Feed', new_feed_path, :id => feed.id, :class => "feed_new_submit" %>

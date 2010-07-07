@@ -1,4 +1,4 @@
-$("#list_pane").html("<%= escape_javascript(render :partial => '/rss_entries/lists_pane') %>");
+$("#list_pane").html("<%= escape_javascript(render :partial => 'lists_pane') %>");
 $("#middle_pane").html("<%= escape_javascript(render :partial => 'list_edit') %>");
 $('#list_update_spinner<%= @list.id %>').hide();
 ajaxLinks();

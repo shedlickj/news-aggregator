@@ -85,6 +85,12 @@ function ajaxLinks(){
     $('a.put').putWithAjax();
     $('a.delete').deleteWithAjax();
 }
+
+function set_list(){
+    $.get("/rss_entries", $("#list_selector").serialize(), function(data){
+        return false;
+    });
+}
  
 $(document).ready(function() {
 	
@@ -159,13 +165,6 @@ $(document).ready(function() {
 	 $(".read_link").click(function(event){
          event.preventDefault();
          $.get($(this).attr("href"), {view: $(this).attr("view")}, function(data){
-			 return false;
-         });
-     });
-	 
-	 $(".view_lists_pane").click(function(event){
-         event.preventDefault();
-         $.get($(this).attr("href"), function(data){
 			 return false;
          });
      });

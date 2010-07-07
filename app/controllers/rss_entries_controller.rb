@@ -3,6 +3,7 @@ require 'will_paginate'
 require 'chronic'
 require 'net/http'
 require 'cgi'
+require 'nokogiri'
 
 class RssEntriesController < ApplicationController
   # GET /rss_entries
@@ -11,6 +12,15 @@ class RssEntriesController < ApplicationController
     @feeds = Feed.all
     @lists = List.all
     @rss_entry = RssEntry.first
+    
+    entry = RssEntry.find(2572)
+    response = Net::HTTP.get(URI.parse(entry.link))
+    html = Nokogiri::HTML(response, nil, 'UTF-8')
+    tag = html.css("a")
+    puts "tag:"
+    puts tag
+    puts "name:"
+    puts tag.attribute('href')
     #if(params[:commit] == "Search")
     #  params[:view] = "normal" unless params[:features].include?("hidden")
     #else
@@ -110,9 +120,64 @@ class RssEntriesController < ApplicationController
     "published DESC"
   end
   
+  def cluster_articles
+    RssEntry.all(:conditions => "data <> ''").each {|entry|
+       find_spot_signature(entry)
+       entry.save!
+    }
+    RssEntry.all(:conditions => "spot_signature <> '' AND (rss_entries.source != 'Gizmodo')").each {|entry|
+    match_ids = []
+    RssEntry.all(:conditions => "spot_signature <> '' AND (rss_entries.source != 'Gizmodo')").each {|compareEntry|
+      if((entry.id != compareEntry.id) && (entry.link != compareEntry.link))
+        similarities = 0
+        matches = []
+        spots = compareEntry.spot_signature.split(" || ")
+        entry.spot_signature.split(" || ").each { |currSpot|
+          if(spots.include?(currSpot))
+            similarities+=1
+            matches << currSpot
+          end
+        }
+        if((entry.source != compareEntry.source && similarities >= 4) || (entry.source == compareEntry.source && similarities >= 10) || (entry.source != compareEntry.source && Float(similarities)/entry.spot_signature.split(" || ").length >= 0.2 && similarities >=2)|| (entry.source == compareEntry.source && Float(similarities)/entry.spot_signature.split(" || ").length >= 0.5 && similarities >=4) )
+          if(compareEntry.cluster && compareEntry.cluster != "") #If other article is clustered, add current article to that cluster
+            entry.cluster = compareEntry.cluster
+            if(entry.save)
+              puts "added to existing cluster"
+            end
+            @cluster = Cluster.find(entry.cluster)
+            @cluster.add_article(@cluster, matches, entry.id)
+            puts @cluster.list_of_articles
+          elsif(entry.cluster && entry.cluster != "")            #If article is clustered, add other article to this cluster
+            compareEntry.cluster = entry.cluster
+            if(entry.save)
+              puts "added to existing cluster"
+            end
+            @cluster = Cluster.find(entry.cluster)
+            @cluster.add_article(@cluster, matches, compareEntry.id)
+            puts @cluster.list_of_articles
+          else                                                   #Otherwise, make a new cluster
+            @cluster = Cluster.new
+            @cluster.list_of_articles = "#{entry.id} || #{compareEntry.id}"
+            puts @cluster.list_of_articles
+            @cluster.spot_matches = matches.join(' || ')
+            if(@cluster.save)
+              puts "new cluster"
+            end
+            entry.cluster = @cluster.id
+            compareEntry.cluster = @cluster.id
+            entry.save!
+            compareEntry.save!
+          end
+        end
+      end
+      }
+    }
+  end
+  
   def update_articles
     Feed.all.map { |feed|
       puts "uri: " << feed.uri
+      if(feed.title != "Gizmodo")
       open_feed = FeedTools::Feed.open( feed.uri ) #TODO: Error checking
       open_feed.items.map { |item|
         entry = RssEntry.find_or_initialize_by_title(item.title)
@@ -124,8 +189,13 @@ class RssEntriesController < ApplicationController
         entry.hidden ||= false
         entry.favorite ||= false
         store_article_text(entry)
+        find_spot_signature(entry)
         entry.save! #TODO: Error checking
+        make_clusters(entry)
       }
+      else
+        puts "skipped"
+      end
     }
     find_and_show_entries
   end
@@ -133,27 +203,104 @@ class RssEntriesController < ApplicationController
   def store_article_text(entry)
       entry.data = nil;
       puts "storing data"
-      response = Net::HTTP.get_response(URI.parse(entry.link))
-      entry.data = response
+      response = Net::HTTP.get(URI.parse(entry.link))
+      if(response.downcase.include?("<h1>moved permanently</h1>"))
+        html = Nokogiri::HTML(response, nil, 'UTF-8')
+        tag = html.css("a")
+        link = tag.attribute('href')
+#        puts "new link:"
+#        puts link
+        response = Net::HTTP.get(URI.parse(link))
+#        if(entry.source == "Gizmodo")
+#          puts response
+#          sleep 5
+#        end
+      end
+      data = Readability::Document.new(response || "")
+      if(data.content == nil || data.content.length < 15)
+        entry.data = entry.description
+      else
+        entry.data = data.content.gsub(/<[^>]+>/,"").squeeze(" ").strip || ""
+      end
   end
-
-  def feed_create
-    @feed = Feed.new(params[:feed])
-    @feeds = Feed.all
-    @feed.save!
-    render(:partial=>'right_bar_3', :layout=>false)
+  
+  def find_spot_signature(entry)
+     tokens = entry.data.downcase.split(' ')
+     pos = 0
+     spots = []
+     currSig = ""
+     tokens.each {|token|
+                  if APP_CONFIG['antecedents'].include?(token)
+                    pos = 1
+                  end
+                  if pos > 0
+                    currSig += "#{token} "
+                    pos+=1
+                  end
+                  if pos == 4
+                    spots << currSig.gsub(/[.,";:?!]/,"").squeeze(" ").strip
+                    currSig = ""
+                    pos = 0
+                  end
+                  }
+     spots = spots.uniq
+     entry.spot_signature = spots.join(' || ')
+  end
+  
+  def make_clusters(entry)
+    match_ids = []
+    RssEntry.all(:conditions => "spot_signature <> '' AND (rss_entries.source != 'Gizmodo')").each {|compareEntry|
+      if((entry.id != compareEntry.id) && (entry.link != compareEntry.link))
+        similarities = 0
+        matches = []
+        spots = compareEntry.spot_signature.split(" || ")
+        entry.spot_signature.split(" || ").each { |currSpot|
+          if(spots.include?(currSpot))
+            similarities+=1
+            matches << currSpot
+          end
+        }
+        if((entry.source != compareEntry.source && similarities >= 4) || (entry.source == compareEntry.source && similarities >= 10) || (entry.source != compareEntry.source && Float(similarities)/entry.spot_signature.split(" || ").length >= 0.2 && similarities >=2)|| (entry.source == compareEntry.source && Float(similarities)/entry.spot_signature.split(" || ").length >= 0.5 && similarities >=4) )
+          if(compareEntry.cluster && compareEntry.cluster != "")
+            entry.cluster = compareEntry.cluster
+            if(entry.save)
+              puts "added to existing cluster"
+            end
+            @cluster = Cluster.find(entry.cluster)
+            @cluster.add_article(@cluster, matches, entry.id)
+            puts @cluster.list_of_articles
+          elsif(entry.cluster && entry.cluster != "")
+            compareEntry.cluster = entry.cluster
+            if(entry.save)
+              puts "added to existing cluster"
+            end
+            @cluster = Cluster.find(entry.cluster)
+            @cluster.add_article(@cluster, matches, compareEntry.id)
+            puts @cluster.list_of_articles
+          else
+            @cluster = Cluster.new
+            @cluster.list_of_articles = "#{entry.id} || #{compareEntry.id}"
+            puts @cluster.list_of_articles
+            @cluster.spot_matches = matches.join(' || ')
+            if(@cluster.save)
+              puts "new cluster"
+            end
+            entry.cluster = @cluster.id
+            compareEntry.cluster = @cluster.id
+            entry.save!
+            compareEntry.save!
+          end
+        end
+      end
+    }
   end
   
   private
   
   def find_and_show_entries
-    puts "view:"
-    puts params[:view]
     # if not search
     if(params[:view] != nil)
       conditions = ""
-      puts "cookie:"
-      puts cookies[:list]
       if(cookies[:list] != nil && cookies[:list] != '0')
         list = List.find(cookies[:list])
         list.get_feeds(list.id).each{ |feed_id|
@@ -186,6 +333,9 @@ class RssEntriesController < ApplicationController
     :page => params[:page],
     :per_page => 20,
     :conditions => conditions)
+    @start_article_num = ((params[:page] || 1).to_i-1)*20 + 1
+    @end_article_num = ((params[:page] || 1).to_i)*20
+    @num_of_articles = RssEntry.all.length
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @rss_entries }

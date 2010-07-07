@@ -1,0 +1,13 @@
+<p>
+  <b>List of articles:</b>
+  <%=h @cluster.list_of_articles %>
+</p>
+
+<p>
+  <b>Spot matches:</b>
+  <%=h @cluster.spot_matches %>
+</p>
+
+
+<%= link_to 'Edit', edit_cluster_path(@cluster) %> |
+<%= link_to 'Back', clusters_path %>

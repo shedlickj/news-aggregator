@@ -6,3 +6,11 @@ OR_terms:
 AND_terms:
  hidden : false
  favorite : false
+ 
+antecedents:
+ a
+ there
+ was
+ said
+ the
+ is

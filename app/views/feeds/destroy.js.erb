@@ -1,3 +1,3 @@
-$("#feed_pane").html("<%= escape_javascript(render :partial => "/rss_entries/feeds_pane") %>");
+$("#feed_pane").html("<%= escape_javascript(render :partial => "feeds_pane") %>");
 $("#middle_pane").html("<%= escape_javascript(flash[:notice]) %>");
 ajaxLinks();

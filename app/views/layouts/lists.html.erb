@@ -1,17 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title>Lists: <%= controller.action_name %></title>
-  <%= stylesheet_link_tag 'scaffold' %>
-</head>
-<body>
-
-<p style="color: green"><%= notice %></p>
-
-<%= yield %>
-
-</body>
+<html>
+  <head>
+  <title>List: <%= controller.action_name %></title>
+      <style type="text/css"> 
+        body { font-family:Arial, Helvetica, Sans-Serif; font-size:0.8em;}
+    </style> 
+	<%= javascript_include_tag 'jquery-1.4.2.js' %>
+    <%= stylesheet_link_tag 'scaffold' %>
+    <%= javascript_include_tag 'jquery-ui-1.8.2.custom.min.js' %>
+    <%= stylesheet_link_tag 'jquery-ui-1.8.2.custom' %>
+	<%= javascript_include_tag 'jExpand' %>
+	<%= javascript_include_tag 'jquery.corner' %>
+    </head>
+    <body>
+        <!--<p style="color: green">
+            <%#= flash[:notice] %>
+        </p>-->
+        <%= yield %>
+    </body>
 </html>

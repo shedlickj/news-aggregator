@@ -12,9 +12,9 @@ body, p, ol, ul, td {
 
 div#container { position: relative; width: 950px; height: 700px; margin: 0 auto; }
 div#header { position:absolute; left:0px; top:0px; width:950px; height:100px; padding: 10px; }
-div#content { position:absolute; left:15px; top:120px; width:950px; }
+div#content { position:absolute; left:0px; top:120px; width:950px; }
 
-div#rss_entries_content { position:absolute; left:15px; width:735px; }
+div#rss_entries_content { position:absolute; left:15px; width:735px; padding-bottom:50px; }
 div#right_sidebar { position:absolute; left: 760px; width:180px; }
 
 div#list_pane { position:absolute; left:15px; width:180px; }

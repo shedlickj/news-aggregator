@@ -9,7 +9,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100625183724) do
+ActiveRecord::Schema.define(:version => 20100707135234) do
+
+  create_table "clusters", :force => true do |t|
+    t.text     "list_of_articles"
+    t.text     "spot_matches"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "feeds", :force => true do |t|
     t.string   "uri"
@@ -32,12 +39,14 @@ ActiveRecord::Schema.define(:version => 20100625183724) do
     t.string   "title"
     t.datetime "published"
     t.string   "link"
-    t.text     "description", :limit => 255
+    t.text     "description",    :limit => 255
     t.string   "data"
     t.boolean  "hidden"
     t.boolean  "favorite"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "spot_signature"
+    t.string   "cluster"
   end
 
 end

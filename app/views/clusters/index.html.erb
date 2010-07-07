@@ -1,0 +1,22 @@
+<h1>Listing clusters</h1>
+
+<table border="1">
+  <tr>
+    <th>List of articles</th>
+    <th>Spot matches</th>
+  </tr>
+
+<% @clusters.each do |cluster| %>
+  <tr>
+    <td width="500"><%= cluster.get_articles(cluster) %></td>
+    <td><%=h cluster.spot_matches %></td>
+    <td><%= link_to 'Show', cluster %></td>
+    <td><%= link_to 'Edit', edit_cluster_path(cluster) %></td>
+    <td><%= link_to 'Destroy', cluster, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New cluster', new_cluster_path %>

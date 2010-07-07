@@ -20,7 +20,7 @@
 		$('.feed_update_uri_error<%=@feed.id%>').hide(); 
 	<% end %>
 <% else %>
-	$("#feed_pane").html("<%= escape_javascript(render :partial => "/rss_entries/feeds_pane") %>");
+	$("#feed_pane").html("<%= escape_javascript(render :partial => "feeds_pane") %>");
 	$('.feed_update_title_error<%=@feed.id%>').hide();
 	$('#feed_update_title<%=@feed.id%>').html('<span class="ui-state-accept ui-corner-all ui-icon ui-icon-check" style="float:right;"></span>');
 	$('.feed_update_uri_error<%=@feed.id%>').hide();

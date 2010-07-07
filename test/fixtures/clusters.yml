@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  list_of_articles: MyText
+  spot_matches: MyText
+
+two:
+  list_of_articles: MyText
+  spot_matches: MyText

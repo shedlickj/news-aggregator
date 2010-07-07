@@ -11,6 +11,7 @@ $(document).ready(function(){
      });
 });
 </script>
+<p>Showing articles <%= @start_article_num %> - <%= @end_article_num %> of <%= @num_of_articles %></p>
 <table cellpadding="1" id="report">
   <tr>
   	<th width="15%">Source</th>
@@ -66,7 +67,7 @@ $(document).ready(function(){
 	<% if(row%2==0) %><div id="table_description_even">
 	<% else %><div id="table_description_odd">
 	<% end %>
-	<%=h rss_entry.description %>
+	<%=h rss_entry.data %>
 	</div>
 </div>
 <% row+=1 %>

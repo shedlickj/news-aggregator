@@ -1,76 +1,40 @@
+<style>
+ul {padding-left: 3px;}
+</style>
+
 <div class="right_bar_title">
-    Feeds
+    Lists & Feeds
     <div style="display:block;float:right;">
         <span id="move_icon" class="ui-state-default ui-corner-all ui-icon ui-icon-arrow-4"></span>
     </div>
 </div>
 <script type="text/javascript">
     $(function(){
-        $("a", ".toggle_container").button();
-        
-        $("a", ".toggle_container").click(function(){
-            return false;
+        $("#accordion").accordion({
+			active: 0,
+			event: "mouseover",
+            autoHeight: false,
+            navigation: true
         });
     });
 </script>
-<!--<div class="right_bar_data">-->
-<% for feed in @feeds %>
-<!--<span id="edit_feeds-tag" class="ui-state-default ui-corner-all ui-icon ui-icon-wrench" style="display:none;"></span>-->
-<!--<h4 class="trigger"><a class = "link_to_nowhere" href="#"><%=h feed.title %></a></h4>-->
-<h4 class="trigger"><a class = "link_to_nowhere" href="#"><%=h feed.title %></a></h4>
-<div class="toggle_container" id="block">
-	<%= image_tag 'loading.gif', :size=>"20x20", :id=>"feed_update_spinner#{feed.id}", :style=>"float:right; display:none;" %> 
-    <form id="feed_update_form<%= feed.id %>">
-        <p>
-            <label for="feed_title<%= feed.id %>">
-                Title:
-            </label>
-            <br/>
-            <table cellpadding='0' cellspacing='0'><tr><td><input id="feed_title<%= feed.id %>" name="feed[title]" size="19" type="text" value="<%= feed.title %>" /></td>
-			<td><div id="feed_update_title<%= feed.id %>"></div></td></tr></table>
-        	<div class="ui-state-error feed_update_title_error<%= feed.id %>" style="display:none;"></div>
-		</p>
-        <p>
-            <label for="feed_uri<%= feed.id %>">
-                URL:
-            </label>
-            <br/>
-            <table cellpadding='0' cellspacing='0'><tr><td><input id="feed_uri<%= feed.id %>" name="feed[uri]" size="19" type="text" value="<%= feed.uri %>" /></td>
-			<td><div id="feed_update_uri<%= feed.id %>"></div></td></tr></table>
-        	<div class="ui-state-error feed_update_uri_error<%= feed.id %>" style="display:none;"></div>
-		</p>
-        <p>
-            <%= link_to 'Update', feed_path(feed), :id => feed.id, :class => "feed_update_submit" %>
-            <%= link_to 'Delete', feed_path(feed), :confirm => 'Are you sure?', :class => "delete" %>
-        </p>
-    </form>
-</div>
-<% end %>
-<!--</div>-->
-<a href="#" id="new_feed-toggle">Add a new feed</a>
 
-<div id="new_feed_tag" class="toggle_container" style="display:none; padding:3px; background:#ddd; width=200px">
-    <div class="block">
-    
-    <form id="feed_form" >
-    	<!--<div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="4hWoOR1Hdqi4vEqzt0uM+wEn+JG70oqLLsY4iZzso9w=" /></div>-->
-    <p> 
-        <label for="feed_title">Title:</label>
-        <br/>
-		<table cellpadding='0' cellspacing='0'><tr><td><input id="feed_title" name="feed[title]" size="19" type="text" /></td><td><div id="feed_create_title"></div></td></tr></table>
-		<div class="ui-state-error feed_create_title_error"></div>
-    </p> 
-    <p> 
-        <label for="feed_uri">URL:</label> 
-        <br/>
-		<table cellpadding='0' cellspacing='0'><tr><td><input id="feed_uri" name="feed[uri]" size="19" type="text" /></td><td><div id="feed_create_uri"></div></td></tr></table>
-		<div class="ui-state-error feed_create_uri_error"></div>
-    </p> 
-    <p> 
-        <!--<input class="feed_submit" name="commit" type="submit" value="Create" />-->
-		<%= link_to 'Create', feeds_path(), :class => "new_feed_submit" %>
-		<%= image_tag 'loading.gif', :size=>"20x20", :id=>'feed_create_spinner', :style=>"float:right;" %> 
-    </p> 
-    </form> 
+<div id="accordion">
+	<h3><a href="#">All</a></h3>
+	<div>
+		<ul >
+		<% 	@feeds.each{ |feed|	%>
+			<li><%= feed.title %></li><% } %>
+		</ul>
 	</div>
+<% for list in @lists %>
+	<h3><a href="#"><%= list.name %></a></h3>
+	<div>
+		<ul>
+		<% 	list.get_feeds(list.id).each{ |feed_id|			
+			feed = Feed.find(feed_id) %>
+			<li><%= feed.title %></li><% } %>
+		</ul>
+	</div>
+<% end %>
 </div>
