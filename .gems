@@ -3,6 +3,4 @@ pg
 chronic
 will_paginate
 feedtools
-net/http
-cgi
 nokogiri
