@@ -1,0 +1,82 @@
+<!--<table border="1">
+  <tr>
+    <th>List of articles</th>
+    <th>Spot matches</th>
+  </tr>
+
+<%# @clusters.each do |cluster| %>
+  <tr>
+    <td width="500"><%#= cluster.get_sorted_articles(cluster) %></td>
+    <td><%#=h cluster.spot_matches %></td>
+    <td><%#= link_to 'Show', cluster %></td>
+    <td><%#= link_to 'Edit', edit_cluster_path(cluster) %></td>
+    <td><%#= link_to 'Destroy', cluster, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<%# end %>
+</table>-
+
+<br />-->
+
+<%#= link_to 'New cluster', new_cluster_path %>
+
+<table cellpadding="1" id="report">
+  <tr>
+  	<th width="15%">Source</th>
+    <th width="53%">Title</th>
+    <th width="15%">Published</th>
+	<th width="17%">Options</th>
+  </tr>
+</table>
+
+<% row = 1 %>
+<% for cluster in @clusters %>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#arrow-toggle<%= cluster.id %>').click(function(){
+            $('.table_entry<%= cluster.id %>').slideToggle(400);
+            return false;
+        });
+    });
+</script>
+
+<% if(row%2==0) %><table id="table_row_even">
+<% else %><table id="table_row_odd">
+<% end %>
+  <tr>
+  	<% leader = cluster.get_leader(cluster) %>
+  	<td width="15%"><%=h leader.source %></td>
+    <td width="53%"><a target='_blank' href ='<%=h leader.link %>'><%=h leader.title %></a></td>
+    <td width="15%"><%=h leader.published.strftime("%m/%d/%Y")%> at <%=h leader.published.strftime("%I:%M%p") %></td>
+	<td width="4%">
+		<div align="right">
+		<%= form_remote_tag( :url => {:action => 'update', :id => leader.id, :task => "favorite"}, 
+		:before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") %>
+		<% if leader.favorite %>
+			<% star_img="<div class=star_link></div>" %>
+		<% else %>
+			<% star_img="<div class=star_link_gray></div>" %>
+		<% end %>
+		<%= link_to(star_img, rss_entry_path(leader.id), :task => "favorite", :class=>'update_entry') %>
+    	</form>
+		</div>
+	</td><td width="8%">
+		<% if leader.hidden
+			hide_var = 'Unhide'
+		else
+			hide_var = 'Hide'
+		end %>
+    	<div align="center">
+    		<%= link_to(hide_var, rss_entry_path(leader.id), :task => "hide", :class => "update_entry") %>
+		</div></td>
+	<td width="5%"><span id="arrow-toggle<%= cluster.id %>" class="ui-state-hover ui-corner-all ui-icon ui-icon-triangle-1-s"></span></td>
+  </tr>
+</table>
+<div class="table_entry<%= cluster.id %>" style="display:none;">
+	<% if(row%2==0) %><div id="table_description_even">
+	<% else %><div id="table_description_odd">
+	<% end %>
+	<%= cluster.get_followers(cluster) %>
+	</div>
+</div>
+<% row+=1 %>
+<% end %>

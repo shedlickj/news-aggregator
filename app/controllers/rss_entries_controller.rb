@@ -1,8 +1,8 @@
 require 'feed_tools'
 require 'will_paginate'
 require 'chronic'
-require 'net/http'
-require 'cgi'
+#require 'net/http'
+#require 'cgi'
 require 'nokogiri'
 
 class RssEntriesController < ApplicationController
@@ -12,15 +12,6 @@ class RssEntriesController < ApplicationController
     @feeds = Feed.all
     @lists = List.all
     @rss_entry = RssEntry.first
-    
-    entry = RssEntry.find(2572)
-    response = Net::HTTP.get(URI.parse(entry.link))
-    html = Nokogiri::HTML(response, nil, 'UTF-8')
-    tag = html.css("a")
-    puts "tag:"
-    puts tag
-    puts "name:"
-    puts tag.attribute('href')
     #if(params[:commit] == "Search")
     #  params[:view] = "normal" unless params[:features].include?("hidden")
     #else
@@ -120,13 +111,15 @@ class RssEntriesController < ApplicationController
     "published DESC"
   end
   
-  def cluster_articles
-    RssEntry.all(:conditions => "data <> ''").each {|entry|
-       find_spot_signature(entry)
-       entry.save!
-    }
-    RssEntry.all(:conditions => "spot_signature <> '' AND (rss_entries.source != 'Gizmodo')").each {|entry|
-    match_ids = []
+  def cluster_articles(entry)
+#    RssEntry.all(:conditions => "data <> ''").each {|entry|
+#       find_spot_signature(entry)
+#       entry.save!
+#    }
+#    RssEntry.all(:conditions => "spot_signature <> '' AND (rss_entries.source != 'Gizmodo')").each {|entry|
+    best_similarities = 0
+    best_entry = nil
+    best_matches = []
     RssEntry.all(:conditions => "spot_signature <> '' AND (rss_entries.source != 'Gizmodo')").each {|compareEntry|
       if((entry.id != compareEntry.id) && (entry.link != compareEntry.link))
         similarities = 0
@@ -139,6 +132,29 @@ class RssEntriesController < ApplicationController
           end
         }
         if((entry.source != compareEntry.source && similarities >= 4) || (entry.source == compareEntry.source && similarities >= 10) || (entry.source != compareEntry.source && Float(similarities)/entry.spot_signature.split(" || ").length >= 0.2 && similarities >=2)|| (entry.source == compareEntry.source && Float(similarities)/entry.spot_signature.split(" || ").length >= 0.5 && similarities >=4) )
+          if(similarities > best_similarities)  # closer match found
+            if(compareEntry.cluster != nil)  # new match is in a cluster
+              best_similarities = similarities
+              best_entry = compareEntry
+              best_matches = matches
+            elsif(best_entry && best_entry.cluster != nil) # old match was in a cluster
+              #do nothing
+            else  # neither in a cluster
+              best_similarities = similarities
+              best_entry = compareEntry
+              best_matches = matches              
+            end
+          end
+        end
+      end
+      }
+      if(best_similarities > 0)
+        add_to_cluster(entry, best_entry, best_matches)
+      end
+    #}
+  end
+  
+  def add_to_cluster(entry, compareEntry, matches)
           if(compareEntry.cluster && compareEntry.cluster != "") #If other article is clustered, add current article to that cluster
             entry.cluster = compareEntry.cluster
             if(entry.save)
@@ -168,10 +184,6 @@ class RssEntriesController < ApplicationController
             entry.save!
             compareEntry.save!
           end
-        end
-      end
-      }
-    }
   end
   
   def update_articles
@@ -191,7 +203,8 @@ class RssEntriesController < ApplicationController
         store_article_text(entry)
         find_spot_signature(entry)
         entry.save! #TODO: Error checking
-        make_clusters(entry)
+        cluster_articles(entry)
+        #make_clusters(entry)
       }
       else
         puts "skipped"
@@ -248,7 +261,9 @@ class RssEntriesController < ApplicationController
   end
   
   def make_clusters(entry)
-    match_ids = []
+    best_similarities = 0
+    best_entry = nil
+    best_matches = []
     RssEntry.all(:conditions => "spot_signature <> '' AND (rss_entries.source != 'Gizmodo')").each {|compareEntry|
       if((entry.id != compareEntry.id) && (entry.link != compareEntry.link))
         similarities = 0

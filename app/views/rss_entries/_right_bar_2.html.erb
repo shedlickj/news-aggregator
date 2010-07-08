@@ -1,3 +1,5 @@
+
+
 <div class="right_bar_title">
     View
     <div style="display:block;float:right;">
@@ -15,11 +17,12 @@
 		<div class="button_style"><%= link_to 'Change', rss_entries_path(), :class => "set_list" %></div>
 	</form>
 	<br />
+	<div id="radio1">
 	<%= link_to 'Normal View', rss_entries_path(), :view => "normal", :class => "view_entries" %><br />
 	<%= link_to 'All Articles', rss_entries_path(), :view => "all", :class => "view_entries" %><br />
     <%= link_to 'Favorite Articles', rss_entries_path(), :view => "favorite", :class => "view_entries" %><br />
 	<%= link_to 'Hidden Articles', rss_entries_path(), :view => "hidden", :class => "view_entries" %><br />
-</div>
+	</div>
 <br/>
 <a href="#" id="more_views-toggle">More</a>
 <div id="more_views_tag" style="display:none; padding:3px; background:#ddd;">
@@ -27,4 +30,5 @@
 	<%= link_to 'Cluster Articles', "#{rss_entries_path()}/cluster_articles", :view => "normal", :class => "get" %><br />
 	<%= link_to 'Readability', "#{rss_entries_path()}/readability", :view => "normal", :class => "get" %><br />
     For testing only: <%= link_to 'New rss_entry', new_rss_entry_path %>
+</div>
 </div>

@@ -25,6 +25,8 @@
         $("#right_bar_1").corner();
         $("#right_bar_2").corner();
         $("#right_bar_3").corner();
+		$(".right_bar_title").corner("top");
+		$(".right_bar_data").corner("bottom");
 		$(".toggle_container").corner("bottom");
     });
 </script>
@@ -82,13 +84,13 @@ $(function() {
 	
 <!-- Right bar partials -->
 <div id="right_bar">
-    <div id="right_bar_1" style="width:180px; margin:5px; padding:10px; background:#cccccc;">
+    <div id="right_bar_1" style="width:200px; margin:5px; padding:0px; background:#cccccc;">
         <%= render :partial => '/rss_entries/right_bar_1' %>
     </div>
-    <div id="right_bar_2" style="width:180px; margin:5px; padding:10px; background:#cccccc;">
+    <div id="right_bar_2" style="width:200px; margin:5px; padding:0px; background:#cccccc;">
         <%= render :partial => '/rss_entries/right_bar_2' %>
     </div>
-    <div id="right_bar_3" style="width:180px; margin:5px; padding:10px; background:#cccccc;">
+    <div id="right_bar_3" style="width:200px; margin:5px; padding:0px; background:#cccccc;">
         <%= render :partial => '/rss_entries/right_bar_3' %>
     </div>
 </div>

@@ -3,6 +3,7 @@
 <div class="right_bar_title">
     Feeds
 </div>
+<div class="right_bar_data">
 <% for feed in Feed.all %>
 <script type="text/javascript">
     $(function(){
@@ -20,3 +21,4 @@
 <% end %>
 <br />
 <%= link_to 'Add a Feed', new_feed_path, :id => feed.id, :class => "feed_new_submit" %>
+</div>

@@ -4,8 +4,6 @@ class List < ActiveRecord::Base
   
   def get_feeds(list_id)
     list = List.find(list_id)
-    puts "FEEDS in " << list.name
-    puts list.feeds_by_id.split(',')
     return list.feeds_by_id.split(',')
   end
   

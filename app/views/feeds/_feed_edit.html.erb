@@ -1,7 +1,7 @@
 
 <script type="text/javascript">
     $(function(){
-        $("a", ".feed_edit_container").button();
+        $("a", ".list_middle_container").button();
 		
         $(".feed_update_submit").click(function(event){
             $('#feed_update_spinner' + $(this).attr("id")).show();
@@ -20,25 +20,33 @@
     });
 </script>
 
-<div class="feed_edit_container" id="block">
-	<%= image_tag 'loading.gif', :size=>"20x20", :id=>"feed_update_spinner#{@feed.id}", :style=>"float:right; display:none;" %><br />
+<div class="list_middle_container" id="block">
+	<%= image_tag 'loading.gif', :size=>"20x20", :id=>"feed_update_spinner#{@feed.id}", :style=>"float:right; display:none;" %>
+	<h3 align="left">Edit Feed</h3>
     <form id="feed_update_form<%= @feed.id %>">
-        <p>
             <table align="center" cellpadding='5' cellspacing='0'><tr>
             	<td><label for="feed_title<%= @feed.id %>">Title:</label></td>
             	<td><input id="feed_title<%= @feed.id %>" name="feed[title]" size="40" type="text" value="<%= @feed.title %>" /></td>
 				<td><div id="feed_update_title<%= @feed.id %>"></div></td>
 			</tr>
         	<div class="ui-state-error feed_update_title_error<%= @feed.id %>" style="display:none; width:400px; margin-left:55px"></div>
-		</p>
-        <p>
             <tr>
             	<td><label for="feed_uri<%= @feed.id %>">URL:</label></td>
             	<td><input id="feed_uri<%= @feed.id %>" name="feed[uri]" size="40" type="text" value="<%= @feed.uri %>" /></td>
 				<td><div id="feed_update_uri<%= @feed.id %>"></div></td>
-			</tr></table>
+			</tr>
         	<div class="ui-state-error feed_update_uri_error<%= @feed.id %>" style="display:none; width:400px; margin-left:55px"></div>
-		</p>
+			<tr>
+				<td><label for="feed_rank<%= @feed.id %>">Ranking:</label></td>
+				<td><select id="feed_rank" name="feed[rank]">
+					<option value="1" <% if @feed.rank == "1" %>selected="selected"<% end %>>1 - least trusted</option>
+					<option value="2" <% if @feed.rank == "2" %>selected="selected"<% end %>>2</option>
+					<option value="3" <% if @feed.rank == "3" %>selected="selected"<% end %>>3</option>
+					<option value="4" <% if @feed.rank == "4" %>selected="selected"<% end %>>4</option>
+					<option value="5" <% if @feed.rank == "5" %>selected="selected"<% end %>>5 - most trusted</option>
+					</select>
+				</td>
+			</tr></table>
         <p>
             <%= link_to 'Update', feed_path(@feed), :id => @feed.id, :class => "feed_update_submit" %>
             <%= link_to 'Delete', feed_path(@feed), :confirm => 'Are you sure?', :class => "feed_delete" %>

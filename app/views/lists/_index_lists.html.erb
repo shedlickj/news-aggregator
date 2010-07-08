@@ -5,15 +5,18 @@
         $("#list_pane").corner();
 		$("#middle_pane").corner();
         $("#feed_pane").corner();
+		$(".right_bar_title").corner("top");
+		$(".right_bar_data").corner("bottom");
     });
 </script>
-
-<div class='pane_container' id='list_pane'>
-    <%= render :partial=>'lists_pane' %>
-</div>
-<div class='pane_container' id='middle_pane'>
-    <%= render :partial=>'middle_pane' %>
-</div>
-<div class='pane_container' id='feed_pane'>
-    <%= render :partial=>'/feeds/feeds_pane' %>
+<div id="lists_content" class='ajaxWrapper'>
+    <div class='pane_container' id='list_pane'>
+        <%= render :partial=>'lists_pane' %>
+    </div>
+    <div class='pane_container' id='middle_pane' style="border: 1px solid #999;">
+        <%= render :partial=>'middle_pane' %>
+    </div>
+    <div class='pane_container' id='feed_pane'>
+        <%= render :partial=>'/feeds/feeds_pane' %>
+    </div>
 </div>

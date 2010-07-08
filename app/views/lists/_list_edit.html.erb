@@ -1,7 +1,7 @@
 
 <script type="text/javascript">
     $(function(){
-        $("a", ".list_edit_container").button();
+        $("a", ".list_middle_container").button();
 		
         $(".list_update_submit").click(function(event){
             $('#list_update_spinner' + $(this).attr("id")).show();
@@ -20,8 +20,9 @@
     });
 </script>
 
-<div class="list_edit_container" id="block">
-	<%= image_tag 'loading.gif', :size=>"20x20", :id=>"list_update_spinner#{@list.id}", :style=>"float:right; display:none;" %><br />
+<div class="list_middle_container" id="block">
+	<%= image_tag 'loading.gif', :size=>"20x20", :id=>"list_update_spinner#{@list.id}", :style=>"float:right; display:none;" %>
+	<h3 align="left">Edit List</h3>
     <form id="list_update_form<%= @list.id %>">
         <p>
             <table align="center" cellpadding='5' cellspacing='0'><tr>

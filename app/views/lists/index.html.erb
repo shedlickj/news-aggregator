@@ -1,5 +1,5 @@
 
-<%= javascript_include_tag 'lists_load' %>
+<%= javascript_include_tag 'page_load' %>
 
 <%= image_tag 'loading.gif', :id=>'spinner',
 :style=>"float:right;" %>
@@ -13,7 +13,7 @@
 
 <div id="container">
 	<div id="header">
-		<h1>Listing rss_entries</h1>
+		<h1>news-aggregator</h1>
 		<table><tr>
 			<td><div class="button_style"><%= link_to 'Clusters', clusters_path(), :class => "view_clusters_pane" %></div></td>
 			<td><div class="button_style"><%= link_to 'Newsfeed', rss_entries_path(), :class => "view_rss_entries_pane" %></div></td>
