@@ -15,6 +15,8 @@ class RssEntriesController < ApplicationController
     #if(params[:commit] == "Search")
     #  params[:view] = "normal" unless params[:features].include?("hidden")
     #else
+    puts "params!^(&^*%"
+    puts params[:list_id]
     if(params[:list_id] == nil && params[:view] == nil && params[:q] != nil)
 #      if(params[:q]==nil)
 #        params[:q] = cookies[:q]
