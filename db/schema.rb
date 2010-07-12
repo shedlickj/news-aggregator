@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100707205649) do
+ActiveRecord::Schema.define(:version => 20100709135518) do
 
   create_table "clusters", :force => true do |t|
     t.text     "list_of_articles"
@@ -41,13 +41,14 @@ ActiveRecord::Schema.define(:version => 20100707205649) do
     t.datetime "published"
     t.string   "link"
     t.text     "description",    :limit => 255
-    t.string   "data"
+    t.text     "data",           :limit => 255
     t.boolean  "hidden"
     t.boolean  "favorite"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "spot_signature"
     t.string   "cluster"
+    t.decimal  "score"
   end
 
 end

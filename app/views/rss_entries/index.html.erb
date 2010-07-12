@@ -1,3 +1,9 @@
+<style type="text/css"> 
+ 
+#spinner_tag {display:block; float:right; position:fixed; }
+* html #spinner_tag {position:absolute;}
+
+</style> 
 <script>
 $(document).ready(function() {
 	
@@ -20,8 +26,9 @@ $(document).ready(function() {
     });
 </script>
 
+<div id="spinner_tag"></div>
 <%= image_tag 'loading.gif', :id=>'spinner',
-:style=>"float:right; background-attachment: fixed;" %>
+:style=>"float:right; background-attachment: fixed;" %></div>
 <div id="container">
 	<div id="header">
 		<h1>news-aggregator</h1>

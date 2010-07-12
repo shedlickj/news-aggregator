@@ -93,10 +93,10 @@ div.right_bar_data { background:#ccc; padding:10px; }
 /*
  * Table
  ***************************/
-#table_row_even { background-color: #CCF; }
-#table_row_odd { background-color: #DDF; }
-div#table_description_even { background-color: #CCF; padding-left:50px; padding-bottom: 5px; padding-right: 5px; }
-div#table_description_odd { background-color: #DDF; padding-left:50px; padding-bottom: 5px; padding-right: 5px; }
+.table_row_even { background-color: #CCF; padding-left:5; padding-right:5; }/*margin-top:6; }*/
+.table_row_odd { background-color: #DDF; padding-left:5; padding-right:5; }/*margin-top:6; }*/
+div.table_description_even { background-color: #CCF; padding-left:50px; padding-bottom: 5px; padding-right: 5px; }
+div.table_description_odd { background-color: #DDF; padding-left:50px; padding-bottom: 5px; padding-right: 5px; }
 
 #report { border-collapse:collapse;}
 #report h4 { margin:0px; padding:0px;}
@@ -223,5 +223,13 @@ h4.active {background-position: left bottom;} /*--When toggle is triggered, it w
 	overflow: hidden;
 	font-size: 1.2em;
 	width: 475px;
+	clear: both;
+}
+
+.news_container {
+	margin-top: 5px;
+	border: 1px solid #999;
+	background: #ddd;
+	overflow: hidden;
 	clear: both;
 }

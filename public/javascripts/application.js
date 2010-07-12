@@ -129,6 +129,13 @@ $(document).ready(function() {
          });
      });
 	 
+	 $("input[name='radio']").change(function(event){
+		event.preventDefault();
+        $.get('/rss_entries', {view: $("input[name='radio']:checked").val()}, function(data){
+			return false;
+        });
+	});
+	 
 	 $(".search_submit").click(function(event) {
 	 	event.preventDefault();
 	 	$.get($(this).attr("href"), $("#search_form").serialize(), function(data) {

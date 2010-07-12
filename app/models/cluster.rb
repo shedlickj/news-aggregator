@@ -49,10 +49,18 @@ class Cluster < ActiveRecord::Base
     articles.sort! { |a,b| Feed.find_by_title(b.source).rank <=> Feed.find_by_title(a.source).rank }
     output = []
     articles.each { |article|
-      if(article != "")
+      if(article != "" && (article.id != articles.first.id))
         output << "#{article.published} #{article.source}: <a href='#{article.link}' target='_blank'>#{article.title}</a>"
       end
     }
     return output.join(' <br /> ')
+  end
+  
+  def size(cluster)
+    return cluster.list_of_articles.split(" || ").length
+  end
+  
+  def get_matches(cluster)
+    return cluster.spot_matches.split(" || ").uniq
   end
 end

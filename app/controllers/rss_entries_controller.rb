@@ -15,17 +15,44 @@ class RssEntriesController < ApplicationController
     #if(params[:commit] == "Search")
     #  params[:view] = "normal" unless params[:features].include?("hidden")
     #else
-    if(params[:list_id] != nil)
+    if(params[:list_id] == nil && params[:view] == nil && params[:q] != nil)
+#      if(params[:q]==nil)
+#        params[:q] = cookies[:q]
+#        params[:start_on] = cookies[:start_on]
+#        params[:end_on] = cookies[:end_on]
+#        params[:features] = cookies[:features]
+#        params[:sources] = cookies[:sources]
+#      else
+#        cookies[:q] = params[:q]
+#        cookies[:start_on] = params[:start_on]
+#        cookies[:end_on] = params[:end_on]
+#        cookies[:features] = params[:features]
+#        cookies[:sources] = params[:sources]
+#      end
+      search_request = true
+    elsif(params[:list_id] != nil)
       cookies[:list] = params[:list_id]
+      clear_search_cookies
+    elsif(params[:view] != nil)
+      cookies[:view] = params[:view]
+      clear_search_cookies
     end
-    params[:view] ||= "normal" unless params[:q] != nil
-    find_and_show_entries
+    params[:view] ||= cookies[:view] ||= "normal" unless search_request
+    find_and_show_entries(search_request)
+  end
+  
+  def clear_search_cookies
+    cookies[:q] = nil
+    cookies[:start_on] = nil
+    cookies[:end_on] = nil
+    cookies[:features] = nil
+    cookies[:sources] = nil
   end
   
     # GET /rss_entries/1/edit
     # This method is used to change the state of favorite and hidden
   def edit
-    find_and_show_entries
+    find_and_show_entries(false)
   end
   
   # PUT /rss_entries/1
@@ -108,7 +135,7 @@ class RssEntriesController < ApplicationController
 #    else
 #      "username"
 #    end
-    "published DESC"
+    "score, published DESC"
   end
   
   def cluster_articles(entry)
@@ -210,7 +237,8 @@ class RssEntriesController < ApplicationController
         puts "skipped"
       end
     }
-    find_and_show_entries
+    calculate_scores
+    find_and_show_entries(false)
   end
   
   def store_article_text(entry)
@@ -310,11 +338,32 @@ class RssEntriesController < ApplicationController
     }
   end
   
+  def calculate_scores
+    puts "finding scores"
+    RssEntry.all.each { |entry|
+      score = 0;
+      if(entry.published)
+        score += (Time.now - entry.published)/360 #increment score by # of hours
+      else
+        score += (Time.now - entry.created_at)/360 #increment score by # of hours
+      end
+      if(entry.cluster)
+        score += 5 #cluster penalty
+        cluster = Cluster.find(entry.cluster)
+        score += cluster.size(cluster)*2 #penalty for larger clusters
+      end
+      entry.score = score
+      entry.save!
+    }
+  end
+  
   private
   
-  def find_and_show_entries
+  def find_and_show_entries(search_request)
     # if not search
-    if(params[:view] != nil)
+    puts "search:"
+    puts search_request
+    if(!search_request)
       conditions = ""
       if(cookies[:list] != nil && cookies[:list] != '0')
         list = List.find(cookies[:list])
@@ -324,6 +373,8 @@ class RssEntriesController < ApplicationController
           else conditions += " OR (rss_entries.source = '#{feed.title}')"
           end
         }
+        if (conditions.length>0) then conditions = "(" + conditions + ")"
+        end
       end
       if(params[:view] == 'all')
         #do nothing
@@ -340,21 +391,22 @@ class RssEntriesController < ApplicationController
         else conditions += " AND (rss_entries.hidden = 't')"
         end
       end
+    puts conditions
     else
       conditions = search_conditions
     end
     @rss_entries = RssEntry.paginate(:all,
     :order => order_from_params,
     :page => params[:page],
-    :per_page => 20,
+    :per_page => 15,
     :conditions => conditions)
-    @start_article_num = ((params[:page] || 1).to_i-1)*20 + 1
-    @end_article_num = ((params[:page] || 1).to_i)*20
+    @start_article_num = ((params[:page] || 1).to_i-1)*15 + 1
+    @end_article_num = ((params[:page] || 1).to_i)*15
     @num_of_articles = RssEntry.all.length
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @rss_entries }
-      format.js {render :layout => false}
+      format.js { render :layout => false }
     end
   end
 
@@ -378,8 +430,10 @@ class RssEntriesController < ApplicationController
             strings << "(rss_entries.#{feature} = 't')"
           end
          }
+        puts "here"
         params[:sources].each{ |source|
           @feeds.each{ |feed|
+            puts feed
             if(feed.title == source)
               if str_src.length==0
                 str_src = "(rss_entries.source = '#{source}')"
