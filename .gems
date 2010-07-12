@@ -4,3 +4,5 @@ chronic
 will_paginate
 feedtools
 nokogiri
+warden -v 0.10.7
+devise -v 1.0.8
