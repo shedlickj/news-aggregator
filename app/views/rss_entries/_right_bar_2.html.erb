@@ -1,10 +1,19 @@
-<div class="right_bar_title">
-    View
+<div class="right_bar_title move_container">
+    Account
     <!--<div style="display:block;float:right;">
         <span id="move_icon" class="ui-state-default ui-corner-all ui-icon ui-icon-arrow-4"></span>
     </div>-->
 </div>
 <div class="right_bar_data">
+	<p><%= link_to 'Logout', '/users/sign_out' %></p>
+	<p>Current User: <%= current_user.email %></p>
+	<p>Created at: <%= current_user.created_at %></p>
+	<p>Last login: <%= current_user.updated_at %></p>
+	<p># of logins: <%= current_user.sign_in_count %></p>
+	<p>User Session: <%= user_session %></p>
+	
+	<a href="#" id="more_views-toggle">More</a>
+	<div id="more_views_tag" style="display:none; padding:3px; background:#ddd;">
 	<form id="list_selector">
     	<select name="list_id" onchange="set_list()">
     	    <option value="0">All Feeds</option>
@@ -21,12 +30,11 @@
     <%= link_to 'Favorite Articles', rss_entries_path(), :view => "favorite", :class => "view_entries" %><br />
 	<%= link_to 'Hidden Articles', rss_entries_path(), :view => "hidden", :class => "view_entries" %><br />
 	</div>
-<br/>
-<a href="#" id="more_views-toggle">More</a>
-<div id="more_views_tag" style="display:none; padding:3px; background:#ddd;">
+	<br/>
+
 	<%= link_to 'Update Articles', "#{rss_entries_path()}/update_articles", :view => "normal", :class => "get" %><br />
 	<%= link_to 'Cluster Articles', "#{rss_entries_path()}/cluster_articles", :view => "normal", :class => "get" %><br />
 	<%= link_to 'Readability', "#{rss_entries_path()}/readability", :view => "normal", :class => "get" %><br />
     For testing only: <%= link_to 'New rss_entry', new_rss_entry_path %>
-</div>
+	</div>
 </div>

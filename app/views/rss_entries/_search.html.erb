@@ -8,26 +8,6 @@
 	});
 </script>
 
-<% if @rss_entries.empty? %>
-	<p>No entries to display</p>
-<% else %>
-<script type="text/javascript">
-$(document).ready(function(){
-	 $('a.update_entry').click(function(event) {
-         event.preventDefault();
-         $.put($(this).attr("href"), {id: $(this).attr("id"), task: $(this).attr("task")}, function(data){
-			 return false;
-         });
-     });
-});
-</script>
-<script type="text/javascript">
-    /*$(function(){
-        $(".table_row_even").corner();
-		$(".table_row_odd").corner();
-    });*/
-</script>
-
 <script type="text/javascript">
 	$(function() {
 		$(".list_id").button().click( function() {
@@ -133,6 +113,26 @@ $(document).ready(function(){
   </div>
 </td></tr></table>
 </div>
+
+<% if @rss_entries.empty? %>
+	<p>No entries to display</p>
+<% else %>
+<script type="text/javascript">
+$(document).ready(function(){
+	 $('a.update_entry').click(function(event) {
+         event.preventDefault();
+         $.put($(this).attr("href"), {id: $(this).attr("id"), task: $(this).attr("task")}, function(data){
+			 return false;
+         });
+     });
+});
+</script>
+<script type="text/javascript">
+    /*$(function(){
+        $(".table_row_even").corner();
+		$(".table_row_odd").corner();
+    });*/
+</script>
 
 <% row = 1 %>
 <% for rss_entry in @rss_entries %>
