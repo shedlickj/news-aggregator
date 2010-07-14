@@ -9,13 +9,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100713132000) do
+ActiveRecord::Schema.define(:version => 20100714140440) do
+
+  create_table "articles", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "rss_entry_id"
+    t.boolean  "hidden"
+    t.boolean  "favorite"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.decimal  "score"
+    t.string   "cluster"
+  end
 
   create_table "clusters", :force => true do |t|
     t.text     "list_of_articles"
     t.text     "spot_matches"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   create_table "feeds", :force => true do |t|
@@ -25,6 +37,7 @@ ActiveRecord::Schema.define(:version => 20100713132000) do
     t.datetime "updated_at"
     t.string   "lists_by_id"
     t.string   "rank"
+    t.integer  "user_id"
   end
 
   create_table "lists", :force => true do |t|
@@ -33,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20100713132000) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
+    t.integer  "user_id"
   end
 
   create_table "rss_entries", :force => true do |t|

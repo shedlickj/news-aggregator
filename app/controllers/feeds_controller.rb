@@ -1,7 +1,8 @@
 class FeedsController < ApplicationController
 
   def index
-    @feeds = Feed.all
+    #@feeds = Feed.all
+    @feeds = current_user.feeds
     respond_to do |format|
       format.html #we only respond to the html request
     end
@@ -10,7 +11,8 @@ class FeedsController < ApplicationController
   def new
     @feed = Feed.new
     if !request.xhr?
-      @feeds = Feed.all
+      #@feeds = Feed.all
+      @feeds = current_user.feeds
     end
  
     respond_to do |format|
@@ -21,8 +23,11 @@ class FeedsController < ApplicationController
  
   def create
     @feed = Feed.create(params[:feed])
-    flash[:notice] = "Feed successfully created"
-    @feeds = Feed.all
+    @feed.user_id = current_user.id
+    if(@feed.save)
+      flash[:notice] = "Feed successfully created"
+    end
+    @feeds = current_user.feeds
     respond_to do |format|
       format.html { redirect_to feeds_path() }
       format.js {render :layout => false}
@@ -54,7 +59,7 @@ class FeedsController < ApplicationController
   # PUT /feeds/1.xml
   def update
     @feed = Feed.find(params[:id])
-    @feeds = Feed.all
+    @feeds = current_user.feeds
     if @feed.update_attributes(params[:feed])
       flash[:notice] = "Feed successfully updated"
     else
@@ -70,7 +75,7 @@ class FeedsController < ApplicationController
   def destroy
     @feed = Feed.find(params[:id])
     @feed.destroy
-    @feeds = Feed.all
+    @feeds = current_user.feeds
     flash[:notice] = "Feed successfully deleted"
  
     respond_to do |format|

@@ -1,4 +1,7 @@
 class Cluster < ActiveRecord::Base
+  
+  belongs_to :user
+  
   def add_article(cluster, matches, article_id)
     if(!cluster.list_of_articles.split(" || ").include?("#{article_id}"))
       cluster.list_of_articles += " || #{article_id}"
@@ -36,7 +39,7 @@ class Cluster < ActiveRecord::Base
     return articles.first
   end
   
-  def get_followers(cluster)
+  def get_followers(cluster, is_formatted)
     article_ids = cluster.list_of_articles.split(" || ")
     articles = []
     article_ids.each { |article_id|
@@ -50,10 +53,17 @@ class Cluster < ActiveRecord::Base
     output = []
     articles.each { |article|
       if(article != "" && (article.id != articles.first.id))
-        output << "#{article.published} #{article.source}: <a href='#{article.link}' target='_blank'>#{article.title}</a>"
+        if(is_formatted)
+          output << "#{article.published} #{article.source}: <a href='#{article.link}' target='_blank'>#{article.title}</a>"
+        else
+          output << article
+        end
       end
     }
-    return output.join(' <br /> ')
+    if(is_formatted)
+      return output.join(' <br /> ')
+    end
+    return output
   end
   
   def size(cluster)

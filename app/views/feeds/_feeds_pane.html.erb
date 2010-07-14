@@ -1,10 +1,22 @@
 
 <%= javascript_include_tag 'feeds_editor' %>
+
+<script type="text/javascript">
+    $(function(){
+        $("#feed_pane").corner();
+		$(".right_bar_title").corner("top");
+		$(".right_bar_data").corner("bottom");
+    });
+</script>
+
 <div class="right_bar_title">
     Feeds
 </div>
 <div class="right_bar_data">
-<% for feed in Feed.all %>
+<% if @feeds.size == 0 %>
+<p>No feeds to display.</p>
+<% else %>
+<% for feed in @feeds %>
 <script type="text/javascript">
     $(function(){
 		$("#draggable_feed_<%= feed.id %>").draggable({ revert: true, opacity: 0.75, appendTo: 'body', helper: 'clone', distance: 5});
@@ -20,5 +32,6 @@
 <%= link_to 'Edit', edit_feed_path(feed), :id => feed.id, :class => "feed_edit_submit" %>
 <% end %>
 <br />
-<%= link_to 'Add a Feed', new_feed_path, :id => feed.id, :class => "feed_new_submit" %>
+<% end %>
+<%= link_to 'Add a Feed', new_feed_path, :class => "feed_new_submit" %>
 </div>

@@ -1,8 +1,13 @@
 class ListsController < ApplicationController
+  
+  before_filter :authenticate_user!
+  
   # GET /lists
   # GET /lists.xml
   def index
-    @lists = List.all
+    #@lists = List.all
+    @lists = current_user.lists
+    @feeds = current_user.feeds
 
     respond_to do |format|
       format.html
@@ -46,6 +51,10 @@ class ListsController < ApplicationController
   def create
     @list = List.new(params[:list])
     @list.feeds_by_id = ''
+    @list.user_id = current_user.id
+    
+    @lists = current_user.lists
+    @feeds = current_user.feeds
 
     respond_to do |format|
       if @list.save
@@ -64,8 +73,12 @@ class ListsController < ApplicationController
   # PUT /lists/1.xml
   def update
     @list = List.find(params[:id])
+    
+    @lists = current_user.lists
+    @feeds = current_user.feeds
+    
     # Case where feed is dropped
-    if(params[:feed_title]!=nil)
+    if(params[:feed_title]!=nil)    
       respond_to do |format|
         if(@list.add_feed(@list.id,params[:feed_title]))
           puts "success!!!!!!!!"
@@ -106,6 +119,9 @@ class ListsController < ApplicationController
     @list = List.find(params[:id])
     @list.destroy
     flash[:notice] = "List successfully deleted"
+    
+    @lists = current_user.lists
+    @feeds = current_user.feeds
 
     respond_to do |format|
       format.html { redirect_to(lists_url) }

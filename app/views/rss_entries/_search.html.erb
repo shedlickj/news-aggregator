@@ -114,7 +114,7 @@
 </td></tr></table>
 </div>
 
-<% if @rss_entries.empty? %>
+<% if @articles.empty? %>
 	<p>No entries to display</p>
 <% else %>
 <script type="text/javascript">
@@ -135,22 +135,22 @@ $(document).ready(function(){
 </script>
 
 <% row = 1 %>
-<% for rss_entry in @rss_entries %>
+<% for article in @articles %>
 <%# if(rss_entry.cluster)
 	cluster = Cluster.find(rss_entry.cluster)%>
 	
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#arrow-toggle<%= rss_entry.id %>').click(function(){
-            $('.table_entry<%= rss_entry.id %>').slideToggle(400);
+        $('#arrow-toggle<%= article.id %>').click(function(){
+            $('.table_entry<%= article.id %>').slideToggle(400);
             return false;
         });
     });
 </script>
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#similar-toggle<%= rss_entry.id %>').click(function(){
-            $('.table_entry_similar<%= rss_entry.id %>').slideToggle(400);
+        $('#similar-toggle<%= article.id %>').click(function(){
+            $('.table_entry_similar<%= article.id %>').slideToggle(400);
             return false;
         });
     });
@@ -160,51 +160,51 @@ $(document).ready(function(){
 <% else %><table class="table_row_odd" width="100%">
 <% end %>
   <tr>
-    <td colspan="2"><a target='_blank' href ='<%=h rss_entry.link %>'><%=h rss_entry.title %></a></td>
-    <td width="26%"><%=h rss_entry.published.strftime("%m/%d/%Y")%> at <%=h rss_entry.published.strftime("%I:%M%p") %></td>
+    <td colspan="2"><a target='_blank' href ='<%=h article.rss_entry.link %>'><%=h article.rss_entry.title %></a></td>
+    <td width="26%"><%=h article.rss_entry.published.strftime("%m/%d/%Y")%> at <%=h article.rss_entry.published.strftime("%I:%M%p") %></td>
 	<td width="14%">
 		<div align="right">
-		<%= form_remote_tag( :url => {:action => 'update', :id => rss_entry.id, :task => "favorite"}, 
+		<%= form_remote_tag( :url => {:action => 'update', :id => article.id, :task => "favorite"}, 
 		:before => "Element.show('spinner')", :complete  => "Element.hide('spinner')") %>
-		<% if rss_entry.favorite %>
+		<% if article.favorite %>
 			<% star_img="<div class=star_link></div>" %>
 		<% else %>
 			<% star_img="<div class=star_link_gray></div>" %>
 		<% end %>
-		<%= link_to(star_img, rss_entry_path(rss_entry.id), :task => "favorite", :class=>'update_entry') %>
+		<%= link_to(star_img, rss_entry_path(article.id), :task => "favorite", :class=>'update_entry') %>
     	</form>
 		</div>
 	</td>
   </tr>
   <tr>
-  	<td width="30%"><%=h rss_entry.source %></td>
-	<td width="30%"><% if(rss_entry.cluster) %><table><tr><td>Similar Articles</td><td><span id="similar-toggle<%= rss_entry.id %>" class="ui-state-hover ui-corner-all ui-icon ui-icon-triangle-1-s"></span></td></tr></table><% end %></td>
+  	<td width="30%"><%=h article.rss_entry.source %></td>
+	<td width="30%"><% if(article.rss_entry.cluster) %><table><tr><td>Similar Articles</td><td><span id="similar-toggle<%= article.id %>" class="ui-state-hover ui-corner-all ui-icon ui-icon-triangle-1-s"></span></td></tr></table><% end %></td>
 	<td>
-		<% if rss_entry.hidden
+		<% if article.hidden
 			hide_var = 'Unhide Article'
 		else
 			hide_var = 'Hide Article'
 		end %>
     	<div align="center">
-    		<%= link_to(hide_var, rss_entry_path(rss_entry.id), :task => "hide", :class => "update_entry") %>
+    		<%= link_to(hide_var, rss_entry_path(article.id), :task => "hide", :class => "update_entry") %>
 		</div></td>
-	<td><table><tr><td>See More</td><td><span id="arrow-toggle<%= rss_entry.id %>" class="ui-state-hover ui-corner-all ui-icon ui-icon-triangle-1-s"></span></td></tr></table></td>
+	<td><table><tr><td>See More</td><td><span id="arrow-toggle<%= article.id %>" class="ui-state-hover ui-corner-all ui-icon ui-icon-triangle-1-s"></span></td></tr></table></td>
   </tr>
 </table>
-<div class="table_entry<%= rss_entry.id %>" style="display:none; border:1px solid #999;">
+<div class="table_entry<%= article.id %>" style="display:none; border:1px solid #999;">
 	<% if(row%2==0) %><div class="table_description_even">
 	<% else %><div class="table_description_odd">
 	<% end %>
-	<%=h rss_entry.description %>
+	<%=h article.rss_entry.description %>
 	</div>
 </div>
-<% if(rss_entry.cluster) %>
-<div class="table_entry_similar<%= rss_entry.id %>" style="display:none; border:1px solid #999;">
+<% if(article.rss_entry.cluster) %>
+<div class="table_entry_similar<%= article.id %>" style="display:none; border:1px solid #999;">
 	<% if(row%2==0) %><div class="table_description_even">
 	<% else %><div class="table_description_odd">
 	<% end %>
-	<% cluster = Cluster.find(rss_entry.cluster) %>
-	<%= cluster.get_followers(cluster) %><br />
+	<% cluster = Cluster.find(article.rss_entry.cluster) %>
+	<%= cluster.get_followers(cluster, true) %><br /><br />
 	Similarities: <%= cluster.get_matches(cluster).join(', ') %>
 	</div>
 </div>
@@ -214,4 +214,4 @@ $(document).ready(function(){
 <% end %>
 <% end %>
 <p>Showing articles <%= @start_article_num %> - <%= @end_article_num %> of <%= @num_of_articles %></p>
-<div align = "center"><%= will_paginate @rss_entries, :params => params %></div>
+<div align = "center"><%= will_paginate @articles, :params => params %></div>

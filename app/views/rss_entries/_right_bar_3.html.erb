@@ -19,11 +19,16 @@ ul {padding-left: 3px;}
     </div>-->
 </div>
 
-<div id="accordion" class="right_bar_data">
+<div class="right_bar_data">
+<% if @feeds.size == 0 %>
+<p>No feeds to display.</p>
+<p><%= link_to 'Add a Feed', lists_path() %></p>
+<% else %>
+<div id="accordion">
 	<h3><a href="#">All</a></h3>
 	<div>
 		<ul >
-		<% 	@feeds.each{ |feed|	%>
+		<% @feeds.each{ |feed|	%>
 			<li><%= feed.title %></li><% } %>
 		</ul>
 	</div>
@@ -36,5 +41,7 @@ ul {padding-left: 3px;}
 			<li><%= feed.title %></li><% } %>
 		</ul>
 	</div>
+<% end %>
+</div>
 <% end %>
 </div>

@@ -5,9 +5,9 @@ class ClustersController < ApplicationController
    @clusters = Cluster.paginate(:all,
     :order => "created_at DESC",
     :page => params[:page],
-    :per_page => 40)
-   @feeds = Feed.all
-   @lists = List.all
+    :per_page => 80)
+   @feeds = current_user.feeds
+   @lists = current_user.clusters
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @clusters }

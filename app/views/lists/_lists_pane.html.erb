@@ -1,5 +1,14 @@
 
 <%= javascript_include_tag 'lists_editor' %>
+
+<script type="text/javascript">
+    $(function(){
+        $("#list_pane").corner();
+		$(".right_bar_title").corner("top");
+		$(".right_bar_data").corner("bottom");
+    });
+</script>
+
 <script>
 	$(document).ready(function(){
         $('a#new_list-toggle').click(function(){
@@ -12,7 +21,10 @@
     Lists
 </div>
 <div class="right_bar_data">
-<% for list in List.all %>
+<% if @lists.size == 0 %>
+<p>No lists to display.</p>
+<% else %>
+<% for list in @lists %>
 <script type="text/javascript">
     $(function(){
 		$("#droppable_list_<%= list.id %>").droppable({
@@ -50,6 +62,7 @@
 <%= link_to 'Edit', edit_list_path(list), :id => list.id, :class => "list_edit_submit" %>
 <% end %>
 <br />
+<% end %>
 <a href="#" id="new_list-toggle">Add a List</a>
 
 <div id="new_list_tag" class="toggle_container" style="display:none; padding:3px; background:#ddd; width=200px">
