@@ -1,2 +1,11 @@
-<p align="right">Drag feeds --></p>
-<p><-- Drop on lists</p>
+<script type="text/javascript">
+    $(function(){
+		$("#middle_title").corner("tr");
+		$("#middle_pane").corner("tr");
+    });
+</script>
+<div class="feed_list_bar_title" id="middle_title">
+</div>
+<div class="right_bar_data" id="list_replace">
+	<%= render :partial=>'default_list_pane' %>
+</div>

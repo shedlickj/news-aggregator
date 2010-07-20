@@ -1,4 +1,4 @@
-<%= javascript_include_tag 'application' %>
+<%= javascript_include_tag 'article_list' %>
 
 <script type="text/javascript">
 	$(function() {
@@ -136,6 +136,7 @@ $(document).ready(function(){
 
 <% row = 1 %>
 <% for article in @articles %>
+<% entry = article.rss_entry %>
 <%# if(rss_entry.cluster)
 	cluster = Cluster.find(rss_entry.cluster)%>
 	
@@ -160,8 +161,8 @@ $(document).ready(function(){
 <% else %><table class="table_row_odd" width="100%">
 <% end %>
   <tr>
-    <td colspan="2"><a target='_blank' href ='<%=h article.rss_entry.link %>'><%=h article.rss_entry.title %></a></td>
-    <td width="26%"><%=h article.rss_entry.published.strftime("%m/%d/%Y")%> at <%=h article.rss_entry.published.strftime("%I:%M%p") %></td>
+    <td colspan="2"><a target='_blank' href ='<%=h entry.link %>'><%=h entry.title %></a></td>
+    <td width="26%"><%=h entry.published.strftime("%m/%d/%Y")%> at <%=h entry.published.strftime("%I:%M%p") %></td>
 	<td width="14%">
 		<div align="right">
 		<%= form_remote_tag( :url => {:action => 'update', :id => article.id, :task => "favorite"}, 
@@ -178,7 +179,7 @@ $(document).ready(function(){
   </tr>
   <tr>
   	<td width="30%"><%=h article.rss_entry.source %></td>
-	<td width="30%"><% if(article.rss_entry.cluster) %><table><tr><td>Similar Articles</td><td><span id="similar-toggle<%= article.id %>" class="ui-state-hover ui-corner-all ui-icon ui-icon-triangle-1-s"></span></td></tr></table><% end %></td>
+	<td width="30%"><% if(article.cluster) %><table><tr><td>Similar Articles</td><td><span id="similar-toggle<%= article.id %>" class="ui-state-hover ui-corner-all ui-icon ui-icon-triangle-1-s"></span></td></tr></table><% end %></td>
 	<td>
 		<% if article.hidden
 			hide_var = 'Unhide Article'
@@ -195,15 +196,15 @@ $(document).ready(function(){
 	<% if(row%2==0) %><div class="table_description_even">
 	<% else %><div class="table_description_odd">
 	<% end %>
-	<%=h article.rss_entry.description %>
+	<%=h entry.description %>
 	</div>
 </div>
-<% if(article.rss_entry.cluster) %>
+<% if(article.cluster) %>
 <div class="table_entry_similar<%= article.id %>" style="display:none; border:1px solid #999;">
 	<% if(row%2==0) %><div class="table_description_even">
 	<% else %><div class="table_description_odd">
 	<% end %>
-	<% cluster = Cluster.find(article.rss_entry.cluster) %>
+	<% cluster = Cluster.find(article.cluster) %>
 	<%= cluster.get_followers(cluster, true) %><br /><br />
 	Similarities: <%= cluster.get_matches(cluster).join(', ') %>
 	</div>

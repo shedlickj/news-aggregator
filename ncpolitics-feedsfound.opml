@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Netvibes.com Subscriptions</title>
+    </head>
+    <body>
+        <outline title="Advocacy groups" text="Advocacy groups">
+            <outline xmlUrl="http://lpnc.org/rss.xml" htmlUrl="http://www.lpnc.org/" title="Latest LPNC News" text="Latest LPNC News"/>
+            <outline xmlUrl="http://www.rssmix.com/u/604076/rss.xml" htmlUrl="http://www.rssmix.com/" title="RSSMix.com Mix ID 604076" text="RSSMix.com Mix ID 604076"/>
+            <outline xmlUrl="http://equalitync.blogspot.com/feeds/posts/default" htmlUrl="http://equalitync.blogspot.com/" title="Equality NC Blog" text="Equality NC Blog"/>
+            <outline xmlUrl="http://deathwatch.wordpress.com/feed" htmlUrl="http://deathwatch.wordpress.com" title="DeathWatch North Carolina" text="DeathWatch North Carolina"/>
+            <outline xmlUrl="http://www.thevoterupdate.com/rss/index.xml" htmlUrl="http://www.thevoterupdate.com" title="The Voter Update" text="The Voter Update"/>
+            <outline xmlUrl="http://pulse.ncpolicywatch.org/feed/" htmlUrl="http://pulse.ncpolicywatch.org" title="The Progressive Pulse" text="The Progressive Pulse"/>
+            <outline xmlUrl="http://feeds.johnlocke.org/thelockerroom" htmlUrl="http://www.johnlocke.org/lockerroom/" title="JLF &gt; The Locker Room" text="JLF &gt; The Locker Room"/>
+            <outline xmlUrl="http://publicpolicypolling.blogspot.com/feeds/posts/default" htmlUrl="http://publicpolicypolling.blogspot.com/" title="Public Policy Polling" text="Public Policy Polling"/>
+            <outline xmlUrl="http://feeds.feedburner.com/conservativenc/CNCVoices" htmlUrl="http://www.conservativenc.com" title="ConservativeNC" text="ConservativeNC"/>
+            <outline xmlUrl="http://feeds.feedburner.com/civitasinstitute" htmlUrl="http://www.nccivitas.org/feed" title="Civitas Institute" text="Civitas Institute"/>
+            <outline xmlUrl="http://bluenc.com/blog/feed" htmlUrl="http://bluenc.com/blog" title="BlueNC blogs" text="BlueNC blogs"/>
+        </outline>
+        <outline title="Government" text="Government" icon="http://cdn.netvibes.com/img/icons/color_swatch.gif">
+            <outline xmlUrl="http://www.ncleg.net/LegislativeCalendar/LegislativeCalendar.pl?view=RSS" htmlUrl="http://www.ncleg.net/LegislativeCalendar/" title="NC General Assembly Legislative Calendar" text="NC General Assembly Legislative Calendar"/>
+            <outline xmlUrl="http://www.dor.state.nc.us/rss/headlines.xml" htmlUrl="http://www.dornc.com/index.html" title="North Carolina Department of Revenue Headlines" text="North Carolina Department of Revenue Headlines"/>
+            <outline xmlUrl="http://www.dor.state.nc.us/rss/press.xml" htmlUrl="http://www.dornc.com/press/" title="North Carolina Department of Revenue Press Releases" text="North Carolina Department of Revenue Press Releases"/>
+            <outline xmlUrl="http://www.dor.state.nc.us/rss/siteadditions.xml" htmlUrl="http://www.dornc.com/whatsnew.html" title="North Carolina Department of Revenue Site Additions" text="North Carolina Department of Revenue Site Additions"/>
+            <outline xmlUrl="http://news.ncdcr.gov/category/in-the-news/feed/" htmlUrl="http://news.ncdcr.gov" title="NC Cultural Resources Newsroom » In the News" text="NC Cultural Resources Newsroom » In the News"/>
+            <outline xmlUrl="http://portal.ncdenr.org/web/opa/news-releases-rss" htmlUrl="http://portal.ncdenr.org/web/opa/news-releases" title="N.C. DENR News Releases" text="N.C. DENR News Releases"/>
+            <outline xmlUrl="http://www.doa.nc.gov/pio/news/doanewsrss.asp" htmlUrl="http://www.doa.nc.gov/" title="NCDOA News Releases Feed" text="NCDOA News Releases Feed"/>
+            <outline xmlUrl="http://www.ncdoi.com/media/rss-feed_mediarelations.xml" htmlUrl="http://www.ncdoi.com/Media/media_home.asp" title="NC Department of Insurance" text="NC Department of Insurance"/>
+            <outline xmlUrl="http://www.ncdhhs.gov/pressreleases.xml" htmlUrl="http://www.ncdhhs.gov/pressrel/news.htm" title="N.C. Department of Health and Human Services: Press Releases" text="N.C. Department of Health and Human Services: Press Releases"/>
+            <outline xmlUrl="http://www.nctreasurer.com/DSTMcmsWeb/News/RSS.aspx" htmlUrl="http://www.dummy.web.site.blahblah.com/" title="North Carolina -- State Treasurer News" text="North Carolina -- State Treasurer News"/>
+            <outline xmlUrl="http://www.governorrss.nc.gov/Governor09RSS.Feed1.svc/Feed1?format=atom" htmlUrl="http://www.governor09.nc.gov/NewsItems/PressReleaseDetail.aspx?newsItemID=1134" title="NC Governor News" text="NC Governor News"/>
+            <outline xmlUrl="http://www.ltgov.state.nc.us/blog/syndication.axd?format=rss" htmlUrl="http://www.ltgov.state.nc.us/blog/" title="NC Lt. Governor Walter Dalton's Blog (RSS)" text="NC Lt. Governor Walter Dalton's Blog (RSS)"/>
+            <outline xmlUrl="http://www.ltgov.state.nc.us/news/NewRss.aspx?format=atom" htmlUrl="http://www.newbernsj.com/news/board-85088-dalton-governor.html" title="NC Lt. Governor News" text="NC Lt. Governor News"/>
+        </outline>
+        <outline title="News and blogs" text="News and blogs">
+            <outline xmlUrl="http://weblogs.jomc.unc.edu/talkpolitics/?feed=rss2" htmlUrl="http://weblogs.jomc.unc.edu/talkpolitics" title="Talk Politics" text="Talk Politics"/>
+            <outline xmlUrl="http://ncblogger.com/rss2.aspx" htmlUrl="http://ncblogger.com" title="NCBLOGGER.COM" text="NCBLOGGER.COM"/>
+            <outline xmlUrl="http://feeds.feedburner.com/typepad/UfGm" htmlUrl="http://katysconservativecorner.typepad.com/katy/" title="Katy's Conservative Feedburner" text="Katy's Conservative Feedburner"/>
+            <outline xmlUrl="http://edcone.typepad.com/wordup/atom.xml" htmlUrl="http://edcone.typepad.com/wordup/" title="EdCone.com" text="EdCone.com"/>
+            <outline xmlUrl="http://capitalcommentary.blogs.starnewsonline.com/feed/" htmlUrl="http://capitalcommentary.blogs.starnewsonline.com" title="Capital Commentary" text="Capital Commentary"/>
+            <outline xmlUrl="http://projects.newsobserver.com/rss/dome/blog" htmlUrl="http://projects.newsobserver.com/rss/dome/blog" title="Under the Dome blog" text="Under the Dome blog"/>
+            <outline xmlUrl="http://jackbetts.blogspot.com/feeds/posts/default" htmlUrl="http://jackbetts.blogspot.com/" title="This Old State" text="This Old State"/>
+            <outline xmlUrl="http://wunc.org/programs/news/Isaac-Hunters-Tavern/RSS" htmlUrl="http://wunc.org/programs/news/Isaac-Hunters-Tavern" title="Reporter's Blog: Isaac Hunter's Tavern" text="Reporter's Blog: Isaac Hunter's Tavern"/>
+            <outline xmlUrl="http://womblencappellate.blogspot.com/feeds/posts/default" htmlUrl="http://womblencappellate.blogspot.com/" title="North Carolina Appellate Blog" text="North Carolina Appellate Blog"/>
+            <outline xmlUrl="http://blogs.citizen-times.com/blogs/index.php?blog=10&amp;tempskin=_atom" htmlUrl="http://blogs.citizen-times.com/blogs/index.php?blog=10" title="Capital Letters" text="Capital Letters"/>
+            <outline xmlUrl="http://eighthdistrictdemsnc.blogspot.com/feeds/posts/default" htmlUrl="http://eighthdistrictdemsnc.blogspot.com/" title="Wayne's World: Politics in and around North Carolina" text="Wayne's World: Politics in and around North Carolina"/>
+            <outline xmlUrl="http://www.news-record.com/blog/capblog/feed" htmlUrl="http://www.news-record.com/blog/capblog" title="Capital Beat RSS Feed" text="Capital Beat RSS Feed"/>
+            <outline xmlUrl="http://campaigntracker.blogspot.com/feeds/posts/default" htmlUrl="http://campaigntracker.blogspot.com/" title="Campaign Tracker" text="Campaign Tracker"/>
+            <outline xmlUrl="http://www.talkingaboutpolitics.com/DesktopModules/DnnForge%20-%20NewsArticles/Rss.aspx?TabID=36&amp;ModuleID=364&amp;MaxCount=25" htmlUrl="http://www.talkingaboutpolitics.com" title="Talking About Politics" text="Talking About Politics"/>
+        </outline>
+        <outline title="General NC news" text="General NC news">
+            <outline xmlUrl="http://www2.journalnow.com/content/list/news/regional/rss/" htmlUrl="http://www2.journalnow.com/content/list/news/regional/" title="WSJ News Regional" text="WSJ News Regional"/>
+            <outline xmlUrl="http://www2.journalnow.com/content/list/news/ncpolitics/rss/" htmlUrl="http://www2.journalnow.com/content/list/news/ncpolitics/" title="WSJ News N.C./Politics" text="WSJ News N.C./Politics"/>
+            <outline xmlUrl="http://www2.journalnow.com/content/list/news/local/rss/" htmlUrl="http://www2.journalnow.com/content/list/news/local/" title="WSJ News Local" text="WSJ News Local"/>
+            <outline xmlUrl="http://www.thetimesnews.com/common/rss/rss.php?cat=Top+News" htmlUrl="http://www.thetimesnews.com/" title="Burlington Times News : Top News" text="Burlington Times News : Top News"/>
+            <outline xmlUrl="http://www.npr.org/rss/podcast.php?id=510037" htmlUrl="http://wunc.org/programs/news/archive" title="North Carolina Public Radio - WUNC News Audio Archive Podcast" text="North Carolina Public Radio - WUNC News Audio Archive Podcast"/>
+            <outline xmlUrl="http://www.charlotteobserver.com/topstories/index.rss" htmlUrl="http://http://www.charlotteobserver.com/topstories/index.rss" title="CharlotteObserver.com: Top Stories" text="CharlotteObserver.com: Top Stories"/>
+            <outline xmlUrl="http://www.wral.com/news/rss/48/" htmlUrl="http://www.wral.com/rs/" title="WRAL.com Top Stories" text="WRAL.com Top Stories"/>
+            <outline xmlUrl="http://www.newsobserver.com/102/index.rss" htmlUrl="http://www.newsobserver.com/news/index.rss" title="News &amp; Observer: &#10; &#10;        News" text="News &amp; Observer: &#10; &#10;        News"/>
+            <outline xmlUrl="http://blogs.newsobserver.com/iteam/rss/feed" htmlUrl="http://blogs.newsobserver.com/%24arg/rss/iteam" title="newsobserver.com blogs -- iteam" text="newsobserver.com blogs -- iteam"/>
+            <outline xmlUrl="http://blogs.newsobserver.com/editor/rss/feed" htmlUrl="http://blogs.newsobserver.com/%24arg/rss/editor" title="newsobserver.com blogs -- editor" text="newsobserver.com blogs -- editor"/>
+            <outline xmlUrl="http://www.wral.com/news/rss/2/" htmlUrl="http://www.wral.com/news/local/" title="WRAL.com - AP State News" text="WRAL.com - AP State News"/>
+        </outline>
+    </body>
+</opml>

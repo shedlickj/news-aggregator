@@ -1,0 +1,31 @@
+<!-- Toggling -->
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('a#feeds-toggle').click(function(){
+            $('#feed_drag_tag').slideToggle(400);
+            return false;
+        });
+    });
+</script>
+
+<a href="#" id="feeds-toggle">Show Feeds</a>
+<div id="feed_drag_tag" style="display:none">
+<% if @feeds.size == 0 %>
+<p>No feeds to display.</p>
+<% else %>
+<% for feed in @feeds %>
+<script type="text/javascript">
+    $(function(){
+		$("#draggable_feed_<%= feed.id %>").draggable({ opacity: 0.75, appendTo: 'body', helper: 'clone', distance: 5});
+
+        $("a", ".toggle_container").button();
+        
+        $("a", ".toggle_container").click(function(){
+            return false;
+        });
+    });
+</script>
+<div class="list_container move_container" id="draggable_feed_<%= feed.id %>"><%=h feed.title %></div>
+<% end %>
+<% end %>
+</div>

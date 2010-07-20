@@ -4,8 +4,25 @@ class Cluster < ActiveRecord::Base
   
   def add_article(cluster, matches, article_id)
     if(!cluster.list_of_articles.split(" || ").include?("#{article_id}"))
+      prev_leader = get_leader(cluster)
       cluster.list_of_articles += " || #{article_id}"
       cluster.spot_matches += ' || ' + matches.join(' || ')
+      if(cluster.save)
+        puts "cluster updated"
+      end
+      if((new_leader = get_leader(cluster)) != prev_leader)
+        prev_leader.cluster_follower = true
+        prev_leader.save!
+        new_leader.cluster_follower = false
+        new_leader.save!
+      end
+    end
+  end
+  
+  def remove_article(cluster, article_id)
+    list = cluster.list_of_articles.split(" || ")
+    if(list.delete(article_id))
+      cluster.list_of_articles = list.join(' || ')
       if(cluster.save)
         puts "cluster updated"
       end
@@ -18,8 +35,9 @@ class Cluster < ActiveRecord::Base
     output = []
     article_ids.each { |article_id|
       if(article_id != "")
-        article = RssEntry.find(article_id)
-        output << "#{article.id} #{article.source}: <a href='#{article.link}' target='_blank'>#{article.title}</a>"
+        article = Article.find(article_id)
+        entry = article.rss_entry
+        output << "#{entry.id} #{entry.source}: <a href='#{entry.link}' target='_blank'>#{entry.title}</a>"
       end
     }
     return output.join(' <br /> ')
@@ -30,12 +48,12 @@ class Cluster < ActiveRecord::Base
     articles = []
     article_ids.each { |article_id|
       if(article_id != "")
-        article = RssEntry.find(article_id)
+        article = Article.find(article_id)
         articles << article
       end
     }
-    articles.sort! { |a,b| b.published <=> a.published }
-    articles.sort! { |a,b| Feed.find_by_title(b.source).rank <=> Feed.find_by_title(a.source).rank }
+    articles.sort! { |a,b| b.rss_entry.published <=> a.rss_entry.published }
+    articles.sort! { |a,b| Feed.find_by_title(b.rss_entry.source).rank <=> Feed.find_by_title(a.rss_entry.source).rank }
     return articles.first
   end
   
@@ -44,17 +62,18 @@ class Cluster < ActiveRecord::Base
     articles = []
     article_ids.each { |article_id|
       if(article_id != "")
-        article = RssEntry.find(article_id)
+        article = Article.find(article_id)
         articles << article
       end
     }
-    articles.sort! { |a,b| b.published <=> a.published }
-    articles.sort! { |a,b| Feed.find_by_title(b.source).rank <=> Feed.find_by_title(a.source).rank }
+    articles.sort! { |a,b| b.rss_entry.published <=> a.rss_entry.published }
+    articles.sort! { |a,b| Feed.find_by_title(b.rss_entry.source).rank <=> Feed.find_by_title(a.rss_entry.source).rank }
     output = []
     articles.each { |article|
       if(article != "" && (article.id != articles.first.id))
         if(is_formatted)
-          output << "#{article.published} #{article.source}: <a href='#{article.link}' target='_blank'>#{article.title}</a>"
+          entry = article.rss_entry
+          output << "#{entry.published} #{entry.source}: <a href='#{entry.link}' target='_blank'>#{entry.title}</a>"
         else
           output << article
         end

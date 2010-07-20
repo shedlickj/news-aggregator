@@ -9,17 +9,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100714140440) do
+ActiveRecord::Schema.define(:version => 20100715181049) do
 
   create_table "articles", :force => true do |t|
     t.integer  "user_id"
     t.integer  "rss_entry_id"
-    t.boolean  "hidden"
-    t.boolean  "favorite"
+    t.boolean  "hidden",           :default => false
+    t.boolean  "favorite",         :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "score"
+    t.decimal  "score",            :default => 0.0
     t.string   "cluster"
+    t.boolean  "cluster_follower", :default => false
   end
 
   create_table "clusters", :force => true do |t|
@@ -38,6 +39,7 @@ ActiveRecord::Schema.define(:version => 20100714140440) do
     t.string   "lists_by_id"
     t.string   "rank"
     t.integer  "user_id"
+    t.integer  "user_update_rank", :default => 0
   end
 
   create_table "lists", :force => true do |t|
@@ -47,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20100714140440) do
     t.datetime "updated_at"
     t.string   "name"
     t.integer  "user_id"
+    t.boolean  "shared",       :default => false
   end
 
   create_table "rss_entries", :force => true do |t|
@@ -56,13 +59,9 @@ ActiveRecord::Schema.define(:version => 20100714140440) do
     t.string   "link"
     t.text     "description",    :limit => 255
     t.text     "data",           :limit => 255
-    t.boolean  "hidden"
-    t.boolean  "favorite"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "spot_signature"
-    t.string   "cluster"
-    t.decimal  "score"
   end
 
   create_table "users", :force => true do |t|

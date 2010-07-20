@@ -42,15 +42,17 @@
 <% else %><table id="table_row_odd">
 <% end %>
   <tr>
-  	<% leader = cluster.get_leader(cluster) %>
+  	<% article_leader = cluster.get_leader(cluster) %>
+	<% leader = article_leader.rss_entry %>
   	<td width="15%"><%=h leader.source %></td>
     <td width="62%"><a target='_blank' href ='<%=h leader.link %>'><%=h leader.title %></a></td>
     <td width="23%"><%=h leader.published.strftime("%m/%d/%Y")%> at <%=h leader.published.strftime("%I:%M%p") %></td>
   </tr>
 	<% cluster.get_followers(cluster, false).each { |article| %>
-	<tr><td><%= article.source %></td>
-	<td><a target='_blank' href ='<%=h article.link %>'><%=h article.title %></a></td>
-	<td><%=h article.published.strftime("%m/%d/%Y")%> at <%=h article.published.strftime("%I:%M%p") %></td></tr>
+	<% entry = article.rss_entry %>
+	<tr><td><%= entry.source %></td>
+	<td><a target='_blank' href ='<%=h entry.link %>'><%=h entry.title %></a></td>
+	<td><%=h entry.published.strftime("%m/%d/%Y")%> at <%=h entry.published.strftime("%I:%M%p") %></td></tr>
 	<% } %>
   <tr><td colspan='4'><%= cluster.get_matches(cluster).join(" || ") %></td></tr>
 </table>

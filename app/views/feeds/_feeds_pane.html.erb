@@ -3,35 +3,32 @@
 
 <script type="text/javascript">
     $(function(){
-        $("#feed_pane").corner();
-		$(".right_bar_title").corner("top");
-		$(".right_bar_data").corner("bottom");
+        $("#feed_pane").corner("tl");
+		$("#feeds_title").corner("tl");
     });
 </script>
 
-<div class="right_bar_title">
+<div class="feed_list_bar_title" id="feeds_title">
     Feeds
 </div>
-<div class="right_bar_data">
+<div class="right_bar_data" id="feeds_pane">
 <% if @feeds.size == 0 %>
 <p>No feeds to display.</p>
 <% else %>
 <% for feed in @feeds %>
 <script type="text/javascript">
-    $(function(){
-		$("#draggable_feed_<%= feed.id %>").draggable({ revert: true, opacity: 0.75, appendTo: 'body', helper: 'clone', distance: 5});
-
-        $("a", ".toggle_container").button();
-        
-        $("a", ".toggle_container").click(function(){
-            return false;
+	$(document).ready(function(){
+        $('#feed_<%= feed.id %>').click(function(){
+			event.preventDefault();
+        	$.get($(this).attr("link"), function(data){
+			 	return false;
+         	});
         });
     });
 </script>
-<div class="list_container move_container" id="draggable_feed_<%= feed.id %>"><%=h feed.title %></div>
-<%= link_to 'Edit', edit_feed_path(feed), :id => feed.id, :class => "feed_edit_submit" %>
+<div class="list_container open_container" id="feed_<%= feed.id %>" link="<%= edit_feed_path(feed) %>"><%=h feed.title %></div>
 <% end %>
 <br />
 <% end %>
-<%= link_to 'Add a Feed', new_feed_path, :class => "feed_new_submit" %>
+<%= link_to '<span class="ui-icon ui-icon-circle-plus" style="float:left;"></span>Add a Feed', new_feed_path, :class => "feed_new_submit" %>
 </div>

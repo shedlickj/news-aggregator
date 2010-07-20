@@ -3,9 +3,8 @@
 
 <script type="text/javascript">
     $(function(){
-        $("#list_pane").corner();
-		$(".right_bar_title").corner("top");
-		$(".right_bar_data").corner("bottom");
+        $("#list_pane").corner("tl");
+		$("#lists_title").corner("tl");
     });
 </script>
 
@@ -17,7 +16,7 @@
         });
     });
 </script>
-<div class="right_bar_title">
+<div class="feed_list_bar_title" id="lists_title">
     Lists
 </div>
 <div class="right_bar_data">
@@ -26,14 +25,12 @@
 <% else %>
 <% for list in @lists %>
 <script type="text/javascript">
-    $(function(){
+	 $(function(){
 		$("#droppable_list_<%= list.id %>").droppable({
 			activeClass: "ui-state-default",
 			hoverClass: "ui-state-hover",
 			accept: ":not(.ui-sortable-helper)",
 			drop: function(event, ui) {
-				$("#droppable_list_container_<%= list.id %>").find(".placeholder").remove();
-				$("<li></li>").text(ui.draggable.text()).appendTo("#droppable_list_container_<%= list.id %>");
                 $.put('<%= list_path(list) %>', {feed_title: ui.draggable.text()}, function(data){
                     return false;
                 });
@@ -42,44 +39,16 @@
     });
 	$(document).ready(function(){
         $('#droppable_list_<%= list.id %>').click(function(){
-            $('#droppable_list_container_<%= list.id %>').slideToggle(400);
-            return false;
+			event.preventDefault();
+        	$.get($(this).attr("link"), function(data){
+			 	return false;
+         	});
         });
     });
 </script>
-<div class="list_container open_container" id="droppable_list_<%= list.id %>"><%=h list.name %><%= link_to '<span class="ui-state-error ui-corner-all ui-icon ui-icon-closethick" style="float:right;"></span>', list_path(list), :confirm => 'Delete: Are you sure?', :class => "delete" %></div>
-<div id="droppable_list_container_<%= list.id %>" class="toggle_container" style="display:none; padding:3px; background:#ddd; width=200px">
-    <div class="block">
-    	<ul>
-    	<% 	list_of_feeds = list.get_feeds(list.id) 
-			title = ''
-			list_of_feeds.each{ |feed_id|			
-			feed = Feed.find(feed_id) %>
-			<li><%= feed.title %></li><% } %>
-		<span class="placeholder"></ul></span>
-	</div>
-</div>
-<%= link_to 'Edit', edit_list_path(list), :id => list.id, :class => "list_edit_submit" %>
+<div class="list_container open_container" id="droppable_list_<%= list.id %>" link="<%= edit_list_path(list) %>"><%=h list.name %><span class="ui-icon ui-icon-circle-arrow-e" style="float:right;"></span></div>
 <% end %>
 <br />
 <% end %>
-<a href="#" id="new_list-toggle">Add a List</a>
-
-<div id="new_list_tag" class="toggle_container" style="display:none; padding:3px; background:#ddd; width=200px">
-    <div class="block">
-    
-    <form id="list_form" >
-    <p> 
-        <label for="list_name">List name:</label>
-        <br/>
-		<table cellpadding='0' cellspacing='0'><tr><td><input id="list_name" name="list[name]" size="22" type="text" /></td><td><div id="list_create_name"></div></td></tr></table>
-		<div class="ui-state-error list_create_name_error"></div>
-    </p> 
-    <p> 
-        <!--<input class="feed_submit" name="commit" type="submit" value="Create" />-->
-		<%= link_to 'Create', lists_path(), :class => "new_list_submit" %>
-    </p> 
-    </form> 
-	</div>
-</div>
+<%= link_to '<span class="ui-icon ui-icon-circle-plus" style="float:left;"></span>Add a List', new_list_path, :class => "list_new_submit" %>
 </div>

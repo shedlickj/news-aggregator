@@ -22,7 +22,7 @@ class RssEntriesController < ApplicationController
     #if(params[:commit] == "Search")
     #  params[:view] = "normal" unless params[:features].include?("hidden")
     #else
-    if(params[:list_id] == nil && params[:view] == nil && params[:q] != nil)
+    if(params[:dataset] == nil && params[:list_id] == nil && params[:view] == nil && params[:q] != nil)
 #      if(params[:q]==nil)
 #        params[:q] = cookies[:q]
 #        params[:start_on] = cookies[:start_on]
@@ -37,6 +37,9 @@ class RssEntriesController < ApplicationController
 #        cookies[:sources] = params[:sources]
 #      end
       search_request = true
+    elsif(params[:dataset] != nil)
+      cookies[:dataset] = params[:dataset]
+      clear_search_cookies
     elsif(params[:list_id] != nil)
       cookies[:list] = params[:list_id]
       clear_search_cookies
@@ -44,6 +47,7 @@ class RssEntriesController < ApplicationController
       cookies[:view] = params[:view]
       clear_search_cookies
     end
+    params[:dataset] ||= cookies[:dataset] ||= "newsfeed"
     params[:view] ||= cookies[:view] ||= "normal" unless search_request
     find_and_show_entries(search_request)
   end
@@ -65,13 +69,6 @@ class RssEntriesController < ApplicationController
   # PUT /rss_entries/1
   # PUT /rss_entries/1.xml
   def update
-#    @rss_entry = RssEntry.find(params[:id])
-#    if(params[:task] == 'favorite')
-#      @rss_entry.favorite = !@rss_entry.favorite
-#    elsif(params[:task] == 'hide')
-#      @rss_entry.hidden = !@rss_entry.hidden
-#    end
-#    @rss_entry.save!
     @article = Article.find(params[:id])
     if(params[:task] == 'favorite')
       @article.favorite = !@article.favorite
@@ -154,238 +151,6 @@ class RssEntriesController < ApplicationController
     #"created_at DESC"
   end
   
-  def cluster_articles(article)
-#    RssEntry.all(:conditions => "data <> ''").each {|entry|
-#       find_spot_signature(entry)
-#       entry.save!
-#    }
-#    RssEntry.all(:conditions => "spot_signature <> '' AND (rss_entries.source != 'Gizmodo')").each {|entry|
-    entry = article.rss_entry
-    best_similarities = 0
-    #best_entry = nil
-    best_article = nil
-    best_matches = []
-    current_user.articles.each { |compareArticle|
-    compareEntry = compareArticle.rss_entry
-    #RssEntry.all(:conditions => "spot_signature <> '' AND (rss_entries.source != 'Gizmodo')").each {|compareEntry|
-      if((entry.id != compareEntry.id) && (entry.link != compareEntry.link) && (compareEntry.spot_signature != ''))
-        similarities = 0
-        matches = []
-        spots = compareEntry.spot_signature.split(" || ")
-        entry.spot_signature.split(" || ").each { |currSpot|
-          if(spots.include?(currSpot))
-            similarities+=1
-            matches << currSpot
-          end
-        }
-        if((entry.source != compareEntry.source && similarities >= 4) || (entry.source == compareEntry.source && similarities >= 10) || (entry.source != compareEntry.source && Float(similarities)/entry.spot_signature.split(" || ").length >= 0.2 && similarities >=2)|| (entry.source == compareEntry.source && Float(similarities)/entry.spot_signature.split(" || ").length >= 0.5 && similarities >=4) )
-          if(similarities > best_similarities)  # closer match found
-            if(compareEntry.cluster != nil)  # new match is in a cluster
-              best_similarities = similarities
-              #best_entry = compareEntry
-              best_article = compareArticle
-              best_matches = matches
-            elsif(best_entry && best_entry.cluster != nil) # old match was in a cluster
-              #do nothing
-            else  # neither in a cluster
-              best_similarities = similarities
-              #best_entry = compareEntry
-              best_article = compareArticle
-              best_matches = matches              
-            end
-          end
-        end
-      end
-      }
-      if(best_similarities > 0)
-        #add_to_cluster(entry, best_entry, best_matches)
-        add_to_cluster(article, best_article, best_matches)
-      end
-    #}
-  end
-  
-  def add_to_cluster(article, compareArticle, matches)
-          if(compareArticle.cluster && compareArticle.cluster != "") #If other article is clustered, add current article to that cluster
-            article.cluster = compareArticle.cluster
-            if(article.save)
-              puts "added to existing cluster"
-            end
-            @cluster = Cluster.find(article.cluster)
-            @cluster.add_article(@cluster, matches, article.id)
-            puts @cluster.list_of_articles
-          elsif(article.cluster && article.cluster != "")            #If article is clustered, add other article to this cluster
-            compareArticle.cluster = article.cluster
-            if(article.save)
-              puts "added to existing cluster"
-            end
-            @cluster = Cluster.find(article.cluster)
-            @cluster.add_article(@cluster, matches, compareArticle.id)
-            puts @cluster.list_of_articles
-          else                                                   #Otherwise, make a new cluster
-            @cluster = Cluster.new
-            @cluster.list_of_articles = "#{article.id} || #{compareArticle.id}"
-            puts @cluster.list_of_articles
-            @cluster.spot_matches = matches.join(' || ')
-            if(@cluster.save)
-              puts "new cluster"
-            end
-            article.cluster = @cluster.id
-            compareArticle.cluster = @cluster.id
-            article.save!
-            compareArticle.save!
-          end
-  end
-  
-  def update_articles
-    Feed.all.map { |feed|
-      puts "uri: " << feed.uri
-      if(feed.title != "Gizmodo")
-      open_feed = FeedTools::Feed.open( feed.uri ) #TODO: Error checking
-      open_feed.items.map { |item|
-        entry = RssEntry.find_or_initialize_by_title(item.title)
-        entry.source = feed.title
-        entry.title = item.title
-        entry.published = item.published
-        entry.link = item.link
-        entry.description = (item.description || "No description").gsub(/<[^>]+>/,"").squeeze(" ").strip
-        #entry.hidden ||= false
-        #entry.favorite ||= false
-        store_article_text(entry)
-        find_spot_signature(entry)
-        entry.save! #TODO: Error checking
-        article = Article.find_or_initialize_by_rss_entry_id(entry.id)
-        article.hidden ||= false
-        article.favorite ||= false
-        article.user_id = current_user.id
-        article.rss_entry_id = entry.id
-        article.save! #TODO: Error checking
-        cluster_articles(article)
-        #make_clusters(entry)
-      }
-      else
-        puts "skipped"
-      end
-    }
-    calculate_scores
-    find_and_show_entries(false)
-  end
-  
-  def store_article_text(entry)
-      entry.data = nil;
-      puts "storing data"
-      response = Net::HTTP.get(URI.parse(entry.link))
-      if(response.downcase.include?("<h1>moved permanently</h1>"))
-        html = Nokogiri::HTML(response, nil, 'UTF-8')
-        tag = html.css("a")
-        link = tag.attribute('href')
-#        puts "new link:"
-#        puts link
-        response = Net::HTTP.get(URI.parse(link))
-#        if(entry.source == "Gizmodo")
-#          puts response
-#          sleep 5
-#        end
-      end
-      data = Readability::Document.new(response || "")
-      if(data.content == nil || data.content.length < 15)
-        entry.data = entry.description
-      else
-        entry.data = data.content.gsub(/<[^>]+>/,"").squeeze(" ").strip.toutf8 || ""
-      end
-  end
-  
-  def find_spot_signature(entry)
-     tokens = entry.data.downcase.split(' ')
-     pos = 0
-     spots = []
-     currSig = ""
-     tokens.each {|token|
-                  if APP_CONFIG['antecedents'].include?(token)
-                    pos = 1
-                  end
-                  if pos > 0
-                    currSig += "#{token} "
-                    pos+=1
-                  end
-                  if pos == 4
-                    spots << currSig.gsub(/[.,";:?!]/,"").squeeze(" ").strip
-                    currSig = ""
-                    pos = 0
-                  end
-                  }
-     spots = spots.uniq
-     entry.spot_signature = spots.join(' || ')
-  end
-  
-  def make_clusters(entry)
-    best_similarities = 0
-    best_entry = nil
-    best_matches = []
-    RssEntry.all(:conditions => "spot_signature <> '' AND (rss_entries.source != 'Gizmodo')").each {|compareEntry|
-      if((entry.id != compareEntry.id) && (entry.link != compareEntry.link))
-        similarities = 0
-        matches = []
-        spots = compareEntry.spot_signature.split(" || ")
-        entry.spot_signature.split(" || ").each { |currSpot|
-          if(spots.include?(currSpot))
-            similarities+=1
-            matches << currSpot
-          end
-        }
-        if((entry.source != compareEntry.source && similarities >= 4) || (entry.source == compareEntry.source && similarities >= 10) || (entry.source != compareEntry.source && Float(similarities)/entry.spot_signature.split(" || ").length >= 0.2 && similarities >=2)|| (entry.source == compareEntry.source && Float(similarities)/entry.spot_signature.split(" || ").length >= 0.5 && similarities >=4) )
-          if(compareEntry.cluster && compareEntry.cluster != "")
-            entry.cluster = compareEntry.cluster
-            if(entry.save)
-              puts "added to existing cluster"
-            end
-            @cluster = Cluster.find(entry.cluster)
-            @cluster.add_article(@cluster, matches, entry.id)
-            puts @cluster.list_of_articles
-          elsif(entry.cluster && entry.cluster != "")
-            compareEntry.cluster = entry.cluster
-            if(entry.save)
-              puts "added to existing cluster"
-            end
-            @cluster = Cluster.find(entry.cluster)
-            @cluster.add_article(@cluster, matches, compareEntry.id)
-            puts @cluster.list_of_articles
-          else
-            @cluster = Cluster.new
-            @cluster.list_of_articles = "#{entry.id} || #{compareEntry.id}"
-            puts @cluster.list_of_articles
-            @cluster.spot_matches = matches.join(' || ')
-            if(@cluster.save)
-              puts "new cluster"
-            end
-            entry.cluster = @cluster.id
-            compareEntry.cluster = @cluster.id
-            entry.save!
-            compareEntry.save!
-          end
-        end
-      end
-    }
-  end
-  
-  def calculate_scores
-    puts "finding scores"
-    RssEntry.all.each { |entry|
-      score = 0;
-      if(entry.published)
-        score += (Time.now - entry.published)/360 #increment score by # of hours
-      else
-        score += (Time.now - entry.created_at)/360 #increment score by # of hours
-      end
-      if(entry.cluster)
-        score += 5 #cluster penalty
-        cluster = Cluster.find(entry.cluster)
-        score += cluster.size(cluster)*2 #penalty for larger clusters
-      end
-      entry.score = score
-      entry.save!
-    }
-  end
-  
   private
   
   def find_and_show_entries(search_request)
@@ -398,8 +163,8 @@ class RssEntriesController < ApplicationController
         list = List.find(cookies[:list])
         list.get_feeds(list.id).each{ |feed_id|
           feed = Feed.find(feed_id)
-          if (conditions.length==0) then conditions = "(articles.rss_entry.source = '#{feed.title}')"
-          else conditions += " OR (articles.rss_entry.source = '#{feed.title}')"
+          if (conditions.length==0) then conditions = "(rss_entries.source = '#{feed.title.gsub(/[']/, '')}')"
+          else conditions += " OR (rss_entries.source = '#{feed.title.gsub(/[']/, '')}')"
           end
         }
         if (conditions.length>0) then conditions = "(" + conditions + ")"
@@ -420,23 +185,44 @@ class RssEntriesController < ApplicationController
         else conditions += " AND (articles.hidden = 't')"
         end
       end
-    puts conditions
+      
+      puts "Conditions:"
+      puts conditions
+    
+      # Pick the set of articles to display
+      if(conditions.length != 0)
+        conditions += " AND "
+      end
+    
+      if(params[:dataset] == 'newsfeed')
+        puts conditions + "(articles.cluster_follower = 'f')"
+        articles = Article.find(:all, :joins => :rss_entry, :conditions => [conditions + "(articles.cluster_follower = 'f') AND (articles.user_id = #{current_user.id})"])
+        articles.sort! { |a,b| a.score <=> b.score }
+      elsif(params[:dataset] == 'livefeed')
+        articles = Article.find(:all, :joins => :rss_entry, :conditions => [conditions + "(articles.user_id = #{current_user.id})"])
+        articles.sort! { |a,b| b.created_at <=> a.created_at }
+      elsif(params[:dataset] == 'toparticles')
+        articles = Article.find(:all, :joins => :rss_entry, :conditions => [conditions + "(articles.cluster != 'nil') AND (articles.cluster_follower = 'f') AND (articles.user_id = #{current_user.id})"])
+        articles = articles.select{|article| article.cluster != nil && article.cluster_follower == false}
+        articles.sort! { |a,b| b.rss_entry.published <=> a.rss_entry.published }
+      end
+     
+      @num_of_articles = articles.size
+      @articles = articles.paginate(
+      :page => params[:page],
+      :per_page => 15)
     else
-      conditions = search_conditions
+      @articles = current_user.articles.paginate(:all, :joins => :rss_entry,
+      :order => order_from_params,
+      :page => params[:page],
+      :per_page => 15,
+      :conditions => search_conditions)
+      @num_of_articles = 0
     end
-#    @rss_entries = RssEntry.paginate(:all,
-#    :order => order_from_params,
-#    :page => params[:page],
-#    :per_page => 15,
-#    :conditions => conditions)
-    @articles = current_user.articles.paginate(:all,
-    :order => order_from_params,
-    :page => params[:page],
-    :per_page => 15,
-    :conditions => conditions)
+    
     @start_article_num = ((params[:page] || 1).to_i-1)*15 + 1
     @end_article_num = ((params[:page] || 1).to_i)*15
-    @num_of_articles = RssEntry.all.length
+    
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @rss_entries }
@@ -456,9 +242,9 @@ class RssEntriesController < ApplicationController
         params[:features].each{ |feature|
           if(APP_CONFIG['OR_terms'].include?(feature))
             if str_OR.length==0
-              str_OR = "(LOWER(articles.rss_entry.#{feature}) like :q)"
+              str_OR = "(LOWER(rss_entries.#{feature}) like :q)"
             else
-              str_OR += " OR (LOWER(articles.rss_entry.#{feature}) like :q)"
+              str_OR += " OR (LOWER(rss_entries.#{feature}) like :q)"
             end
           elsif(APP_CONFIG['AND_terms'].include?(feature))
             strings << "(articles.#{feature} = 't')"
@@ -468,9 +254,9 @@ class RssEntriesController < ApplicationController
           @feeds.each{ |feed|
             if(feed.title == source)
               if str_src.length==0
-                str_src = "(articles.rss_entry.source = '#{source}')"
+                str_src = "(rss_entries.source = '#{source.gsub(/[']/, '')}')"
               else
-                str_src += " OR (articles.rss_entry.source = '#{source}')"
+                str_src += " OR (rss_entries.source = '#{source.gsub(/[']/, '')}')"
               end
             end
           }
@@ -478,14 +264,14 @@ class RssEntriesController < ApplicationController
         strings << "(#{str_OR})" << "(#{str_src})"
       end
       if cond_params[:start_on] && cond_params[:end_on]
-        strings << " articles.rss_entry.created_at between :start_on and :end_on"
+        strings << " rss_entries.published between :start_on and :end_on"
       elsif cond_params[:start_on]
-        strings << " articles.rss_entry.created_at >= :start_on"
+        strings << " rss_entries.published >= :start_on"
       elsif cond_params[:end_on]
-        strings << " articles.rss_entry.created_at <= :end_on"
+        strings << " rss_entries.published <= :end_on"
       end
     end
-    puts cond_strings
-    cond_strings.any? ? [ cond_strings.join(' AND '), cond_params ] : nil
+    return cond_strings.any? ? [ cond_strings.join(' AND '), cond_params ] : nil
+    #return cond_strings.join(' AND ')
   end
 end

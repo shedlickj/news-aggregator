@@ -1,34 +1,54 @@
+<%= javascript_include_tag 'jquery-1.4.2.js' %>
 <%= stylesheet_link_tag 'scaffold' %>
+<%= javascript_include_tag 'jquery-ui-1.8.2.custom.min.js' %>
+<%= stylesheet_link_tag 'jquery-ui-1.8.2.custom' %>
 
+<div id="top_user_bar" class="styled_link">
+	<span>Signed in as: <%= current_user.email %> | <%= link_to 'Account Settings', edit_user_registration_path, :class => 'styled_link' %> | <%= link_to 'Logout', destroy_user_session_path, :class => 'styled_link' %></span>
+</div>
 <div id="container">
 	<div id="header">
-		<h1>news-aggregator</h1>
+		<h1>NewsEngage</h1>
+		<div id="header_bar">
+			<%= render :partial => 'rss_entries/header_bar_alt' %>
+		</div>
 	</div>
-    <div id="content">
-		<h2>Edit <%= resource_name.to_s.humanize %></h2>
+    <div id="content" align="center">
+    	<div class="form_box", style="width:500px;">
+
+		<div class="form_title"><h3>Account Settings</h3></div>
+		<div class="form_data">
 
 		<% form_for resource_name, resource, :url => registration_path(resource_name), :html => { :method => :put } do |f| -%>
 		  <%= f.error_messages %>
-
-		  <p><%= f.label :email %></p>
-		  <p><%= f.text_field :email %></p>
-
-		  <p><%= f.label :password %> <i>(leave blank if you don't want to change it)</i></p>
-		  <p><%= f.password_field :password %></p>
-
-		  <p><%= f.label :password_confirmation %></p>
-		  <p><%= f.password_field :password_confirmation %></p>
-
-		  <p><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i></p>
-		  <p><%= f.password_field :current_password %></p>
-
+		  <h4>Update <%= resource_name.to_s.humanize %></h4>
+		  <table cellspacing="10"><tr>
+		  	  <td><%= f.label :email %></td>
+		  	  <td><%= f.text_field :email, :size => 40 %></td>
+			</tr><tr>
+		  	  <td><%= f.label :current_password %></td>
+		  	  <td><%= f.password_field :current_password, :size => 40 %></td>
+			</tr><tr>
+			  <td colspan="2"> <i>(we need your current password to confirm your changes)</i></td>
+		  </tr></table>
+		  <h4>Change password</h4>
+		  <table cellspacing="10"><tr>
+		  	  <td><%= f.label :password %></td>
+		  	  <td><%= f.password_field :password, :size => 40 %></td>
+			</tr><tr>
+		  	  <td><%= f.label :password_confirmation %></td>
+		  	  <td><%= f.password_field :password_confirmation, :size => 40 %></td>
+			</tr><tr>
+			  <td colspan="2"> <i>(leave blank if you don't want to change it)</i></td>
+		  </tr></table>
 		  <p><%= f.submit "Update" %></p>
 		<% end -%>
 
-		<h3>Cancel my account</h3>
+		<h4>Cancel my account</h4>
 
 		<p>Unhappy? <%= link_to "Cancel my account", registration_path(resource_name), :confirm => "Are you sure?", :method => :delete %>.</p>
 
 		<%= render :partial => "shared/devise_links" %>
+		</div></div>
 	</div>
 </div>

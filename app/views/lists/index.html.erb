@@ -1,8 +1,6 @@
 
 <%= javascript_include_tag 'page_load' %>
-
-<%= image_tag 'loading.gif', :id=>'spinner',
-:style=>"float:right;" %>
+<%= javascript_include_tag 'feeds_editor' %>
 
 <!-- Buttons -->
 <script type="text/javascript">
@@ -11,19 +9,25 @@
     });
 </script>
 
+
+<div id="top_user_bar" class="styled_link">
+<span>Signed in as: <%= current_user.email %> | <%= link_to 'Account Settings', edit_user_registration_path, :class => 'styled_link' %> | <%= link_to 'Logout', destroy_user_session_path, :class => 'styled_link' %></span>
+</div>
+<%= image_tag 'loading.gif', :id=>'spinner',
+:style=>"float:right; background-attachment: fixed; padding:5px;" %>
 <div id="container">
 	<div id="header">
-		<h1>news-aggregator</h1>
-		<table><tr>
-			<td><div class="button_style"><%= link_to 'Clusters', clusters_path(), :class => "view_clusters_pane" %></div></td>
-			<td><div class="button_style"><%= link_to 'Newsfeed', rss_entries_path(), :class => "view_rss_entries_pane" %></div></td>
-			<td><div class="button_style"><%= link_to 'Lists & Feeds', lists_path(), :class => "view_lists_pane" %></div></td>
-		</tr></table>
+		<h1>NewsEngage</h1>
+		<div id="header_bar">
+			<%= render :partial => 'rss_entries/header_bar_alt' %>
+		</div>
 	</div>
-    <div id="content">
-		<%= render :partial => 'index_lists' %>
-	</div>
-	<!--<div id="footer">
-		<%#= render :partial => 'footer' %>
-	</div>-->
+  <div id="content" class='ajaxWrapper'>
+    <div class='pane_container' id='list_pane'>
+        <%= render :partial=>'lists_pane' %>
+    </div>
+    <div class='pane_container' id='middle_pane'>
+        <%= render :partial=>'middle_pane' %>
+    </div>
+  </div>
 </div>

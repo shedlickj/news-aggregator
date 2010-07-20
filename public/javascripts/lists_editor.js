@@ -37,4 +37,11 @@ $(document).ready(function() {
 			 return false;
          });
      });
+	 
+	 $(".list_new_submit").click(function(event){
+         event.preventDefault();
+         $.get($(this).attr("href"), function(data){
+			 return false;
+         });
+     });
 });

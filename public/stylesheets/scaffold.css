@@ -2,7 +2,7 @@
  * Layout
  ***************************/
 
-body { background-color: #fff; color: #333; }
+body { background-color: #fff; color: #333; text-align: center;}
 
 body, p, ol, ul, td {
   font-family: verdana, arial, helvetica, sans-serif;
@@ -10,27 +10,37 @@ body, p, ol, ul, td {
   line-height: 18px;
 }
 
-div#container { position: relative; width: 950px; height: 700px; margin: 0 auto; }
-div#header { position:absolute; left:0px; top:0px; width:950px; height:100px; padding: 10px; background:#99c;}
-div#content { position:absolute; left:0px; top:120px; width:950px; }
+div#top_user_bar { position: relative; height:20px; margin: 0 auto; padding:10px; text-align: right; color:#fff; background: url(../images/user_bar_bg2.png) #003;}
 
-div#rss_entries_content { position:absolute; left:15px; width:735px; padding-bottom:50px; margin-top:5px; }
+div#container { position: relative; width: 950px; height: 700px; margin: 0 auto; text-align: left;}
+div#header { position:relative; width:950px; height:100px; padding: 10px 10px 0px 10px; }
+div#content { position:relative; width:950px; }
+
+div#rss_entries_content { position:absolute; left:0px; width:750px; padding-bottom:50px; margin-top:0px; }
 div#right_sidebar { position:absolute; left: 760px; width:200px; }
 
 div#clusters_content { position:absolute; left:15px; width:735px; padding-bottom:50px; margin-top:5px; }
 
-div#lists_content { position:absolute; left:0px; width:735px; padding-bottom:50px; }
-div#list_pane { position:absolute; left:0px; width:200px; }
-div#middle_pane { position:absolute; left:210px; width:535px; }
-div#feed_pane { position:absolute; left:760px; width:200px; }
+div#list_pane { position:absolute; left:0px; width:250px; }
+div#middle_pane { position:absolute; left:260px; width:690px; }
+div#feed_pane { position:absolute; left:0px; width:250px; }
+/**div#feed_pane { position:absolute; left:760px; width:200px; }**/
 
 div#footer { clear: both; text-align: center; font-size: 11px; color: #777; padding-top: 40px; padding-bottom: 40px; }
 div#footer p { margin: 0; padding: 0; }
 
+.selected_button {
+  padding: 5px 5px 15px 5px;
+  background: #225;
+}
+
+.unselected_button {
+  padding: 5px 5px 15px 5px;
+}
+
 div.pane_container {
-	margin: 5px;
+	border: 1px solid #225;
 	padding: 0px;
-	background: #ccc;
 	overflow: hidden;
 	font-size: 1.0em;
 	clear: both;
@@ -45,6 +55,16 @@ pre {
 a { color: #000; }
 a:visited { color: #666; }
 a:hover { color: #fff; background-color:#000; }
+
+a.styled_link:link {color: white; }
+a.styled_link:visited {color: white; }
+a.styled_link:hover {color: white; }
+a.styled_link:active {color: white; }
+
+a.styled_button:link {color: 3383bb; }
+a.styled_button:visited {color: 3383bb; }
+a.styled_button:hover {color: 3383bb; }
+a.styled_button:active {color: 3383bb; }
 
 .fieldWithErrors {
   padding: 2px;
@@ -85,9 +105,21 @@ a:hover { color: #fff; background-color:#000; }
 /*
  * Forms
  ***************************/
-div.right_bar_title { font-weight:bold; margin-bottom:2px; color:#fff; background:#003; padding:6px; }
+div.right_bar_title { font-weight:bold; margin-bottom:2px; color:#fff; background:#225; padding:6px; }
 div.right_bar_img {  align: right; }
 div.right_bar_data { background:#ccc; padding:10px; }
+
+div.form_box { 	margin: 0 0 5px;
+	padding: 2px;
+	border: 1px solid #225;
+	background: #ccc;
+	overflow: hidden;
+	font-size: 1em;
+	width: 400px;
+	clear: both; 
+	text-align: left; }
+div.form_title { font-weight:bold; margin-bottom:2px; color:#fff; background:#225; padding: 1 1 1 10; }
+div.form_data { background:#ccc; padding:10px; }
 
 
 /*
@@ -170,14 +202,17 @@ h4.active {background-position: left bottom;} /*--When toggle is triggered, it w
 /*
  * List Pane
  ***************************/
+
+.feed_list_bar_title { font-weight:bold; font-size: 1.2em; color:#fff; background:#225; padding:10px; height:20px;}
+
 .list_container {
 	margin: 4px;
-	padding: 2px;
+	padding: 4px;
 	border: 1px solid #999;
 	background: #ddd;
 	overflow: hidden;
-	font-size: 1.2em;
-	width: 168px;
+	font-size: 1em;
+	width: 205px;
 	clear: both;
 }
 
@@ -222,7 +257,7 @@ h4.active {background-position: left bottom;} /*--When toggle is triggered, it w
 	background: #ddd;
 	overflow: hidden;
 	font-size: 1.2em;
-	width: 475px;
+	width: 608px;
 	clear: both;
 }
 

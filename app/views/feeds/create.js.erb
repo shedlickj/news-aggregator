@@ -21,7 +21,7 @@
 	<% end %>
 <% else %>
 	$("#feed_pane").html("<%= escape_javascript(render :partial => "feeds_pane") %>");
-	$("#middle_pane").html("<div class='list_middle_container'><%= escape_javascript(flash[:notice]) %></div>");
+	$("#list_replace").html("<%= escape_javascript(render :partial => 'lists/default_list_pane') %>");
 <% end %>
 $('#feed_create_spinner').hide();
 ajaxLinks();

@@ -1,20 +1,25 @@
 <%= stylesheet_link_tag 'scaffold' %>
 
+<div id="top_user_bar" class="styled_link">
+	<span></span>
+</div>
 <div id="container">
 	<div id="header">
-		<h1>news-aggregator</h1>
+		<h1>NewsEngage</h1>
 	</div>
-    <div id="content">
+    <div id="content" align="center">
+    	<div class="form_box">
 
-		<h2>Sign in</h2>
-
+		<div class="form_title"><h3>Sign in</h3></div>
+		<div class="form_data">
 		<% form_for resource_name, resource, :url => session_path(resource_name) do |f| -%>
-		  <p><%= f.label :email %></p>
-		  <p><%= f.text_field :email %></p>
-
-		  <p><%= f.label :password %></p>
-		  <p><%= f.password_field :password %></p>
-
+		  <table cellspacing="10"><tr>
+		  <td><%= f.label :email %></td>
+		  <td><%= f.text_field :email, :size => 40 %></td>
+		  </tr><tr>
+		  <td><%= f.label :password %></td>
+		  <td><%= f.password_field :password, :size => 40 %></td>
+		  </tr></table>
 		  <% if devise_mapping.rememberable? -%>
 		    <p><%= f.check_box :remember_me %> <%= f.label :remember_me %></p>
 		  <% end -%>
@@ -23,5 +28,7 @@
 		<% end -%>
 
 		<%= render :partial => "shared/devise_links" %>
+		</div>
+		</div>
 	</div>
 </div>

@@ -1,0 +1,28 @@
+<%= javascript_include_tag 'header_bar' %>
+
+
+<!-- Buttons -->
+<script type="text/javascript">
+    $(function(){
+        $("a", ".button_style").button();
+		$(".selected_button").corner("top");
+    });
+</script>
+
+		<table><tr>
+			<td>
+				<% if(cookies[:dataset] == 'newsfeed')%><div id="newsfeed" class="button_style selected_button"><%= link_to 'Newsfeed', rss_entries_path(), :dataset => 'newsfeed', :class => "update_dataset styled_button" %></div>
+				<% else %><div class="button_style unselected_button"><%= link_to 'Newsfeed', rss_entries_path(), :dataset => 'newsfeed', :class => "update_dataset styled_button" %></div>
+				<% end %>
+			</td>
+			<td>
+				<% if(cookies[:dataset] == 'livefeed')%><div id="livefeed" class="button_style selected_button"><%= link_to 'Livefeed', rss_entries_path(), :dataset => 'livefeed', :class => "update_dataset styled_button" %></div>
+				<% else %><div class="button_style unselected_button"><%= link_to 'Livefeed', rss_entries_path(), :dataset => 'livefeed', :class => "update_dataset styled_button" %></div>
+				<% end %>
+			</td>
+			<td>
+				<% if(cookies[:dataset] == 'toparticles')%><div id="toparticles" class="button_style selected_button"><%= link_to 'Top Articles', rss_entries_path(), :dataset => 'toparticles', :class => "update_dataset styled_button" %></div>
+				<% else %><div class="button_style unselected_button"><%= link_to 'Top Articles', rss_entries_path(), :dataset => 'toparticles', :class => "update_dataset styled_button" %></div>
+				<% end %>
+			</td>
+		</tr></table>

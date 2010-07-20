@@ -5,7 +5,17 @@
 		$("#middle_pane").corner();
     });
 </script>
-<div id="lists_content" class='ajaxWrapper'>
+<div id="top_user_bar" class="styled_link">
+<span>Signed in as: <%= current_user.email %> | <%= link_to 'Account Settings', edit_user_registration_path, :class => 'styled_link' %> | <%= link_to 'Logout', destroy_user_session_path, :class => 'styled_link' %></span>
+</div>
+<div id="spinner_tag"></div>
+<%= image_tag 'loading.gif', :id=>'spinner',
+:style=>"float:right; background-attachment: fixed; padding:5px;" %></div>
+<div id="container">
+	<div id="header">
+		<h1>NewsEngage</h1>
+	</div>
+  <div id="lists_content" class='ajaxWrapper'>
     <div class='pane_container' id='list_pane'>
         <%= render :partial=>'lists_pane' %>
     </div>
@@ -15,4 +25,5 @@
     <div class='pane_container' id='feed_pane'>
         <%= render :partial=>'/feeds/feeds_pane' %>
     </div>
+  </div>
 </div>

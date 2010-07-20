@@ -1,3 +1,5 @@
+
+<%= javascript_include_tag 'application' %>
 <style type="text/css"> 
  
 #spinner_tag {display:block; float:right; position:fixed; }
@@ -19,24 +21,17 @@ $(document).ready(function() {
 });
 </script>
 
-<!-- Buttons -->
-<script type="text/javascript">
-    $(function(){
-        $("a", ".button_style").button();
-    });
-</script>
-
-<div id="spinner_tag"></div>
+<div id="top_user_bar" class="styled_link">
+	<span>Signed in as: <%= current_user.email %> | <%= link_to 'Account Settings', edit_user_registration_path, :class => 'styled_link' %> | <%= link_to 'Logout', destroy_user_session_path, :class => 'styled_link' %></span>
+</div>
 <%= image_tag 'loading.gif', :id=>'spinner',
-:style=>"float:right; background-attachment: fixed;" %></div>
+:style=>"float:right; background-attachment: fixed; padding:5px;" %>
 <div id="container">
 	<div id="header">
-		<h1>news-aggregator</h1>
-		<table><tr>
-			<td><div class="button_style"><%= link_to 'Clusters', clusters_path(), :class => "view_clusters_pane" %></div></td>
-			<td><div class="button_style"><%= link_to 'Newsfeed', rss_entries_path(), :class => "view_rss_entries_pane" %></div></td>
-			<td><div class="button_style"><%= link_to 'Lists & Feeds', lists_path(), :class => "view_lists_pane" %></div></td>
-		</tr></table>
+		<h1>NewsEngage</h1>
+		<div id="header_bar">
+			<%= render :partial => 'header_bar' %>
+		</div>
 	</div>
     <div id="content">
 		<%= render :partial => 'index_rss_entries' %>

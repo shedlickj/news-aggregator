@@ -1,5 +1,11 @@
 
 <script type="text/javascript">
+	function add_feed(){
+		$.put("/lists/<%= @list.id %>", $("#add_feed_selector").serialize(), function(data){
+             return false;
+        });
+	}
+	
     $(function(){
         $("a", ".list_middle_container").button();
 		
@@ -16,6 +22,11 @@
             $.delete_($(this).attr("href"), $("#list_form").serialize(), function(data){
                 return false;
             });
+        });
+		
+		$(".list_back_submit").click(function(event){
+            event.preventDefault();
+			$("#list_replace").html("<%= escape_javascript(render :partial => 'default_list_pane') %>");
         });
     });
 </script>
@@ -46,12 +57,28 @@
 						<% } %>
 					<% end %></td>
 				<td><div id="list_update_feeds<%= @list.id %>"></div></td>
+			</tr></form><tr>
+				<td>Add Feed:</td>
+				<td><% if @feeds.empty? %>
+					  None
+					<% else %>
+					<form id="add_feed_selector">
+    				  <select name="feed_id" onchange="add_feed()">
+    				  <option value="0">Select</option>
+     	    		  <% for feed in @feeds %>
+      				    <option value="<%= feed.id %>"><%= feed.title %></option>
+    	    		  <% end %>
+    				  </select>
+					</form>
+					<% end %>
+				</td>
+				<td></td>
 			</tr></table>
         	<div class="ui-state-highlight list_update_feeds_error<%= @list.id %>" style="display:none; width:400px; margin-left:55px"></div>
 		</p>
         <p>
             <%= link_to 'Update', list_path(@list), :id => @list.id, :class => "list_update_submit" %>
             <%= link_to 'Delete', list_path(@list), :confirm => 'Are you sure?', :class => "list_delete" %>
+			<%= link_to 'Back', lists_path, :class => "list_back_submit" %>
         </p>
-    </form>
 </div>

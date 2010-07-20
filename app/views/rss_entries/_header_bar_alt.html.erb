@@ -1,0 +1,18 @@
+<!-- Buttons -->
+<script type="text/javascript">
+    $(function(){
+        $("a", ".button_style").button();
+		$(".selected_button").corner("top");
+    });
+</script>
+		<table><tr>
+			<td>
+				<div class="button_style"><%= link_to 'News', rss_entries_path(), :class => "styled_button" %></div>
+			</td>
+			<td>
+				<div class="button_style"><%= link_to 'Lists', lists_path(), :class => "styled_button" %></div>
+			</td>
+			<td>
+				<div class="button_style"><%= link_to 'Feeds', feeds_path(), :class => "styled_button" %></div>
+			</td>
+		</tr></table>

@@ -1,0 +1,37 @@
+<script type="text/javascript">
+    $(function(){
+        $("a", ".list_middle_container").button();
+		
+		$(".list_create_submit").click(function(event){
+            event.preventDefault();
+            $.post($(this).attr("href"), $("#new_list").serialize(), function(data){
+                return false;
+            });
+        });
+		
+		$(".list_back_submit").click(function(event){
+            event.preventDefault();
+			$("#list_replace").html("<%= escape_javascript(render :partial => 'default_list_pane') %>");
+        });
+    });
+</script>
+
+<div class="list_middle_container" id="block">
+	<h3 align="left">New List</h3>
+
+<% form_for(@list) do |f| %>
+  <%= f.error_messages %>
+
+  <table><tr>
+    <td><%= f.label :name %></td>
+    <td><%= f.text_field :name %></td>
+  </tr></table>
+  <p>
+  	<%= link_to 'Create', lists_path(), :class => "list_create_submit" %>
+	<%= link_to 'Back', lists_path, :class => "list_back_submit" %>
+
+    <%#= f.submit 'Create' %>
+  </p>
+<% end %>
+
+</div>

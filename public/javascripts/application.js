@@ -135,6 +135,14 @@ $(document).ready(function() {
 			return false;
         });
 	});
+	
+	$(".update_dataset").click(function(event){
+		event.preventDefault();
+		$(".header_bar").html("<%= escape_javascript(render :partial => 'header_bar') %>");
+        $.get('/rss_entries', {dataset: $(this).attr("dataset")}, function(data){
+			return false;
+        });
+	});
 	 
 	 $(".search_submit").click(function(event) {
 	 	event.preventDefault();

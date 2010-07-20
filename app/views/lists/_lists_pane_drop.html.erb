@@ -1,0 +1,88 @@
+
+<%= javascript_include_tag 'lists_editor' %>
+
+<script type="text/javascript">
+    $(function(){
+        $("#list_pane").corner("tl");
+		$("#lists_title").corner("tl");
+    });
+</script>
+
+<script>
+	$(document).ready(function(){
+        $('a#new_list-toggle').click(function(){
+            $('#new_list_tag').slideToggle(400);
+            return false;
+        });
+    });
+</script>
+<div class="feed_list_bar_title" id="lists_title">
+    Lists
+</div>
+<div class="right_bar_data">
+<% if @lists.size == 0 %>
+<p>No lists to display.</p>
+<% else %>
+<% for list in @lists %>
+<script type="text/javascript">
+    $(function(){
+		$("#droppable_list_<%= list.id %>").droppable({
+			activeClass: "ui-state-default",
+			hoverClass: "ui-state-hover",
+			accept: ":not(.ui-sortable-helper)",
+			drop: function(event, ui) {
+				$("#droppable_list_container_<%= list.id %>").find(".placeholder").remove();
+				$("<li></li>").text(ui.draggable.text()).appendTo("#droppable_list_container_<%= list.id %>");
+                $.put('<%= list_path(list) %>', {feed_title: ui.draggable.text()}, function(data){
+                    return false;
+                });
+			}
+    	});
+    });
+	$(document).ready(function(){
+        $('#droppable_list_<%= list.id %>').click(function(){
+			event.preventDefault();
+        	$.get($(this).attr("href"), function(data){
+			 	return false;
+         	});
+            $//('#droppable_list_container_<%= list.id %>').slideToggle(400);
+            return false;
+        });
+    });
+</script>
+<div class="list_container open_container" id="droppable_list_<%= list.id %>"><%=h list.name %><span class="ui-icon ui-icon-circle-arrow-e" style="float:right;"></span></div>
+<div id="droppable_list_container_<%= list.id %>" class="toggle_container" style="display:none; padding:3px; background:#ddd; width=200px">
+    <div class="block">
+    	<ul>
+    	<% 	list_of_feeds = list.get_feeds(list.id) 
+			title = ''
+			list_of_feeds.each{ |feed_id|			
+			feed = Feed.find(feed_id) %>
+			<li><%= feed.title %></li><% } %>
+		<span class="placeholder"></ul></span>
+	</div>
+</div>
+<%= link_to 'Edit', edit_list_path(list), :id => list.id, :class => "list_edit_submit" %>
+<% end %>
+<br />
+<% end %>
+<a href="#" id="new_list-toggle">Add a List</a>
+
+<div id="new_list_tag" class="toggle_container" style="display:none; padding:3px; background:#ddd; width=200px">
+    <div class="block">
+    
+    <form id="list_form" >
+    <p> 
+        <label for="list_name">List name:</label>
+        <br/>
+		<table cellpadding='0' cellspacing='0'><tr><td><input id="list_name" name="list[name]" size="22" type="text" /></td><td><div id="list_create_name"></div></td></tr></table>
+		<div class="ui-state-error list_create_name_error"></div>
+    </p> 
+    <p> 
+        <!--<input class="feed_submit" name="commit" type="submit" value="Create" />-->
+		<%= link_to 'Create', lists_path(), :class => "new_list_submit" %>
+    </p> 
+    </form> 
+	</div>
+</div>
+</div>
