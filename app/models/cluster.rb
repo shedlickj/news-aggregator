@@ -10,7 +10,7 @@ class Cluster < ActiveRecord::Base
       if(cluster.save)
         puts "cluster updated"
       end
-      if((new_leader = get_leader(cluster)) != prev_leader)
+      if((new_leader = get_leader(cluster)).id != prev_leader.id)
         prev_leader.cluster_follower = true
         prev_leader.save!
         new_leader.cluster_follower = false

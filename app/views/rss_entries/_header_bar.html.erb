@@ -21,8 +21,8 @@
 				<% end %>
 			</td>
 			<td>
-				<% if(cookies[:dataset] == 'toparticles')%><div id="toparticles" class="button_style selected_button"><%= link_to 'Top Articles', rss_entries_path(), :dataset => 'toparticles', :class => "update_dataset styled_button" %></div>
-				<% else %><div class="button_style unselected_button"><%= link_to 'Top Articles', rss_entries_path(), :dataset => 'toparticles', :class => "update_dataset styled_button" %></div>
+				<% if(cookies[:dataset] == 'toparticles')%><div id="toparticles" class="button_style selected_button"><%= link_to 'Top Stories', rss_entries_path(), :dataset => 'toparticles', :class => "update_dataset styled_button" %></div>
+				<% else %><div class="button_style unselected_button"><%= link_to 'Top Stories', rss_entries_path(), :dataset => 'toparticles', :class => "update_dataset styled_button" %></div>
 				<% end %>
 			</td>
 		</tr></table>

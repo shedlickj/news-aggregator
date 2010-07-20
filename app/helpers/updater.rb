@@ -16,9 +16,10 @@ require 'config/environment'
 
 handler do |job|
   puts "Running #{job}"
-  update_articles
-  puts "Done updating"
-  calculate_scores
+#  update_articles
+#  puts "Done updating"
+#  calculate_article_scores
+  calculate_cluster_scores
   puts "Task complete"
 end
 
@@ -33,61 +34,64 @@ def update_articles
       open_feed = FeedTools::Feed.open( feed.uri ) #TODO: Error checking
       open_feed.items.map { |item|
         
-        # Find or create new entry
-        if(entry = RssEntry.find_by_title(item.title))
-          entry_existed = true
-        else
-          entry = RssEntry.create
-          entry_existed = false
-        end
-        
-        # Update entry fields
-        #entry = RssEntry.find_or_initialize_by_title(item.title)
-        entry.source = feed.title
-        entry.title = item.title || "No title"
-        entry.published = item.published || Time.now
-        entry.link = item.link || "#"
-        entry.description = (item.description || "No description").gsub(/<[^>]+>/,"").squeeze(" ").strip
-        
-        # Scrape article text, find spot_signature if it is new
-        text_is_new = store_article_text(entry)
-        if(text_is_new)
-          puts "finding spot sig"
-          find_spot_signature(entry)
-          puts "done spot sig"
-        end
-        entry.save! #TODO: Error checking
-        
-        # Create new article for entry for each feed that contains it
-        if(!entry_existed)
-          puts "create articles"
-          Feed.all.select{|feed_matching_entry| feed_matching_entry.uri == feed.uri}.each{ |feed_matching_entry|
-            article = Article.create
-            article.hidden ||= false
-            article.favorite ||= false
-            article.user_id = feed_matching_entry.user_id
-            article.rss_entry_id = entry.id
-            article.save! #TODO: Error checking
-            @@current_articles << article
-          }
-          puts "done create articles"
-        end
-        
-        # Cluster each article if the text is new/has changed
-        if(text_is_new)
-          entry.articles.each{ |article|
-            # Remove article from cluster if it is in one
-            if(article.cluster)
-              cluster = Cluster.find(article.cluster)
-              article.cluster = nil
-              cluster.remove_article(cluster, article.id) #TODO: remove article from clusters
-            end
-            if(article.rss_entry.source != "Gizmodo")
-              puts "cluster"
-              cluster_articles(article)
-              puts "cluster done"
-            end
-          }
+        # Only save articles with a source and title
+        if(item.source && item.title)
+          # Find or create new entry
+          if(entry = RssEntry.find_by_title(item.title))
+            entry_existed = true
+          else
+            entry = RssEntry.create
+            entry_existed = false
+          end
+          
+          # Update entry fields
+          #entry = RssEntry.find_or_initialize_by_title(item.title)
+          entry.source = feed.title.toutf8
+          entry.title.toutf8 = item.title.toutf8
+          entry.published = item.published || Time.now
+          entry.link = (item.link || "#").toutf8
+          entry.description = (item.description || "No description").gsub(/<[^>]+>/,"").squeeze(" ").strip.toutf8
+          
+          # Scrape article text, find spot_signature if it is new
+          text_is_new = store_article_text(entry)
+          if(text_is_new)
+            puts "finding spot sig"
+            find_spot_signature(entry)
+            puts "done spot sig"
+          end
+          entry.save! #TODO: Error checking
+          
+          # Create new article for entry for each feed that contains it
+          if(!entry_existed)
+            puts "create articles"
+            Feed.all.select{|feed_matching_entry| feed_matching_entry.uri == feed.uri}.each{ |feed_matching_entry|
+              article = Article.create
+              article.hidden ||= false
+              article.favorite ||= false
+              article.user_id = feed_matching_entry.user_id
+              article.rss_entry_id = entry.id
+              article.save! #TODO: Error checking
+              @@current_articles << article
+            }
+            puts "done create articles"
+          end
+          
+          # Cluster each article if the text is new/has changed
+          if(text_is_new)
+            entry.articles.each{ |article|
+              # Remove article from cluster if it is in one
+              if(article.cluster)
+                cluster = Cluster.find(article.cluster)
+                article.cluster = nil
+                cluster.remove_article(cluster, article.id) #TODO: remove article from clusters
+              end
+              if(article.rss_entry.source != "Gizmodo")
+                puts "cluster"
+                cluster_articles(article)
+                puts "cluster done"
+              end
+            }
+          end
         end
       }
       feeds_done << feed.uri
@@ -116,7 +120,7 @@ def store_article_text(entry)
     # Use readability to find text from html
     data = Readability::Document.new(response || "")
     if(data.content == nil || data.content.length < 15)
-      new_data = entry.description
+      new_data = entry.description.toutf8
     else
       new_data = data.content.gsub(/<[^>]+>/,"").squeeze(" ").strip.toutf8 || ""
     end
@@ -228,7 +232,7 @@ def add_to_cluster(article, compare_article, matches)
     if(new_cluster.save)
       puts "new cluster"
     end
-    if(new_cluster.get_leader(new_cluster) == article)
+    if(new_cluster.get_leader(new_cluster).id == article.id)
       compare_article.cluster_follower = true
     else
       article.cluster_follower = true
@@ -241,8 +245,8 @@ def add_to_cluster(article, compare_article, matches)
 end
 
 # Calculate scores of all articles
-def calculate_scores
-  puts "finding scores"
+def calculate_article_scores
+  puts "finding article scores"
   Article.all.each { |article|
     score = 0;
     entry = article.rss_entry
@@ -258,5 +262,22 @@ def calculate_scores
     end
     article.score = score
     article.save!
+  }
+end
+
+# Calculate scores of all clusters
+def calculate_cluster_scores
+  puts "finding cluster scores"
+  Cluster.all.each { |cluster|
+    score = 0;
+    leader = cluster.get_leader(cluster).rss_entry
+    if(leader.published)
+      score += (Time.now - leader.published)/360 #increment score by # of hours
+    else
+      score += (Time.now - leader.created_at)/360 #increment score by # of hours
+    end
+    score -= cluster.size(cluster)*3 #larger clusters are better
+    cluster.score = score
+    cluster.save!
   }
 end

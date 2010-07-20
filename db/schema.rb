@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100715181049) do
+ActiveRecord::Schema.define(:version => 20100720192219) do
 
   create_table "articles", :force => true do |t|
     t.integer  "user_id"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(:version => 20100715181049) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
+    t.integer  "score",            :default => 0
   end
 
   create_table "feeds", :force => true do |t|
@@ -54,7 +55,7 @@ ActiveRecord::Schema.define(:version => 20100715181049) do
 
   create_table "rss_entries", :force => true do |t|
     t.string   "source"
-    t.string   "title"
+    t.text     "title",          :limit => 255
     t.datetime "published"
     t.string   "link"
     t.text     "description",    :limit => 255

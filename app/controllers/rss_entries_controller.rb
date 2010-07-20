@@ -202,9 +202,14 @@ class RssEntriesController < ApplicationController
         articles = Article.find(:all, :joins => :rss_entry, :conditions => [conditions + "(articles.user_id = #{current_user.id})"])
         articles.sort! { |a,b| b.created_at <=> a.created_at }
       elsif(params[:dataset] == 'toparticles')
-        articles = Article.find(:all, :joins => :rss_entry, :conditions => [conditions + "(articles.cluster != 'nil') AND (articles.cluster_follower = 'f') AND (articles.user_id = #{current_user.id})"])
-        articles = articles.select{|article| article.cluster != nil && article.cluster_follower == false}
-        articles.sort! { |a,b| b.rss_entry.published <=> a.rss_entry.published }
+        articles_temp = Article.find(:all, :joins => :rss_entry, :conditions => [conditions + "(articles.cluster != 'nil') AND (articles.cluster_follower = 'f') AND (articles.user_id = #{current_user.id})"])
+        articles_temp = articles_temp.select{|article| article.cluster != nil && article.cluster_follower == false}
+        clusters = []
+        articles_temp.each{|a| clusters << Cluster.find(a.cluster)}
+        clusters.sort! { |a,b| a.score <=> b.score }
+        articles = []
+        clusters.each{|c| articles << c.get_leader(c)}
+        #articles.sort! { |a,b| b.rss_entry.published <=> a.rss_entry.published }
       end
      
       @num_of_articles = articles.size
