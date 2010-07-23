@@ -4,6 +4,7 @@ require 'chronic'
 #require 'net/http'
 #require 'cgi'
 require 'nokogiri'
+require 'mechanize'
 
 class RssEntriesController < ApplicationController
   
@@ -49,6 +50,18 @@ class RssEntriesController < ApplicationController
     end
     params[:dataset] ||= cookies[:dataset] ||= "newsfeed"
     params[:view] ||= cookies[:view] ||= "normal" unless search_request
+    
+    list_match = false
+    iter = 1
+    @lists.each{|list|
+      if(list.id == cookies[:list].to_i)
+        list_match = true 
+        @active_list = iter
+      end
+      iter += 1 }
+    cookies[:list] = '0' if(!list_match)
+    @active_list = 0 if(!@active_list)
+    
     find_and_show_entries(search_request)
   end
   
@@ -200,10 +213,11 @@ class RssEntriesController < ApplicationController
         articles.sort! { |a,b| a.score <=> b.score }
       elsif(params[:dataset] == 'livefeed')
         articles = Article.find(:all, :joins => :rss_entry, :conditions => [conditions + "(articles.user_id = #{current_user.id})"])
-        articles.sort! { |a,b| b.created_at <=> a.created_at }
+        articles = articles.select{|some_article| (Time.now - some_article.rss_entry.published)/(60*60*24) < 2 }
+        articles.sort! { |a,b| b.rss_entry.published <=> a.rss_entry.published }
       elsif(params[:dataset] == 'toparticles')
-        articles_temp = Article.find(:all, :joins => :rss_entry, :conditions => [conditions + "(articles.cluster != 'nil') AND (articles.cluster_follower = 'f') AND (articles.user_id = #{current_user.id})"])
-        articles_temp = articles_temp.select{|article| article.cluster != nil && article.cluster_follower == false}
+        articles_temp = Article.find(:all, :joins => :rss_entry, :conditions => [conditions + "(articles.cluster != 'nil' AND articles.cluster != '') AND (articles.cluster_follower = 'f') AND (articles.user_id = #{current_user.id})"])
+        #articles_temp = articles_temp.select{|article| article.cluster != nil && article.cluster_follower == false}
         clusters = []
         articles_temp.each{|a| clusters << Cluster.find(a.cluster)}
         clusters.sort! { |a,b| a.score <=> b.score }

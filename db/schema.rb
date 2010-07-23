@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100720192219) do
+ActiveRecord::Schema.define(:version => 20100721183641) do
 
   create_table "articles", :force => true do |t|
     t.integer  "user_id"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20100720192219) do
     t.decimal  "score",            :default => 0.0
     t.string   "cluster"
     t.boolean  "cluster_follower", :default => false
+    t.boolean  "has_new_text",     :default => false
   end
 
   create_table "clusters", :force => true do |t|

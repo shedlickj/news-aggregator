@@ -1,4 +1,6 @@
 <%= javascript_include_tag 'article_list' %>
+<%= stylesheet_link_tag 'dropdown' %>
+<%= stylesheet_link_tag 'default' %>
 
 <script type="text/javascript">
 	$(function() {
@@ -10,75 +12,14 @@
 
 <script type="text/javascript">
 	$(function() {
-		$(".list_id").button().click( function() {
-			}).next().button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-triangle-1-s"
-				}
-			}).click( function(event) {
-				var menu = $(this).parent().next().show()
-				$('a.select_list').click(function(event) {
-					menu.hide();
-                    event.preventDefault();
-         			$.get("/rss_entries", {
-						list_id: $(this).attr("id")
-					}, function(data){
-			 			return false;
-         			});
-				});
-				return false;
-			}).parent().buttonset().next().hide().menu();
+		$(".list_id").button(({
+            icons: {
+                primary: 'ui-icon-triangle-1-s'
+            }
+        }))
 	});
 </script>
-<style>
-    .ui-menu {
-        position: absolute;
-        list-style: none;
-        display: block;
-    }
-    
-    .submenu ul {
-        border: solid 1px #c9dea1;
-        border-top: none;
-        background: #FFFFFF;
-        position: relative;
-        top: 4px;
-        width: 150px;
-        padding: 6px 0;
-        clear: both;
-        z-index: 2;
-        display: none;
-    }
-    
-    .submenu li {
-        background: none;
-        display: block;
-        float: none;
-        margin: 0 6px;
-        border: 0;
-        height: auto;
-		width: auto;
-        line-height: normal;
-        border-top: solid 1px #DEDEDE;
-    }
-    
-    .submenu li a {
-        background: none;
-        display: block;
-        float: none;
-        padding: 6px;
-        margin: 0;
-        border: 0;
-        height: auto;
-        color: #105cbe;
-        line-height: normal;
-    }
-    
-    .submenu li a:hover {
-        background: #e3edef;
-    }
-</style>
+
 	
 <div class="right_bar_title">
   <table><tr><td>
@@ -89,28 +30,24 @@
   	<input type="radio" name="radio" id="radio4" value="hidden" <% if(cookies[:view] && cookies[:view] == "hidden") %>checked="checked"<% end %> /><label for="radio4">Hidden Articles</label>
   </div>
   </td><td>
-  <div class="list_dropdown">
-	<div>
-		<!--<select name="list_id" onchange="set_list()">-->
-		<div id="selector_button">
-		<% if(cookies[:list] && cookies[:list] != '0')  %>
-    	<button class="list_id" id="<%= cookies[:list] %>" value="<%= cookies[:list] %>"><%= List.find(cookies[:list]).name %></button>
-		<% else %>
-		<button class="list_id" id="0" value="0">All Feeds</button>
-		<% end %>
-		<button id="select">Select an action</button>
-		</div>
-		<div>
-		<ul class="submenu"> 
-		<li><a class="select_list" href="#" id="0">All Feeds</a></li>
-     	<% for list in @lists %>
-			<li id="<%= list.id %>"><a class="select_list" href="#" id="<%= list.id %>"><%= list.name %></a></li> 
-      	<!--<button class="list_id" value="<%= list.id %>" <% if cookies[:list] == "#{list.id}" %>selected="selected"<% end %>><%= list.name %></button>-->
-    	<% end %>
+		<ul id="nav" class="dropdown dropdown-horizontal" style="background:none">
+			<li class="dir">
+				<% if(cookies[:list] && cookies[:list] != '0')  %>
+    				<!--<a class="list_id" href="./"><%#= List.find(cookies[:list]).name %></a>-->
+					<button class="list_id" id="<%= cookies[:list] %>" value="<%= cookies[:list] %>"><%= List.find(cookies[:list]).name %></button>
+				<% else %>
+					<button class="list_id" id="0" value="0">All Feeds</button>
+					<!--<a class="list_id" href="./">All Feeds</a>-->
+				<% end %>
+			<ul> 
+				<li><a href="./" class="select_list" id="0">All Feeds</a></li>
+     			<% for list in @lists %>
+				<li><a href="./" class="select_list" id="<%= list.id %>"><%= list.name %></a></li> 
+      			<!--<button class="list_id" value="<%= list.id %>" <% if cookies[:list] == "#{list.id}" %>selected="selected"<% end %>><%= list.name %></button>-->
+    			<% end %>
+			</ul>
+			</li>
 		</ul>
-		</div>
-	</div>
-  </div>
 </td></tr></table>
 </div>
 

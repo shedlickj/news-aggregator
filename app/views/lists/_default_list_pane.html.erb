@@ -13,19 +13,21 @@
 <% if @feeds.size == 0 %>
 <p>No feeds to display.</p>
 <% else %>
+<p>Drag and drop feeds to add to lists.</p>
+<table>
+<% count = 0 %>
 <% for feed in @feeds %>
 <script type="text/javascript">
     $(function(){
-		$("#draggable_feed_<%= feed.id %>").draggable({ opacity: 0.75, appendTo: 'body', helper: 'clone', distance: 5});
-
-        $("a", ".toggle_container").button();
-        
-        $("a", ".toggle_container").click(function(){
-            return false;
-        });
+		$("#draggable_feed_<%= feed.id %>").draggable({ opacity: 0.75, appendTo: 'body', helper: 'clone'});
     });
 </script>
-<div class="list_container move_container" id="draggable_feed_<%= feed.id %>"><%=h feed.title %></div>
+<% if count%2 == 0 %><tr><% end %>
+<td><div class="list_container move_container" id="draggable_feed_<%= feed.id %>"><%=h feed.title %></div></td>
+<% if count%2 == 1 %></tr><% end %>
+<% count+=1 %>
 <% end %>
+<% if count%2 == 0 %></tr><% end %>
+</table>
 <% end %>
 </div>

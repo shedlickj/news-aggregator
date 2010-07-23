@@ -105,6 +105,13 @@ $(document).ready(function() {
 			return false;
         });
 	});
+	
+	$("a.select_list").click(function(event){
+         event.preventDefault();
+         $.get("/rss_entries", {list_id: $(this).attr("id")}, function(data){
+			 return false;
+         });
+     });
  
   ajaxLinks();
 });

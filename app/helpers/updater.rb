@@ -2,6 +2,7 @@ require 'feed_tools'
 require 'nokogiri'
 require 'clockwork'
 include Clockwork
+require 'mechanize'
 
 require 'config/boot'
 require 'config/environment'
@@ -16,26 +17,63 @@ require 'config/environment'
 
 handler do |job|
   puts "Running #{job}"
-#  update_articles
-#  puts "Done updating"
-#  calculate_article_scores
+#  agent = Mechanize.new
+#  page_html = agent.get_file(RssEntry.find(110).link)
+#  data = Readability::Document.new(page_html || "")
+#  puts data.content.gsub(/<[^>]+>/,"").squeeze(" ").strip.toutf8
+  find_uris
+  puts "Done finding uris"
+  update_articles_simple
+  #update_articles_threaded
+  puts "Done updating"
+  clustering_helper
+  calculate_article_scores
   calculate_cluster_scores
   puts "Task complete"
 end
 
 every(12.hours, 'recurring.job')
 
-def update_articles
-  @@current_articles = Article.all.select{|some_article| (Time.now <=> some_article.rss_entry.published)/(60*60*24) <= 3 }
-  feeds_done = []
-  Feed.all.map { |feed|
-    puts "uri: " << feed.uri
-    if(!feeds_done.include?(feed.uri))
+def find_uris
+  feed_uris = []
+  #feeds = Feed.all.select{|feed| feed.user_id == 1}
+  feeds = Feed.all
+  feeds.map { |feed| feed_uris << feed.uri }
+  @@feeds = []
+  feed_uris.uniq.each{ |uri| @@feeds << Feed.find_by_uri(uri); puts uri }
+end
+
+def update_articles_simple
+    #feeds_done = []
+    @@feeds.each { |feed|
+      update_articles(feed)
+    }
+end
+
+def update_articles_threaded
+  threads = []
+  for f in @@feeds
+    threads << Thread.new(f) { |feed|
+      update_articles(feed)
+      threads.each{|t| puts t.status}
+      #Thread.pass
+    }
+  end
+  puts "Main thread"
+  #threads.each{|t| t.run; puts t.status}
+  threads.each { |t|  t.join if(t.status != nil) }
+end
+
+def update_articles(feed)
+
+      puts "uri: " << feed.uri
+    #if(!feeds_done.include?(feed.uri))
+      begin
       open_feed = FeedTools::Feed.open( feed.uri ) #TODO: Error checking
       open_feed.items.map { |item|
         
         # Only save articles with a source and title
-        if(item.source && item.title)
+        if(item.title)
           # Find or create new entry
           if(entry = RssEntry.find_by_title(item.title))
             entry_existed = true
@@ -47,7 +85,7 @@ def update_articles
           # Update entry fields
           #entry = RssEntry.find_or_initialize_by_title(item.title)
           entry.source = feed.title.toutf8
-          entry.title.toutf8 = item.title.toutf8
+          entry.title = item.title.toutf8
           entry.published = item.published || Time.now
           entry.link = (item.link || "#").toutf8
           entry.description = (item.description || "No description").gsub(/<[^>]+>/,"").squeeze(" ").strip.toutf8
@@ -70,35 +108,28 @@ def update_articles
               article.favorite ||= false
               article.user_id = feed_matching_entry.user_id
               article.rss_entry_id = entry.id
+              article.has_new_text = true if(text_is_new)
               article.save! #TODO: Error checking
-              @@current_articles << article
+              #@@current_articles << article
             }
             puts "done create articles"
           end
           
-          # Cluster each article if the text is new/has changed
-          if(text_is_new)
-            entry.articles.each{ |article|
-              # Remove article from cluster if it is in one
-              if(article.cluster)
-                cluster = Cluster.find(article.cluster)
-                article.cluster = nil
-                cluster.remove_article(cluster, article.id) #TODO: remove article from clusters
-              end
-              if(article.rss_entry.source != "Gizmodo")
-                puts "cluster"
-                cluster_articles(article)
-                puts "cluster done"
-              end
-            }
-          end
+          ##CLUSTERING
         end
       }
-      feeds_done << feed.uri
-    else
-      puts "#{feed.title} already updated"
-    end
-  }
+      #feeds_done << feed.uri
+      rescue Timeout::Error => e
+        puts "Timeout error."
+        $stderr.print e
+      rescue => e
+        puts "Could not open feed."
+        $stderr.print "IO failed: " + $!
+        $stderr.print e
+      end
+#    else
+#      puts "#{feed.title} already updated"
+#    end
 end
 
 
@@ -109,13 +140,19 @@ def store_article_text(entry)
   if(entry.link != '#')
     
     # Get html from link
-    response = Net::HTTP.get(URI.parse(entry.link))
-    if(response.downcase.include?("<h1>moved permanently</h1>"))
-      html = Nokogiri::HTML(response, nil, 'UTF-8')
-      tag = html.css("a")
-      link = tag.attribute('href')
-      response = Net::HTTP.get(URI.parse(link))
+    begin
+      agent = Mechanize.new
+      response = agent.get_file(entry.link)
+    rescue
+      puts "Could not get page from link."
     end
+#    response = Net::HTTP.get(URI.parse(entry.link))
+#    if(response.downcase.include?("<h1>moved permanently</h1>"))
+#      html = Nokogiri::HTML(response, nil, 'UTF-8')
+#      tag = html.css("a")
+#      link = tag.attribute('href')
+#      response = Net::HTTP.get(URI.parse(link))
+#    end
     
     # Use readability to find text from html
     data = Readability::Document.new(response || "")
@@ -129,6 +166,7 @@ def store_article_text(entry)
     new_data = entry.description
   end
   
+  puts "Done storing - saving"
   # Save data if new
   if(!entry.data || entry.data != new_data)
     entry.data = new_data
@@ -159,6 +197,26 @@ def find_spot_signature(entry)
   }
   spots = spots.uniq
   entry.spot_signature = spots.join(' || ')
+end
+
+def clustering_helper
+    @@current_articles = Article.all.select{|some_article| (Time.now - some_article.rss_entry.published)/(60*60*24) < 3 }
+            # Cluster each article if the text is new/has changed
+    Article.all.select{|a| a.has_new_text}.each{|article|
+            #entry.articles.each{ |article|
+              # Remove article from cluster if it is in one
+              if(article.cluster)
+                cluster = Cluster.find(article.cluster)
+                article.cluster = nil
+                cluster.remove_article(cluster, article.id) #TODO: remove article from clusters
+              end
+              article.has_new_text = false
+              article.save!
+              puts "cluster"
+              cluster_articles(article)
+              puts "cluster done"
+            }
+          #end
 end
 
 # Find cluster for article if a similar article exists
@@ -218,6 +276,7 @@ end
 def add_to_cluster(article, compare_article, matches)
   if(compare_article.cluster && compare_article.cluster != "") #If other article is clustered, add current article to that cluster
     article.cluster = compare_article.cluster
+    article.cluster_follower = true
     if(article.save)
       puts "added to existing cluster"
     end

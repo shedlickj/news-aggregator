@@ -1,14 +1,13 @@
 <div class="right_bar_title move_container">
-    Options
+    View
     <!--<div style="display:block;float:right;">
         <span id="move_icon" class="ui-state-default ui-corner-all ui-icon ui-icon-arrow-4"></span>
     </div>-->
 </div>
-<div class="right_bar_data">
-	<div class="button_style unselected_button"><%= link_to 'News', rss_entries_path(), :class => "styled_button" %></div>
-	<div class="button_style unselected_button"><%= link_to 'Lists', lists_path(), :class => "styled_button" %></div>
-	<div class="button_style unselected_button"><%= link_to 'Feeds', feeds_path(), :class => "styled_button" %></div>
-	<a href="#" id="more_views-toggle">More</a>
+<div class="right_bar_data" align="center">
+	<span class="button_style unselected_button"><%= link_to 'Lists', lists_path(), :class => "styled_button" %></span>
+	<span class="button_style unselected_button"><%= link_to 'Feeds', feeds_path(), :class => "styled_button" %></span>
+	<!--<a href="#" id="more_views-toggle">More</a>-->
 	<div id="more_views_tag" style="display:none; padding:3px; background:#ddd;">
 	<p>Current User: <%= current_user.email %></p>
 	<p>Created at: <%= current_user.created_at %></p>

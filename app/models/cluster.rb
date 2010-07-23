@@ -21,11 +21,23 @@ class Cluster < ActiveRecord::Base
   
   def remove_article(cluster, article_id)
     list = cluster.list_of_articles.split(" || ")
+    
+    # Reset leader if leader is deleted
+    if(get_leader(cluster).id == article_id)
+      new_leader = true
+    end
+  
     if(list.delete(article_id))
       cluster.list_of_articles = list.join(' || ')
       if(cluster.save)
         puts "cluster updated"
       end
+    end
+    
+    if(new_leader)
+      new_leader = get_leader(cluster)
+      new_leader.cluster_follower = false
+      new_leader.save!
     end
   end
   
