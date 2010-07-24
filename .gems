@@ -7,3 +7,4 @@ nokogiri
 warden -v 0.10.7
 devise -v 1.0.8
 clockwork -v 0.2.0
+mechanize
